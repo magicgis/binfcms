@@ -1,7 +1,7 @@
 package me.binf.admin.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import me.binf.core.utils.logger.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -19,13 +19,12 @@ import java.io.IOException;
 public class HelloServlet extends HttpServlet {
 
 
-    private static final Logger logger = LoggerFactory.getLogger(HelloServlet.class);
 
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        logger.info("hello");
 
+        Logger.error("xxx");
     }
 
     @Override

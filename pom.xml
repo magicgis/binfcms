@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>binf-admin</module>
+        <module>binf-core</module>
     </modules>
 
 
