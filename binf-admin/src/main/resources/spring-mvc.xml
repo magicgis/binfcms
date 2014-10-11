@@ -7,127 +7,25 @@
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
             http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
             http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
-
-    <!-- 扫描 com.newtown.web 包及子包下的 @Service @Controller @Repository @Component  注解 -->
+    <!-- 扫描 com.binf.admin 包及子包下的 @Service @Controller @Repository @Component
+          注解 -->
     <context:component-scan base-package="me.binf.admin.mvc">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
 
-    <context:property-placeholder location="classpath:system.properties" ignore-unresolvable="true"/>
 
-    <mvc:resources mapping="/static/**" location="/static/"/>
-
-
-
-    <!-- freemarker  includePage的功能
-    <bean id="includePageInterceptor" class="com.newtown.mvc.interceptor.IncludePageInterceptor"/>
-    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
-        <property name="order" value="1" />
-        <property name="interceptors">
-            <list>
-                <ref bean="includePageInterceptor"/>
-            </list>
-        </property>
-    </bean>
-    -->
-
-
-    <!-- 启动SpringMVC的注解功能，完成请求和注解POJO的映射 -->
-    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-        <property name="messageConverters">
-            <list>
-                <ref bean="stringHttpMessageConverter" />
-                <ref bean="jsonHttpMessageConverter" />
-            </list>
-        </property>
-    </bean>
-
-    <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
-        <property name="supportedMediaTypes">
-            <list>
-                <value>text/plain;charset=UTF-8</value>
-            </list>
-        </property>
-    </bean>
-    <bean id="jsonHttpMessageConverter"
-          class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-        <property name="supportedMediaTypes">
-            <list>
-                <value>application/json</value>
-            </list>
-        </property>
-    </bean>
-
-    <!-- 配置freeMarker视图解析器
-    <bean id="viewResolverFtl" class="com.newtown.web.RichFreeMarkerViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
-        <property name="contentType" value="text/html; charset=utf-8"/>
-        <property name="cache" value="false" />
-        <property name="prefix" value="/"/>
-        <property name="suffix" value=".html" />
-        <property name="exposeRequestAttributes" value="false"/>
-        <property name="exposeSessionAttributes" value="false"/>
-        <property name="exposeSpringMacroHelpers" value="true"/>
-        <property name="order" value="0"/>
-    </bean>
-     -->
-
-
-    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-        <property name="templateLoaderPath" value="/WEB-INF"/>
-        <property name="freemarkerSettings">
-            <props>
-                <!--  <prop key="template_update_delay">900000</prop>-->
-                <prop key="tag_syntax">auto_detect</prop>
-                <prop key="defaultEncoding">UTF-8</prop>
-                <prop key="url_escaping_charset">UTF-8</prop>
-                <prop key="locale">zh_CN</prop>
-                <prop key="boolean_format">true,false</prop>
-                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
-                <prop key="date_format">yyyy-MM-dd</prop>
-                <prop key="time_format">HH:mm:ss</prop>
-                <prop key="number_format">#.######</prop>
-                <prop key="whitespace_stripping">true</prop>
-                <prop key="auto_import">/ftl/common/index.ftl as p,/ftl/spring.ftl as s</prop>
-            </props>
-        </property>
-        <property name="freemarkerVariables">
-            <map>
-            </map>
-        </property>
-    </bean>
-
-
-
-    <!-- 配置jsp视图解析器 -->
-    <bean id="viewResolverJsp" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+    <bean id="viewResolver"  class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
-        <property name="order" value="1"/>
     </bean>
-
-    <!-- 错误跳转定义 -->
-    <!--
-        <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-           <property name="exceptionMappings">
-              <props>
-                   <prop key="javax.servlet.ServletException">errors/404</prop>
-              </props>
-           </property>
-           <property name="statusCodes">
-               <props>
-                  <prop key="errors/404">404</prop>
-               </props>
-           </property>
-        </bean> -->
-
 
     <!-- SpringMVC上传文件时，需要配置MultipartResolver处理器 -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="defaultEncoding" value="UTF-8"/>
-        <!-- 指定所上传文件的总大小不能超过200KB。注意maxUploadSize属性的限制不是针对单个文件，而是所有文件的容量之和 -->
-        <property name="maxUploadSize" value="2000000"/>
+        <!-- 指定所上传文件的总大小不能超过100M。注意maxUploadSize属性的限制不是针对单个文件，而是所有文件的容量之和 -->
+        <property name="maxUploadSize" value="104857600"/>
     </bean>
 
     <!-- SpringMVC在超出上传文件限制时，会抛出org.springframework.web.multipart.MaxUploadSizeExceededException -->
