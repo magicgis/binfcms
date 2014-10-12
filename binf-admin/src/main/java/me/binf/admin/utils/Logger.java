@@ -1,10 +1,7 @@
-package me.binf.core.utils.logger;
+package me.binf.admin.utils;
 
 import org.slf4j.LoggerFactory;
 
-/**
- * Created by wangbin on 14-9-22.
- */
 public class Logger {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Logger.class);
