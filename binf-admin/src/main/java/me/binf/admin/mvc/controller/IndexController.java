@@ -37,7 +37,7 @@ public class IndexController {
 
         model.put("memberList",memberList);
         model.put("hello","hello");
-        return "template/admin/index";
+        return "template/admin/控制面板";
     }
 
 
