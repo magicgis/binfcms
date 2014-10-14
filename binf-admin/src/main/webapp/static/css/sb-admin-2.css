@@ -353,8 +353,9 @@ footer {
     margin: 0;
     color: #fff;
     font-size: 12px;
-    height: 105px;
+    min-height: 50px;
     position: relative
+
 }
 
 footer a {
@@ -362,6 +363,6 @@ footer a {
 }
 
 footer .submit {
-    padding: 30px 0;
+    padding: 20px 0;
     margin: 0
 }

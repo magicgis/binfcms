@@ -25,4 +25,23 @@ $(function() {
             $("#page-wrapper").css("min-height", (height) + "px");
         }
     })
+
+
+    //menu
+
+    $('#side-menu').find("li").each(function(){
+        var menu_a =  $(this).find("a").eq(0);
+        var page_title = $("#page-wrapper .page-header").text();
+        if(menu_a.text()==page_title){
+            menu_a.addClass("active");
+            var ul = $(this).parent("ul .nav-second-level")
+
+            if(ul.length>0){
+                ul.addClass("in")
+
+            }
+
+        }
+
+    })
 })

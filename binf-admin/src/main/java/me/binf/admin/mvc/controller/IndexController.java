@@ -20,19 +20,10 @@ public class IndexController {
     @Autowired
     private MemberDao memberDao;
 
-    @RequestMapping(value = "index")
+    @RequestMapping(value = "/")
     public String index(HttpServletRequest request,
                         HttpServletResponse response,
                         ModelMap model){
-
-        try{
-
-        }catch (Exception e) {
-
-        }
-
-
-
         List<Member> memberList =  memberDao.findAll();
 
         model.put("memberList",memberList);
