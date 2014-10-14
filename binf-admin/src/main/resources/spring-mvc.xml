@@ -21,8 +21,6 @@
     <mvc:resources mapping="/static/**" location="/static/"/>
 
 
-
-
     <!-- 配置freeMarker视图解析器 -->
     <bean id="viewResolverFtl" class="me.binf.admin.web.RichFreeMarkerViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>

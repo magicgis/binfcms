@@ -25,11 +25,19 @@ public class IndexController {
                         HttpServletResponse response,
                         ModelMap model){
 
+        try{
+
+        }catch (Exception e) {
+
+        }
+
+
+
         List<Member> memberList =  memberDao.findAll();
 
         model.put("memberList",memberList);
         model.put("hello","hello");
-        return "template/index";
+        return "template/admin/index";
     }
 
 
