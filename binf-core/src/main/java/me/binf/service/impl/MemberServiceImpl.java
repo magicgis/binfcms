@@ -30,7 +30,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Page<Member> find(int pageNum, int pageSize) {
-        return memberDao.findAll(new PageRequest(pageNum, pageSize, Sort.Direction.DESC, "id"));
+        return memberDao.findAll(new PageRequest(pageNum-1, pageSize, Sort.Direction.DESC, "id"));
     }
 
     @Override

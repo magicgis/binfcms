@@ -1,5 +1,7 @@
 package me.binf.admin.mvc.controller;
 
+import me.binf.admin.utils.WebUtil;
+import me.binf.core.bean.Result;
 import me.binf.entity.Category;
 import me.binf.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,18 @@ public class ContentController {
     }
 
 
+    @RequestMapping(value = "category/save")
+    public void categorySave(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Category category){
+        try {
+            Category data = categoryService.create(category);
+            WebUtil.print(response,new Result(true).data(data).msg("创建类别成功！"));
+        }catch (Exception e){
+            e.printStackTrace();
+            WebUtil.print(response,new Result(false));
+        }
+    }
 
 
 }

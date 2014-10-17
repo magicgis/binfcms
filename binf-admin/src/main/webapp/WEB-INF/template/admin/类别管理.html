@@ -5,7 +5,7 @@
     <#include "inc/meta.html"/>
     <meta name="description" content="">
     <meta name="author" content="">
-    <title></title>
+    <title>类别管理</title>
     <#include "inc/js.html"/>
 
 
@@ -13,7 +13,7 @@
 
 <body>
 
-<div id="wrapper">
+<div id="category">
 
     <#include "inc/nav.html"/>
 
@@ -30,39 +30,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="btn-group pull-left" >
-                            <a href="#" class="btn btn-outline btn-primary btn-lg" role="button" data-toggle="modal" data-target="#categoryModal">创建</a>
+                            <a href="javascript:void(0)" id="create"  class="btn btn-outline btn-primary btn-lg" role="button" data-toggle="modal" >创建</a>
                             <a href="#" class="btn btn-outline btn-warning btn-lg" role="button">修改</a>
-
-                             <!-- Modal -->
-                              <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
-                                  <div class="modal-dialog">
-                                      <div class="modal-content">
-                                          <div class="modal-header">
-                                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                              <h4 class="modal-title" id="categoryModalLabel">类别编辑</h4>
-                                          </div>
-                                          <div class="modal-body">
-                                              <form class="form-horizontal" role="form">
-                                                  <div class="form-group">
-                                                      <label for="name" class="col-sm-2 control-label">类别名称</label>
-                                                      <div class="col-sm-5">
-                                                          <input type="text" class="form-control" id="name" name="name" placeholder="Email">
-                                                      </div>
-                                                  </div>
-
-                                              </form>
-                                          </div>
-                                          <div class="modal-footer">
-                                              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                              <button type="button" class="btn btn-primary">保存</button>
-                                          </div>
-                                      </div>
-                                      <!-- /.modal-content -->
-                                  </div>
-                                  <!-- /.modal-dialog -->
-                              </div>
-                              <!-- Modal end -->
-
                             <a href="#" class="btn btn-outline btn-danger btn-lg" role="button">删除</a>
                         </div>
                         <div class="clearfix"></div>
@@ -127,6 +96,54 @@
         <!-- /.col-lg-12 -->
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="categoryModalLabel">类别编辑</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="categoryForm" method="post" action="content/category/save" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">名称:</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="请输入名称">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="parentId" class="col-sm-2 control-label">父类:</label>
+                                <div class="col-sm-5">
+                                    <select class="form-control" id="parentId"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="alias" class="col-sm-2 control-label">别名:</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="alias" name="alias" placeholder="请输入别名">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="sort" class="col-sm-2 control-label">排序:</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="sort" name="sort" placeholder="请输入排序号">
+                                </div>
+                            </div>
+
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" id="save" class="btn btn-primary">保存</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- Modal end -->
 
     </div>
 <!-- /#page-wrapper -->
@@ -139,7 +156,38 @@
 </body>
 
 <script type="text/javascript">
+
+    var category = {
+        v:"category",
+        fn:{
+           init:function(){
+               $("#create").click(function(){
+                   $("#categoryModal").modal("show");
+               })
+
+               $("#categoryModal #save").click(function(){
+                   category.fn.save();
+                   $("#categoryModal").modal("hide");
+               })
+           },
+           save:function(){
+               $("#categoryForm").ajaxSubmit({
+                   data:{},
+                   dataType:"json",
+                   success:function(result){
+                       if(result.success){
+                           binf.notify(result.msg,"success");
+                       }
+                   }
+               })
+           }
+        }
+    }
+
+
     $(document).ready(function() {
+        category.fn.init();
+
         $('#dataTables-example').dataTable();
     });
 

@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Page<Category> find(int pageNum, int pageSize) {
-        return categoryDao.findAll(new PageRequest(pageNum,pageSize, Sort.Direction.DESC,"id"));
+        return categoryDao.findAll(new PageRequest(pageNum-1,pageSize, Sort.Direction.DESC,"id"));
     }
 
     @Override
@@ -52,6 +52,19 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category create(Category category) {
+
+        if(category.getParentId()==null){
+            category.setLevel(1);
+        }else{
+            Category parent =  getById(category.getParentId());
+            category.setLevel(parent.getLevel()+1);
+        }
+        if(category.getSort()==null){
+            category.setSort(0);
+        }
+
+        category.setCount(0);
+
         category.setCreateDate(new Date());
         return categoryDao.save(category);
     }

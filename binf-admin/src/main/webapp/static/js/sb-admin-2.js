@@ -45,3 +45,18 @@ $(function() {
 
     })
 })
+
+
+var binf = {
+    notify:function notify(msg,status){
+        var option = { position:"top center",
+            autoHideDelay:2000,
+            className:status,
+            arrowSize: 10
+        }
+
+        $.notify(msg, option);
+    }
+
+}
+
