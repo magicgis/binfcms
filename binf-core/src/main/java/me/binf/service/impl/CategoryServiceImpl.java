@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Page<Category> find(int pageNum, int pageSize) {
-        return categoryDao.findAll(new PageRequest(pageNum-1,pageSize, Sort.Direction.DESC,"id"));
+        return categoryDao.findAll(new PageRequest(pageNum,pageSize, Sort.Direction.DESC,"id"));
     }
 
     @Override
@@ -75,4 +76,76 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryDao.save(category);
     }
 
+    @Override
+    public List<Category> findByParent(Integer parentId) {
+        return categoryDao.findByParent(parentId);
+    }
+
+    @Override
+    public List<Category> findAllSub(Integer id) {
+        List<Category> list = categoryDao.findByParent(id);
+        if(list!=null&&!list.isEmpty()){
+            List<Category> allSubList = new ArrayList<Category>();
+            for(Category category:list){
+                List<Category> subList = findAllSub(category.getId());
+                if(subList!=null&&!subList.isEmpty()){
+                     allSubList.addAll(subList);
+                }
+
+            }
+            list.addAll(allSubList);
+        }
+        return list;
+    }
+
+
+    public String tree(Integer pid){
+        List<Category> list = null;
+        if(pid==null){
+            list = categoryDao.findByParent();
+        }else{
+            list = categoryDao.findByParent(pid);
+        }
+        String tree = null;
+        if(list!=null&&!list.isEmpty()){
+            for(Category category:list){
+                if(tree!=null){
+                    tree+=",";
+                }else{
+                    tree="";
+                }
+                tree+=tree(category);
+            }
+            tree="{"+tree+"}";
+        }else{
+            tree="{}";
+        }
+        return tree;
+    }
+
+    public String tree(Category category){
+        String subTree = null;
+        List<Category> categoryList = categoryDao.findByParent(category.getId());
+        if(categoryList!=null&&!categoryList.isEmpty()){
+            for(Category subCategory:categoryList){
+                if(subTree!=null){
+                    subTree+=",";
+                }else{
+                    subTree="";
+                }
+                subTree+=tree(subCategory);
+
+            }
+
+        }
+        String tree = category.getId()+":{name:'"+category.getName()+"'}";
+        if(subTree!=null){
+            tree+=",cell:{"+subTree+"}";
+        }
+        return tree;
+    }
+
 }
+
+
+

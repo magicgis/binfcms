@@ -44,11 +44,45 @@ $(function() {
         }
 
     })
+
+    // check all checkboxes in table
+    if(jQuery('.checkall').length > 0) {
+
+        jQuery('.checkall').click(function(){
+            var parentTable = jQuery('.checkall').parents('table');
+            var ch = parentTable.find('tbody input[type=checkbox]');
+
+            if(jQuery(this).is(':checked')) {
+                //check all rows in table
+                ch.each(function(){
+                    jQuery(this).attr('checked',true);
+                    jQuery(this).parent().addClass('warning');	//used for the custom checkbox style
+                    jQuery(this).parents('tr').addClass('warning'); // to highlight row as selected
+                });
+
+            } else {
+                //uncheck all rows in table
+                ch.each(function(){
+                    jQuery(this).attr('checked',false);
+                    jQuery(this).parent().removeClass('warning');	//used for the custom checkbox style
+                    jQuery(this).parents('tr').removeClass('warning');
+                });
+
+            }
+        });
+    }
+
+
+
+
 })
 
 
 var binf = {
-    notify:function notify(msg,status){
+    v:{
+      ajaxOption:{method:'get',dataType:'json',async:true}
+    },
+    notify:function(msg,status){
         var option = { position:"top center",
             autoHideDelay:2000,
             className:status,
@@ -56,7 +90,54 @@ var binf = {
         }
 
         $.notify(msg, option);
+    },
+    uiform:function(){
+//        if(jQuery().uniform){
+//            jQuery('input:checkbox, input:radio').uniform();
+//        }
+
+        jQuery('tbody input:checkbox').click(function(){
+            if(jQuery(this).is(':checked'))
+                jQuery(this).parents('tr').addClass('warning');
+            else
+                jQuery(this).parents('tr').removeClass('warning');
+        });
+    },
+    ajax:function(url, data, callbackFun, option){
+        if(option==null || option==undefined){
+            option=binf.v.ajaxOption;
+        }else{
+            if(option.method==null || option.method==undefined){
+                option.method=binf.v.ajaxOption.method;
+            }
+            if(option.dataType==null || option.dataType==undefined){
+                option.dataType=binf.v.ajaxOption.dataType;
+            }
+            if(option.async==null || option.async==undefined){
+                option.async=binf.v.ajaxOption.async;
+            }
+        }
+        jQuery.ajax({
+            dataType: option.dataType,
+            url: url,
+            data: data,
+            async: option.async,
+            success: function(data){
+                console.log(data)
+                callbackFun(data);
+            },
+            statusCode: {
+                401: function() {
+                },
+                403: function() {
+                },
+                500: function() {
+                }
+            }
+        });
     }
 
 }
+
+
 

@@ -40,54 +40,31 @@
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover" id="dataTables">
+                            <colgroup>
+                                <col class="gradeA even" style="text-align: center; width: 6%"/>
+                                <col class="gradeA odd"/>
+                                <col class="gradeA even"/>
+                                <col class="gradeA odd"/>
+                                <col class="gradeA even"/>
+                                <col class="gradeA odd"/>
+                            </colgroup>
                             <thead>
                                 <tr>
-                                    <th>Rendering engine</th>
-                                    <th>Browser</th>
-                                    <th>Platform(s)</th>
-                                    <th>Engine version</th>
-                                    <th>CSS grade</th>
+                                    <th> <input type="checkbox" class="checkall"/></th>
+                                    <th>名称</th>
+                                    <th>父类</th>
+                                    <th>别名</th>
+                                    <th>级别</th>
+                                    <th>排序</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="odd gradeX">
-                                    <td>Trident</td>
-                                    <td>Internet Explorer 4.0</td>
-                                    <td>Win 95+</td>
-                                    <td class="center">4</td>
-                                    <td class="center">X</td>
-                                </tr>
-                                <tr class="even gradeC">
-                                    <td>Trident</td>
-                                    <td>Internet Explorer 5.0</td>
-                                    <td>Win 95+</td>
-                                    <td class="center">5</td>
-                                    <td class="center">C</td>
-                                </tr>
-                                <tr class="odd gradeA">
-                                    <td>Trident</td>
-                                    <td>Internet Explorer 5.5</td>
-                                    <td>Win 95+</td>
-                                    <td class="center">5.5</td>
-                                    <td class="center">A</td>
-                                </tr>
-                                <tr class="even gradeA">
-                                    <td>Trident</td>
-                                    <td>Internet Explorer 6</td>
-                                    <td>Win 98+</td>
-                                    <td class="center">6</td>
-                                    <td class="center">A</td>
-                                </tr>
 
-                        </tbody>
+
+                            </tbody>
                         </table>
                         </div>
-                        <!-- /.table-responsive -->
-                        <div class="well">
-                            <h4>DataTables Usage Information</h4>
-                            <p>DataTables is a very flexible, advanced tables plugin for jQuery. In SB Admin, we are using a specialized version of DataTables built for Bootstrap 3. We have also customized the table headings to use Font Awesome icons in place of images. For complete documentation on DataTables, visit their website at <a target="_blank" href="https://datatables.net/">https://datatables.net/</a>.</p>
-                            <a class="btn btn-default btn-lg btn-block" target="_blank" href="https://datatables.net/">View DataTables Documentation</a>
-                        </div>
+
                     </div>
                 <!-- /.panel-body -->
                 </div>
@@ -158,7 +135,11 @@
 <script type="text/javascript">
 
     var category = {
-        v:"category",
+        v:{ id:"category",
+            linkageSel:null,
+            dTable:null
+        },
+
         fn:{
            init:function(){
                $("#create").click(function(){
@@ -169,10 +150,50 @@
                    category.fn.save();
                    $("#categoryModal").modal("hide");
                })
+
+               category.fn.initSelect();
+               category.fn.dataTableInit();
+
+           },
+           initSelect:function(){
+
+               var data = {scriptName:"typeTree"};
+               binf.ajax("content/category/tree",data,function(data){
+                   var opts = {data: typeTree,loaderImg:"static/images/ui-anim_basic_16x16.gif", select:'#parentId', selStyle: 'width: 100px;',head:'请选择分类', autoLink:false };
+                   category.v.linkageSel = new LinkageSel(opts);
+               },{dataType:"script"})
+
+           },
+           dataTableInit:function(){
+                category.v.dTable =$('#dataTables').DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": {
+                        "url": "content/category/list",
+                        "type": "POST"
+                    },
+                    ordering:false,
+                    "columns": [
+                        { "data": "id" },
+                        { "data": "name" },
+                        { "data": "parentId" },
+                        { "data": "alias" },
+                        { "data": "level" },
+                        { "data": "sort" }
+                    ],
+                    "createdRow": function ( row, data, index ) {
+                        $('td', row).eq(0).html("<input type='checkbox' value="+data.id+">");
+                    },
+                    "fnDrawCallback": function ( row, data, start, end, display ){
+                        binf.uiform();
+                    }
+                });
+
            },
            save:function(){
+               var parentId = category.v.linkageSel.getSelectedValue();
                $("#categoryForm").ajaxSubmit({
-                   data:{},
+                   data:{parentId:parentId},
                    dataType:"json",
                    success:function(result){
                        if(result.success){
@@ -188,7 +209,7 @@
     $(document).ready(function() {
         category.fn.init();
 
-        $('#dataTables-example').dataTable();
+        $('#dataTables').dataTable();
     });
 
 
