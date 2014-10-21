@@ -31,8 +31,8 @@
                     <div class="panel-heading">
                         <div class="btn-group pull-left" >
                             <a href="javascript:void(0)" id="create"  class="btn btn-outline btn-primary btn-lg" role="button" data-toggle="modal" >创建</a>
-                            <a href="#" class="btn btn-outline btn-warning btn-lg" role="button">修改</a>
-                            <a href="#" class="btn btn-outline btn-danger btn-lg" role="button">删除</a>
+                            <a href="javascript:void(0)" class="btn btn-outline btn-warning btn-lg" role="button">修改</a>
+                            <a href="javascript:void(0)" class="btn btn-outline btn-danger btn-lg" role="button">删除</a>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -83,6 +83,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="categoryForm" method="post" action="content/category/save" class="form-horizontal" role="form">
+                            <input type="hidden"  id="parentId" name="parentId" value="">
                             <div class="form-group">
                                 <label for="name" class="col-sm-2 control-label">名称:</label>
                                 <div class="col-sm-5">
@@ -90,9 +91,9 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="parentId" class="col-sm-2 control-label">父类:</label>
+                                <label for="linkageselId" class="col-sm-2 control-label">父类:</label>
                                 <div class="col-sm-5">
-                                    <select class="form-control" id="parentId"></select>
+                                    <select class="form-control" id="linkageselId"></select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -142,27 +143,32 @@
 
         fn:{
            init:function(){
+
                $("#create").click(function(){
                    $("#categoryModal").modal("show");
-               })
+               });
 
                $("#categoryModal #save").click(function(){
                    category.fn.save();
                    $("#categoryModal").modal("hide");
                })
 
-               category.fn.initSelect();
+               category.fn.selectInit();
                category.fn.dataTableInit();
 
            },
-           initSelect:function(){
-
+           selectInit:function(){
                var data = {scriptName:"typeTree"};
                binf.ajax("content/category/tree",data,function(data){
-                   var opts = {data: typeTree,loaderImg:"static/images/ui-anim_basic_16x16.gif", select:'#parentId', selStyle: 'width: 100px;',head:'请选择分类', autoLink:false };
+                   var opts = {data: typeTree,loaderImg:"static/images/ui-anim_basic_16x16.gif", select:'#linkageselId', selStyle: 'width: 100px;',head:'请选择分类', autoLink:false };
                    category.v.linkageSel = new LinkageSel(opts);
+                   category.v.linkageSel.onChange(function(){
+                       category.fn.selectChange(this);
+                   })
                },{dataType:"script"})
-
+           },
+           selectChange:function(obj){
+              $("#parentId").val(obj.getSelectedValue());
            },
            dataTableInit:function(){
                 category.v.dTable =$('#dataTables').DataTable({
@@ -196,11 +202,15 @@
                    data:{parentId:parentId},
                    dataType:"json",
                    success:function(result){
-                       if(result.success){
-                           binf.notify(result.msg,"success");
-                       }
+                       category.fn.responseComplete(result);
                    }
                })
+            },
+            responseComplete:function(result){
+               if(result.success){
+                   category.v.dTable.ajax.reload();
+                   binf.notify(result.msg,"success");
+               }
            }
         }
     }
@@ -208,8 +218,6 @@
 
     $(document).ready(function() {
         category.fn.init();
-
-        $('#dataTables').dataTable();
     });
 
 

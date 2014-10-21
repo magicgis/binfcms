@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,9 +30,6 @@ public class ContentController {
     public String category(HttpServletRequest request,
                            HttpServletResponse response,
                            ModelMap model){
-
-        Page<Category> categoryPage = categoryService.find(1);
-
 
         return "template/admin/类别管理";
     }
