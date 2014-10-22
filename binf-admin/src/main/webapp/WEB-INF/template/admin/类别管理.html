@@ -32,7 +32,7 @@
                         <div class="btn-group pull-left" >
                             <a href="javascript:void(0)" id="create"  class="btn btn-outline btn-primary btn-lg" role="button" data-toggle="modal" >创建</a>
                             <a href="javascript:void(0)" class="btn btn-outline btn-warning btn-lg" role="button">修改</a>
-                            <a href="javascript:void(0)" class="btn btn-outline btn-danger btn-lg" role="button">删除</a>
+                            <a href="javascript:void(0)" id="delete" class="btn btn-outline btn-danger btn-lg" role="button">删除</a>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -50,7 +50,7 @@
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th> <input type="checkbox" class="checkall"/></th>
+                                    <th> <input type="checkbox" onclick="binf.checkAll(this)" class="checkall"/></th>
                                     <th>名称</th>
                                     <th>父类</th>
                                     <th>别名</th>
@@ -136,11 +136,11 @@
 <script type="text/javascript">
 
     var category = {
-        v:{ id:"category",
+        v:{
+            id:"category",
             linkageSel:null,
             dTable:null
         },
-
         fn:{
            init:function(){
 
@@ -148,14 +148,21 @@
                    $("#categoryModal").modal("show");
                });
 
+               $("#delete").click(function(){
+                   var checkBox =  $("#dataTables tbody tr").find('input[type=checkbox]:checked');
+                   var ids =  checkBox.getInputId();
+                   category.fn.deleteRow(checkBox,ids)
+
+               })
+
                $("#categoryModal #save").click(function(){
                    category.fn.save();
                    $("#categoryModal").modal("hide");
                })
 
                category.fn.selectInit();
-               category.fn.dataTableInit();
 
+               category.fn.dataTableInit();
            },
            selectInit:function(){
                var data = {scriptName:"typeTree"};
@@ -166,6 +173,17 @@
                        category.fn.selectChange(this);
                    })
                },{dataType:"script"})
+           },
+           deleteRow:function(checkBox,ids){
+               if(ids.length>0){
+                   binf.delNotify(function(){
+                       checkBox.each(function(index){
+                           if(ids[index]==$(this).val()){
+                               $(this).parents("tr").remove();
+                           }
+                       })
+                   });
+               }
            },
            selectChange:function(obj){
               $("#parentId").val(obj.getSelectedValue());
@@ -188,10 +206,10 @@
                         { "data": "sort" }
                     ],
                     "createdRow": function ( row, data, index ) {
-                        $('td', row).eq(0).html("<input type='checkbox' value="+data.id+">");
+                        $('td', row).eq(0).html("<input type='checkbox'  value="+data.id+">");
                     },
                     "fnDrawCallback": function ( row, data, start, end, display ){
-                        binf.uiform();
+                         binf.uiform();
                     }
                 });
 
@@ -215,10 +233,12 @@
         }
     }
 
-
     $(document).ready(function() {
         category.fn.init();
     });
+
+
+
 
 
 </script>

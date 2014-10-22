@@ -2,12 +2,6 @@ $(function() {
 
     $('#side-menu').metisMenu();
 
-});
-
-//Loads the correct sidebar on window load,
-//collapses the sidebar on window resize.
-// Sets the min-height of #page-wrapper to window size
-$(function() {
     $(window).bind("load resize", function() {
         topOffset = 50;
         width = (this.window.innerWidth > 0) ? this.window.innerWidth : this.screen.width;
@@ -26,56 +20,33 @@ $(function() {
         }
     })
 
-
     //menu
-
     $('#side-menu').find("li").each(function(){
         var menu_a =  $(this).find("a").eq(0);
         var page_title = $("#page-wrapper .page-header").text();
         if(menu_a.text()==page_title){
             menu_a.addClass("active");
             var ul = $(this).parent("ul .nav-second-level")
-
             if(ul.length>0){
                 ul.addClass("in")
-
             }
 
         }
-
     })
+});
 
-    // check all checkboxes in table
-    if(jQuery('.checkall').length > 0) {
-
-        jQuery('.checkall').click(function(){
-            var parentTable = jQuery('.checkall').parents('table');
-            var ch = parentTable.find('tbody input[type=checkbox]');
-
-            if(jQuery(this).is(':checked')) {
-                //check all rows in table
-                ch.each(function(){
-                    jQuery(this).attr('checked',true);
-                    jQuery(this).parent().addClass('warning');	//used for the custom checkbox style
-                    jQuery(this).parents('tr').addClass('warning'); // to highlight row as selected
-                });
-
-            } else {
-                //uncheck all rows in table
-                ch.each(function(){
-                    jQuery(this).attr('checked',false);
-                    jQuery(this).parent().removeClass('warning');	//used for the custom checkbox style
-                    jQuery(this).parents('tr').removeClass('warning');
-                });
-
-            }
-        });
-    }
-
-
-
-
-})
+$.notify.addStyle('foo', {
+    html:
+        "<div>" +
+            "<div class='clearfix'>" +
+            "<div class='title' data-notify-html='title'/>" +
+            "<div class='buttons'>" +
+            "<button class='no'>取消</button>" +
+            "<button class='yes' data-notify-text='button'></button>" +
+            "</div>" +
+            "</div>" +
+            "</div>"
+});
 
 
 var binf = {
@@ -91,17 +62,54 @@ var binf = {
 
         $.notify(msg, option);
     },
-    uiform:function(){
-//        if(jQuery().uniform){
-//            jQuery('input:checkbox, input:radio').uniform();
-//        }
-
-        jQuery('tbody input:checkbox').click(function(){
-            if(jQuery(this).is(':checked'))
-                jQuery(this).parents('tr').addClass('warning');
-            else
-                jQuery(this).parents('tr').removeClass('warning');
+    delNotify:function(method){
+        $.notify({
+            title: '确认删除么？删除后不可恢复！',
+            button: '删除'
+        }, {
+            style: 'foo',
+            autoHide: false,
+            clickToHide: false,
+            position:"top center"
         });
+
+
+        $(document).on('click', '.notifyjs-foo-base .no', function() {
+            $(this).trigger('notify-hide');
+        });
+        $(document).on('click', '.notifyjs-foo-base .yes', function() {
+            var notifyMethod = method;
+            eval("notifyMethod()")
+            $(this).trigger('notify-hide');
+        });
+    },
+    uiform:function(){
+        jQuery('tbody input:checkbox').click(function(){
+            if(jQuery(this).is(':checked')){
+                jQuery(this).parent().addClass('checked');
+                jQuery(this).parents('tr').addClass('warning');
+            }else{
+                jQuery(this).parent().removeClass('checked');
+                jQuery(this).parents('tr').removeClass('warning');
+            }
+        });
+    },
+    checkAll:function(obj){
+        var parentTable = jQuery(obj).parents('table');
+        var ch = parentTable.find('tbody input[type=checkbox]');
+        if(jQuery(obj).is(':checked')) {
+            ch.each(function(){
+                jQuery(this).prop('checked', true);
+                jQuery(this).parent().addClass('checked');
+                jQuery(this).parents('tr').addClass('warning');
+            });
+        } else {
+            ch.each(function(){
+                jQuery(this).removeAttr('checked')
+                jQuery(this).parent().removeClass('checked');
+                jQuery(this).parents('tr').removeClass('warning');
+            });
+        }
     },
     ajax:function(url, data, callbackFun, option){
         if(option==null || option==undefined){
@@ -123,7 +131,6 @@ var binf = {
             data: data,
             async: option.async,
             success: function(data){
-                console.log(data)
                 callbackFun(data);
             },
             statusCode: {
@@ -138,6 +145,39 @@ var binf = {
     }
 
 }
+
+
+;(function($){
+    $.fn.getInputId = function(sigle){
+        var checkIds = [];
+
+        this.each(function(){
+            checkIds.push($(this).val())
+        });
+
+        if(sigle){
+            if(checkIds.length>1){
+                binf.notify('只能选择一条记录！','error');
+                return false;
+            }
+            else if(checkIds.length==0){
+                binf.notify('请选择一条记录操作！','error');
+                return false;
+            }
+            else{
+                return checkIds[0];
+            }
+        }else{
+            if(checkIds.length==0){
+                binf.notify('请选择至少一条记录操作！','error');
+                return false;
+            }else{
+                return checkIds;
+            }
+
+        }
+    };
+})(jQuery);
 
 
 
