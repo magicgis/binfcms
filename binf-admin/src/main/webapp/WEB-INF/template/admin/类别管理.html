@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>类别管理</title>
-    <#include "inc/js.html"/>
+    <#include "inc/css.html"/>
 
 
 </head>
@@ -87,29 +87,27 @@
                             <div class="form-group">
                                 <label for="name" class="col-sm-2 control-label">名称:</label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="请输入名称">
+                                    <input type="text" class="form-control" id="name" name="name" data-rule="required" placeholder="请输入名称">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="linkageselId" class="col-sm-2 control-label">父类:</label>
-                                <div class="col-sm-5">
-                                    <select class="form-control" id="linkageselId"></select>
+                                <div class="form-inline col-sm-10">
+                                    <select  id="linkageselId"  ></select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="alias" class="col-sm-2 control-label">别名:</label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="alias" name="alias" placeholder="请输入别名">
+                                    <input type="text" class="form-control" id="alias" name="alias" data-rule="required" placeholder="请输入别名">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="sort" class="col-sm-2 control-label">排序:</label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="sort" name="sort" placeholder="请输入排序号">
+                                    <input type="text" class="form-control" id="sort" data-rule="integer[+0]" value="0" name="sort" placeholder="请输入排序号">
                                 </div>
                             </div>
-
-
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -139,7 +137,8 @@
         v:{
             id:"category",
             linkageSel:null,
-            dTable:null
+            dTable:null,
+            list:[]
         },
         fn:{
            init:function(){
@@ -157,7 +156,6 @@
 
                $("#categoryModal #save").click(function(){
                    category.fn.save();
-                   $("#categoryModal").modal("hide");
                })
 
                category.fn.selectInit();
@@ -166,8 +164,24 @@
            },
            selectInit:function(){
                var data = {scriptName:"typeTree"};
+
                binf.ajax("content/category/tree",data,function(data){
-                   var opts = {data: typeTree,loaderImg:"static/images/ui-anim_basic_16x16.gif", select:'#linkageselId', selStyle: 'width: 100px;',head:'请选择分类', autoLink:false };
+                   var opts = {data: typeTree,
+                               loaderImg:"static/images/ui-anim_basic_16x16.gif",
+                               select:'#linkageselId',
+                               selClass:'LinkageSel form-control',
+                               selStyle: 'width: 100px;',
+                               head:'请选择分类',
+                               autoLink:false};
+                   $("#categoryForm .LinkageSel").empty();
+                   $("#categoryForm #parentId").val("");
+                   if(category.v.linkageSel){
+                       $(".LinkageSel").each(function(){
+                           if($(this).attr("id")!="linkageselId"){
+                               $(this).remove();
+                           }
+                       })
+                   }
                    category.v.linkageSel = new LinkageSel(opts);
                    category.v.linkageSel.onChange(function(){
                        category.fn.selectChange(this);
@@ -177,9 +191,16 @@
            deleteRow:function(checkBox,ids){
                if(ids.length>0){
                    binf.delNotify(function(){
-                       checkBox.each(function(index){
-                           if(ids[index]==$(this).val()){
-                               $(this).parents("tr").remove();
+                       binf.ajax("content/category/delete",{ids:JSON.stringify(ids)},function(result){
+                           if(result.success){
+                               binf.notify(result.msg,"success");
+                               checkBox.each(function(index){
+                                   if(ids[index]==$(this).val()){
+                                       $(this).parents("tr").remove();
+                                   }
+                               })
+                           }else{
+                               binf.notify(result.msg,"error");
                            }
                        })
                    });
@@ -206,21 +227,32 @@
                         { "data": "sort" }
                     ],
                     "createdRow": function ( row, data, index ) {
-                        $('td', row).eq(0).html("<input type='checkbox'  value="+data.id+">");
+                        category.v.list.push(data);
+                        $('td',row).eq(0).html("<input type='checkbox'  value="+data.id+">");
                     },
-                    "fnDrawCallback": function ( row, data, start, end, display ){
-                         binf.uiform();
+                    rowCallback:function(row,data){
+                        for(var item in category.v.list){
+                            if(category.v.list[item].id==data.parentId){
+                                $('td:eq(2)', row).html(category.v.list[item].name);
+                            }
+                        }
+                    },
+                    "fnDrawCallback": function (row){
+                        binf.uiform();
                     }
                 });
 
            },
            save:function(){
+               if(!$('#categoryForm').isValid()){
+                   return false;
+               };
                var parentId = category.v.linkageSel.getSelectedValue();
                $("#categoryForm").ajaxSubmit({
-                   data:{parentId:parentId},
                    dataType:"json",
                    success:function(result){
                        category.fn.responseComplete(result);
+                       $("#categoryModal").modal("hide");
                    }
                })
             },
@@ -228,6 +260,9 @@
                if(result.success){
                    category.v.dTable.ajax.reload();
                    binf.notify(result.msg,"success");
+                   category.fn.selectInit();
+               }else{
+                   binf.notify(result.msg,"error");
                }
            }
         }

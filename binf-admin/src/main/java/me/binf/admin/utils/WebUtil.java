@@ -23,7 +23,7 @@ public class WebUtil {
             response.setCharacterEncoding(Constant.ENCODING); // 防止中文乱码
             // 向响应中写入数据
             PrintWriter writer = response.getWriter();
-            writer.write(JsonUtil.Obj2Json(data)); // 转为 JSON 字符串
+            writer.write(JsonUtil.obj2Json(data)); // 转为 JSON 字符串
             writer.flush();
             writer.close();
         } catch (Exception e) {

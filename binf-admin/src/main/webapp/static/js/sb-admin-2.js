@@ -35,23 +35,10 @@ $(function() {
     })
 });
 
-$.notify.addStyle('foo', {
-    html:
-        "<div>" +
-            "<div class='clearfix'>" +
-            "<div class='title' data-notify-html='title'/>" +
-            "<div class='buttons'>" +
-            "<button class='no'>取消</button>" +
-            "<button class='yes' data-notify-text='button'></button>" +
-            "</div>" +
-            "</div>" +
-            "</div>"
-});
-
-
 var binf = {
     v:{
-      ajaxOption:{method:'get',dataType:'json',async:true}
+      ajaxOption:{method:'get',dataType:'json',async:true},
+      notifyMethod:null
     },
     notify:function(msg,status){
         var option = { position:"top center",
@@ -59,7 +46,6 @@ var binf = {
             className:status,
             arrowSize: 10
         }
-
         $.notify(msg, option);
     },
     delNotify:function(method){
@@ -72,16 +58,9 @@ var binf = {
             clickToHide: false,
             position:"top center"
         });
-
-
-        $(document).on('click', '.notifyjs-foo-base .no', function() {
-            $(this).trigger('notify-hide');
-        });
-        $(document).on('click', '.notifyjs-foo-base .yes', function() {
-            var notifyMethod = method;
-            eval("notifyMethod()")
-            $(this).trigger('notify-hide');
-        });
+        if(method!=undefined){
+            binf.v.notifyMethod = method;
+        }
     },
     uiform:function(){
         jQuery('tbody input:checkbox').click(function(){
@@ -145,6 +124,32 @@ var binf = {
     }
 
 }
+
+
+
+$.notify.addStyle('foo', {
+    html:
+        "<div>" +
+            "<div class='clearfix'>" +
+            "<div class='title' data-notify-html='title'/>" +
+            "<div class='buttons'>" +
+            "<button class='no'>取消</button>" +
+            "<button class='yes' data-notify-text='button'></button>" +
+            "</div>" +
+            "</div>" +
+            "</div>"
+});
+
+$(document).on('click', '.notifyjs-foo-base .no', function() {
+    $(this).trigger('notify-hide');
+});
+$(document).on('click', '.notifyjs-foo-base .yes', function() {
+    if(binf.v.notifyMethod!=null){
+        console.log(binf.v.notifyMethod)
+        eval("binf.v.notifyMethod()");
+    }
+    $(this).trigger('notify-hide');
+});
 
 
 ;(function($){

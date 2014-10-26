@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +19,7 @@ import java.util.List;
  * Created by wangbin on 14-10-16.
  */
 @Service
+@Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
@@ -45,6 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public Category deleteById(int id) {
         Category category = getById(id);
         categoryDao.delete(category);
@@ -52,6 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public Category create(Category category) {
 
         if(category.getParentId()==null){
@@ -71,6 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public Category Update(Category category) {
         category.setUpdateDate(new Date());
         return categoryDao.save(category);
@@ -123,6 +128,14 @@ public class CategoryServiceImpl implements CategoryService {
         return tree;
     }
 
+    @Override
+    @Transactional
+    public void deleteAll(int[] ids) {
+        for(int id : ids){
+            deleteById(id);
+        }
+    }
+
     public String tree(Category category){
         String subTree = null;
         List<Category> categoryList = categoryDao.findByParent(category.getId());
@@ -138,10 +151,11 @@ public class CategoryServiceImpl implements CategoryService {
             }
 
         }
-        String tree = category.getId()+":{name:'"+category.getName()+"'}";
+        String tree = category.getId()+":{name:'"+category.getName()+"'";
         if(subTree!=null){
             tree+=",cell:{"+subTree+"}";
         }
+        tree+="}";
         return tree;
     }
 

@@ -16,4 +16,6 @@ public interface CategoryService extends ICommonService<Category> {
 
     public String tree(Integer pid);
 
+    public void deleteAll(int[] ids);
+
 }
