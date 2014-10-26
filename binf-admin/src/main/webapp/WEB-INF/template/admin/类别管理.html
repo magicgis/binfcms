@@ -31,7 +31,7 @@
                     <div class="panel-heading">
                         <div class="btn-group pull-left" >
                             <a href="javascript:void(0)" id="create"  class="btn btn-outline btn-primary btn-lg" role="button" data-toggle="modal" >创建</a>
-                            <a href="javascript:void(0)" class="btn btn-outline btn-warning btn-lg" role="button">修改</a>
+                            <a href="javascript:void(0)" id="edit" class="btn btn-outline btn-warning btn-lg" role="button">修改</a>
                             <a href="javascript:void(0)" id="delete" class="btn btn-outline btn-danger btn-lg" role="button">删除</a>
                         </div>
                         <div class="clearfix"></div>
@@ -83,6 +83,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="categoryForm" method="post" action="content/category/save" class="form-horizontal" role="form">
+                            <input type="hidden"  id="id" name="id" value="">
                             <input type="hidden"  id="parentId" name="parentId" value="">
                             <div class="form-group">
                                 <label for="name" class="col-sm-2 control-label">名称:</label>
@@ -147,12 +148,22 @@
                    $("#categoryModal").modal("show");
                });
 
+               $("#edit").click(function(){
+                   var checkBox =  $("#dataTables tbody tr").find('input[type=checkbox]:checked');
+                   var id =  checkBox.getInputId(true);
+                   if(id){
+                       $("#categoryModal").modal("show");
+                       category.fn.edit(id);
+                   }
+               })
+
                $("#delete").click(function(){
                    var checkBox =  $("#dataTables tbody tr").find('input[type=checkbox]:checked');
                    var ids =  checkBox.getInputId();
                    category.fn.deleteRow(checkBox,ids)
-
                })
+
+
 
                $("#categoryModal #save").click(function(){
                    category.fn.save();
@@ -165,7 +176,7 @@
            selectInit:function(){
                var data = {scriptName:"typeTree"};
 
-               binf.ajax("content/category/tree",data,function(data){
+               binf.ajax("content/category/tree",data,function(result){
                    var opts = {data: typeTree,
                                loaderImg:"static/images/ui-anim_basic_16x16.gif",
                                select:'#linkageselId',
@@ -231,9 +242,10 @@
                         $('td',row).eq(0).html("<input type='checkbox'  value="+data.id+">");
                     },
                     rowCallback:function(row,data){
-                        for(var item in category.v.list){
-                            if(category.v.list[item].id==data.parentId){
-                                $('td:eq(2)', row).html(category.v.list[item].name);
+                        var items = category.v.list;
+                        for(var i in items){
+                            if(items[i].id==data.parentId){
+                                $('td:eq(2)', row).html(items[i].name);
                             }
                         }
                     },
@@ -242,6 +254,19 @@
                     }
                 });
 
+           },
+           edit:function(id){
+               var items = category.v.list;
+               $.each(items,function(index,item){
+                   if(item.id==id){
+                      for(var key in item){
+                         var element = $("#categoryForm :input[name="+key+"]")
+                         if(element.length>0){
+                             element.val(item[key]);
+                         }
+                      }
+                   }
+               })
            },
            save:function(){
                if(!$('#categoryForm').isValid()){
@@ -271,8 +296,6 @@
     $(document).ready(function() {
         category.fn.init();
     });
-
-
 
 
 
