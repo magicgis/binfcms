@@ -76,7 +76,22 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Category Update(Category category) {
+    public Category update(Category category) {
+
+        Category origCategory = getById(category.getId());
+        category.setCount(origCategory.getCount());
+        category.setCreateDate(origCategory.getCreateDate());
+
+        if(category.getParentId()==null){
+            category.setLevel(1);
+            category.setParentId(null);
+        }else{
+            Category parent =  getById(category.getParentId());
+            category.setLevel(parent.getLevel()+1);
+        }
+        if(category.getSort()==null){
+            category.setSort(0);
+        }
         category.setUpdateDate(new Date());
         return categoryDao.save(category);
     }

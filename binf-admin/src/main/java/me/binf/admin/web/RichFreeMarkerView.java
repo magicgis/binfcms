@@ -7,10 +7,7 @@ import java.util.Map;
 
 /**
  * 扩展spring的FreemarkerView，加上base属性。
- * 
  * 支持jsp标签，Application、Session、Request、RequestParameters属性
- * 
- * 
  */
 public class RichFreeMarkerView extends FreeMarkerView {
 	/**

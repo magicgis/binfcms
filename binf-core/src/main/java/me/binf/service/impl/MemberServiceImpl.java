@@ -57,7 +57,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member Update(Member member) {
+    public Member update(Member member) {
         member.setUpdateDate(new Date());
         return memberDao.save(member);
     }

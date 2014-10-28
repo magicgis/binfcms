@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by wangbin on 14-10-17.

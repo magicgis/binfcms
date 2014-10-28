@@ -145,14 +145,15 @@
            init:function(){
 
                $("#create").click(function(){
-                   $("#categoryModal").modal("show");
+                   category.fn.showModal();
+                   category.v.linkageSel.reset();
                });
 
                $("#edit").click(function(){
                    var checkBox =  $("#dataTables tbody tr").find('input[type=checkbox]:checked');
                    var id =  checkBox.getInputId(true);
                    if(id){
-                       $("#categoryModal").modal("show");
+                       category.fn.showModal();
                        category.fn.edit(id);
                    }
                })
@@ -162,8 +163,6 @@
                    var ids =  checkBox.getInputId();
                    category.fn.deleteRow(checkBox,ids)
                })
-
-
 
                $("#categoryModal #save").click(function(){
                    category.fn.save();
@@ -175,7 +174,6 @@
            },
            selectInit:function(){
                var data = {scriptName:"typeTree"};
-
                binf.ajax("content/category/tree",data,function(result){
                    var opts = {data: typeTree,
                                loaderImg:"static/images/ui-anim_basic_16x16.gif",
@@ -184,11 +182,11 @@
                                selStyle: 'width: 100px;',
                                head:'请选择分类',
                                autoLink:false};
-                   $("#categoryForm .LinkageSel").empty();
-                   $("#categoryForm #parentId").val("");
-                   if(category.v.linkageSel){
+                   if($(".LinkageSel").length>0){
+                       $(".LinkageSel").empty();
                        $(".LinkageSel").each(function(){
                            if($(this).attr("id")!="linkageselId"){
+                               $(this).empty();
                                $(this).remove();
                            }
                        })
@@ -216,6 +214,52 @@
                        })
                    });
                }
+           },
+           edit:function(id){
+                var items = category.v.list;
+                $.each(items,function(index,item){
+                    if(item.id==id){
+                        for(var key in item){
+                            var element = $("#categoryForm :input[name="+key+"]")
+                            if(element.length>0){
+                                element.val(item[key]);
+                            }
+                        }
+                        category.fn.selectParents(items,item);
+                    }
+                })
+           },
+           selectParents:function(items,row){
+               var pids = [];
+               while(row!=null){
+                   if(row["parentId"]==null){
+                      break;
+                   }
+                   pids.push(row["parentId"]);
+                   $.each(items,function(index,item){
+                       if(row["parentId"]==item["id"]){
+                           row = item;
+                           return false;
+                       }
+                   })
+               }
+               var pids = binf.turnArray(pids);
+               if(pids.length>0){
+                   category.v.linkageSel.changeValues(pids);
+               }
+           },
+           save:function(){
+                if(!$('#categoryForm').isValid()){
+                    return false;
+                };
+                var parentId = category.v.linkageSel.getSelectedValue();
+                $("#categoryForm").ajaxSubmit({
+                    dataType:"json",
+                    success:function(result){
+                        category.fn.responseComplete(result);
+                        $("#categoryModal").modal("hide");
+                    }
+                })
            },
            selectChange:function(obj){
               $("#parentId").val(obj.getSelectedValue());
@@ -255,33 +299,11 @@
                 });
 
            },
-           edit:function(id){
-               var items = category.v.list;
-               $.each(items,function(index,item){
-                   if(item.id==id){
-                      for(var key in item){
-                         var element = $("#categoryForm :input[name="+key+"]")
-                         if(element.length>0){
-                             element.val(item[key]);
-                         }
-                      }
-                   }
-               })
+           showModal:function(){
+               binf.clearForm($("#categoryForm"));
+               $("#categoryModal").modal("show");
            },
-           save:function(){
-               if(!$('#categoryForm').isValid()){
-                   return false;
-               };
-               var parentId = category.v.linkageSel.getSelectedValue();
-               $("#categoryForm").ajaxSubmit({
-                   dataType:"json",
-                   success:function(result){
-                       category.fn.responseComplete(result);
-                       $("#categoryModal").modal("hide");
-                   }
-               })
-            },
-            responseComplete:function(result){
+           responseComplete:function(result){
                if(result.success){
                    category.v.dTable.ajax.reload();
                    binf.notify(result.msg,"success");

@@ -1,4 +1,4 @@
-package me.binf.utils;
+package me.binf.admin.utils;
 
 import org.springframework.data.domain.Page;
 

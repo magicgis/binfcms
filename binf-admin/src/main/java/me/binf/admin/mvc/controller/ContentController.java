@@ -1,13 +1,12 @@
 package me.binf.admin.mvc.controller;
 
-import me.binf.admin.utils.Logger;
+import me.binf.admin.utils.DataTableFactory;
 import me.binf.admin.utils.WebUtil;
 import me.binf.core.bean.Result;
 import me.binf.entity.Category;
+import me.binf.exception.GeneralExceptionHandler;
 import me.binf.service.CategoryService;
-import me.binf.utils.DataTableFactory;
 import me.binf.utils.JsonUtil;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -18,13 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-/**
- * Created by wangbin on 14-10-14.
- */
 @Controller
 @RequestMapping(value = "content")
 public class ContentController {
-
 
     @Autowired
     private CategoryService categoryService;
@@ -41,11 +36,16 @@ public class ContentController {
                              HttpServletResponse response,
                              Category category){
         try {
-            Category data = categoryService.create(category);
+            Category data = null;
+            if(category.getId()==null){
+                data = categoryService.create(category);
+            }else{
+                data = categoryService.update(category);
+            }
             WebUtil.print(response,new Result(true).data(data).msg("创建类别成功！"));
         }catch (Exception e){
-            Logger.error("创建类别失败",e);
-            WebUtil.print(response,new Result(false).msg("创建类别失败"));
+            GeneralExceptionHandler.log("创建类别失败", e);
+            WebUtil.print(response, new Result(false).msg("创建类别失败"));
         }
     }
 
@@ -67,7 +67,7 @@ public class ContentController {
             start = 0;
         }
         Page<Category> page = categoryService.find(start,length);
-        Map<String,Object> result = DataTableFactory.fitting(draw,page);
+        Map<String,Object> result = DataTableFactory.fitting(draw, page);
         WebUtil.printJson(response,result);
     }
 
@@ -80,7 +80,7 @@ public class ContentController {
             categoryService.deleteAll(arrayId);
             WebUtil.print(response,new Result(true).msg("删除类别成功！"));
         }catch (Exception e){
-            Logger.error(e.getMessage(),e);
+            GeneralExceptionHandler.log("删除类别失败",e);
             WebUtil.print(response,new Result(false).msg("删除类别失败！"));
         }
 

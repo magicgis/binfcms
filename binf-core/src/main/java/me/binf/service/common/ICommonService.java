@@ -21,6 +21,6 @@ public interface ICommonService<T> {
 
     public T create(T t);
 
-    public T Update(T t);
+    public T update(T t);
 
 }

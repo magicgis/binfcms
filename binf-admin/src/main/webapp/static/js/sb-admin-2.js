@@ -48,6 +48,7 @@ var binf = {
         }
         $.notify(msg, option);
     },
+
     delNotify:function(method){
         $.notify({
             title: '确认删除么？删除后不可恢复！',
@@ -121,6 +122,23 @@ var binf = {
                 }
             }
         });
+    },
+    turnArray:function(arr)
+    {
+        var newArr = [];
+        for(var i=arr.length-1;i>=0;i--){
+            newArr.push(arr[i])
+        }
+        return newArr;
+    },
+    /**
+     * 清理表单参数
+     * @param form
+     * @param option boolean类型，为true清理select插件
+     */
+    clearForm:function(form){
+        form.find(":input").val("");
+        form.validator( "cleanUp" );
     }
 
 }
