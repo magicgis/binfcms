@@ -1,7 +1,8 @@
 package me.binf.admin.controller;
 
 
-import me.binf.admin.utils.Logger;
+import me.binf.logger.Logger;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;

@@ -10,4 +10,6 @@ public interface Constant {
     String REQUEST_BASE_URL="BASE_URL";
 
     int PAGE_DEF_SZIE = 20;
+
+
 }

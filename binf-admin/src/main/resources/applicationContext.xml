@@ -73,4 +73,6 @@
 
     <!-- AOP -->
     <aop:aspectj-autoproxy/>
+
+    <bean id="beanUtil" class="me.binf.admin.utils.BeanUtil" />
 </beans>
