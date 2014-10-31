@@ -62,4 +62,9 @@ public class MemberServiceImpl implements MemberService {
         return memberDao.save(member);
     }
 
+
+    @Override
+    public List<Member> findByUsernameAndPassword(String username, String password) {
+        return memberDao.findByUsernameAndPassword(username,password);
+    }
 }

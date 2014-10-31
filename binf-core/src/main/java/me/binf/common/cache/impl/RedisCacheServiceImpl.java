@@ -1,19 +1,16 @@
-package me.binf.cache.impl;
+package me.binf.common.cache.impl;
 
 
-import me.binf.cache.CacheService;
+import me.binf.common.cache.CacheService;
 import me.binf.logger.Logger;
 import me.binf.utils.RedisUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public class RedisCacheServiceImpl implements CacheService {
-	private static final Log log = LogFactory.getLog(RedisCacheServiceImpl.class);
-	
+
 	private RedisUtils redisUtils;
 	
 	public void setRedisUtils(RedisUtils redisUtils) {
@@ -53,13 +50,13 @@ public class RedisCacheServiceImpl implements CacheService {
 	
 	@Override
 	public void putBlob(String key, byte[] data) {
-		log.error("putBlob(String key, byte[] data) not implemented");	
+		Logger.error("putBlob(String key, byte[] data) not implemented");
 		
 	}
 
 	@Override
 	public byte[] getBlob(String key) {
-		log.error("getBlob(String key) not implemented");	
+		Logger.error("getBlob(String key) not implemented");
 		return null;
 	}
 
@@ -70,13 +67,13 @@ public class RedisCacheServiceImpl implements CacheService {
 
 	@Override
 	public int getCacheHits() {
-		log.error("getCacheHits() not implemented");	
+		Logger.error("getCacheHits() not implemented");
 		return 0;
 	}
 
 	@Override
 	public int getCacheTotal() {
-		log.error("getCacheTotal() not implemented");	
+		Logger.error("getCacheTotal() not implemented");
 		return 0;
 	}
 

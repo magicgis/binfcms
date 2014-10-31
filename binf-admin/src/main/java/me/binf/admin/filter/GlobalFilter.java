@@ -1,8 +1,12 @@
 package me.binf.admin.filter;
 
 
+import me.binf.admin.core.Constant;
+import me.binf.admin.service.LoginService;
+import me.binf.admin.utils.BeanUtil;
 import me.binf.admin.utils.WebUtil;
 import me.binf.logger.Logger;
+import me.binf.service.MemberService;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.*;
@@ -35,7 +39,7 @@ public class GlobalFilter implements Filter {
 
             for(String skipUrl:temp){
                 if(StringUtils.isNotBlank(skipUrl)){
-                    skipUrl = "^"+skipUrl.replace("\\*",".*")+"$";
+                    skipUrl = "^"+skipUrl.replaceAll("\\*",".*")+"$";
                     list.add(skipUrl);
                 }
             }
@@ -63,6 +67,16 @@ public class GlobalFilter implements Filter {
                     chain.doFilter(request, response);
                     return;
                 }
+            }
+        }
+
+        String username = (String)httpRequest.getSession().getAttribute(Constant.SESSION_MEMBER);
+
+        if(StringUtils.isNotBlank(username)){
+            LoginService loginService = (LoginService)BeanUtil.getBean("loginServiceImpl");
+            if(loginService.isLogin(username)){
+                chain.doFilter(request, response);
+                return;
             }
         }
 

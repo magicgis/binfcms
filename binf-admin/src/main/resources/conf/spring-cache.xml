@@ -24,8 +24,31 @@
 		<property name="serverName" value="newtown-admin" />
 	</bean>
 	
-	<bean id="redisCacheServiceImpl" class="me.binf.cache.impl.RedisCacheServiceImpl" >
+	<bean id="redisCacheServiceImpl" class="me.binf.common.cache.impl.RedisCacheServiceImpl" >
 		<property name="redisUtils" ref="redisUtils" />
 	</bean>
+
+    <bean id="localCacheServiceImpl" class="me.binf.common.cache.impl.LocalCacheServiceImpl"></bean>
+
+
+    <bean id="commonItemCache" class="me.binf.common.cache.service.impl.CommonItemCacheImpl">
+        <constructor-arg index="0" ref="redisCacheServiceImpl" />
+    </bean>
+    <bean id="commonStringCache" class="me.binf.common.cache.service.impl.CommonStringCacheImpl">
+        <constructor-arg index="0" ref="redisCacheServiceImpl" />
+    </bean>
+    <bean id="commonObjectCache" class="me.binf.common.cache.service.impl.CommonObjectCacheImpl">
+        <constructor-arg index="0" ref="redisCacheServiceImpl" />
+    </bean>
+    <bean id="commonMapCache" class="me.binf.common.cache.service.impl.CommonMapCacheImpl">
+        <constructor-arg index="0" ref="redisCacheServiceImpl" />
+    </bean>
+    <bean id="commonStringListCache" class="me.binf.common.cache.service.impl.CommonStringListCacheImpl">
+        <constructor-arg index="0" ref="redisCacheServiceImpl" />
+    </bean>
+    <bean id="commonObjectListCache" class="me.binf.common.cache.service.impl.CommonObjectListCacheImpl">
+        <constructor-arg index="0" ref="redisCacheServiceImpl" />
+    </bean>
+
 
 </beans>

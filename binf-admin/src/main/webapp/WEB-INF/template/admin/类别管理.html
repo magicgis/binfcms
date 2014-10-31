@@ -252,7 +252,6 @@
                 if(!$('#categoryForm').isValid()){
                     return false;
                 };
-                var parentId = category.v.linkageSel.getSelectedValue();
                 $("#categoryForm").ajaxSubmit({
                     dataType:"json",
                     success:function(result){
@@ -260,12 +259,15 @@
                         $("#categoryModal").modal("hide");
                     }
                 })
+
+
+
            },
            selectChange:function(obj){
               $("#parentId").val(obj.getSelectedValue());
            },
            dataTableInit:function(){
-                category.v.dTable =$('#dataTables').DataTable({
+                category.v.dTable =binf.dataTable($('#dataTables'),{
                     "processing": true,
                     "serverSide": true,
                     "ajax": {

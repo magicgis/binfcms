@@ -1,5 +1,5 @@
 
-package me.binf.cache;
+package me.binf.common.cache;
 
 import java.util.Date;
 import java.util.List;

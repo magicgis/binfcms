@@ -1,18 +1,13 @@
-import me.binf.cache.CacheService;
-import me.binf.utils.RedisUtils;
+import me.binf.admin.cache.CacheService;
+import me.binf.entity.Member;
+import me.binf.service.MemberService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FilterInputStream;
-import java.io.InputStream;
+import javax.annotation.Resource;
 
 /**
  * Created by wangbin on 14-10-30.
@@ -21,48 +16,27 @@ import java.io.InputStream;
 @ContextConfiguration(locations = {"classpath:applicationContext.xml","classpath:/conf/spring-cache.xml"})
 public class TestRedis {
 
-     @Autowired
-     private CacheService cacheService;
+    @Resource(name = "memberCacheServiceImpl")
+    private CacheService<Member> memberCacheService;
+
+
+    @Autowired
+    private MemberService memberService;
 
 
     @Test
     public void test1(){
-
-        File file = new File("D:/test.txt");
-
-        System.out.println(file.exists());
-
-        cacheService.put("test1",file);
-
-        File obj = (File)cacheService.get("test1");
-
-        //obj.toURI().
-
-        try {
-            byte[] bytes = new byte[1];
-
-            InputStream inputStream = new FileInputStream(obj);
-
-            while (true){
-              int red =   inputStream.read(bytes,0,bytes.length);
-                System.out.println("red:"+red);
-                System.out.println("b:"+new String(bytes));
-                if(red<0){
-                    break;
-                }
-
-            }
-
-
-
-
-
-
-            inputStream.close();
-        }catch (Exception e){
-
-        }
-
+//        Member member = new Member();
+//
+//        member.setId(1);
+//        member.setName("wangbin");
+//
+//        memberCacheService.put("wangbin", member);
+//
+//        Member member1 =memberCacheService.get("wangbin");
+//
+//        System.out.println(member1.getName().toString());
+//        System.out.println(memberService.isLogin("wangbin"));
 
 
 
