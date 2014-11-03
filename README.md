@@ -35,4 +35,7 @@
 
 ![无限极分类2](http://ww3.sinaimg.cn/large/7403d840gw1eluphv0y0gj211v0hj0ua.jpg)
 
+##联系方式
 
+博客地址: [www.binf.me](http://www.binf.me/)
+邮箱地址: burgleaf#gmail.com
