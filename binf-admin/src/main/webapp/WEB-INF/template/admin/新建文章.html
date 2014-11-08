@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "inc/meta.html"/>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>新建文章</title>
+    <#include "inc/css.html"/>
+    <link href="static/js/plugins/summernote/dist/summernote.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <#include "inc/nav.html"/>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">新建文章</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+    
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="panel">
+                    <form id="categoryForm" method="post" action="content/category/save" class="form-horizontal" role="form">
+                        <div class="panel-heading">
+                            <input type="text" class="form-control input-lg" name="name" placeholder="请输入名称">
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-body">
+                            <textarea class="summernote"><p>Seasons <b>coming up</b></p></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <b>发布</b>
+                    </div>
+                    <div class="panel-body">
+                        <a href="javascript:void(0)" id="draft"  class="pull-left btn  btn-default" role="button">保存草稿</a>
+                        <a href="javascript:void(0)" id="preview" class="pull-right btn  btn-success" role="button">预览</a>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a href="javascript:void(0)" id="save" class="btn btn-primary" role="button">发布</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <b>类别选择</b>
+                    </div>
+                    <div class="panel-body">
+                        hello
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    
+    </div>
+<!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+<script src="static/js/plugins/summernote/dist/summernote.min.js"></script>
+<script type="text/javascript" src="static/js/plugins/summernote/lang/summernote-zh-CN.js"></script>
+<#include "inc/footer.html"/>
+
+
+</body>
+
+</html>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.summernote').summernote({
+            height: 400,
+            tabsize: 2,
+            lang: 'zh-CN',
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+                ['fontname', ['fontname']],
+                // ['fontsize', ['fontsize']], // Still buggy
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video', 'hr']],
+                ['view', ['fullscreen', 'codeview']],
+            ]
+        });
+    });
+</script>

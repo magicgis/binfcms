@@ -16,7 +16,7 @@
 * 渲染直接弃掉jsp用freemarker。
 * 自己写css太难看了，页面就用[bootstrap](http://www.bootcss.com/)。
 * js框架用jquery，[jquery.dataTables](http://https://datatables.net/)做列表页，[jquery.validator](http://niceue.com/validator/)做表单验证。
-* 当然还有其他的一些类库和js插件什么的。
+* 当然还有其他的一些类库和jquery插件什么的。
 
 
 

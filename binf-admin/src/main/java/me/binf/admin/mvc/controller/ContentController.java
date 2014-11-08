@@ -86,6 +86,14 @@ public class ContentController {
 
     }
 
+    @RequestMapping(value = "post")
+    public String post(HttpServletRequest request,
+                     HttpServletResponse response){
+
+        return "template/admin/新建文章";
+
+    }
+
 
 
 }
