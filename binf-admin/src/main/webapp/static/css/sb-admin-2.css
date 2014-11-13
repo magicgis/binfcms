@@ -348,6 +348,11 @@ table.dataTable thead .sorting:after {
 /*
 自定义
 */
+
+.wrapper {
+    width: 100%;
+}
+
 footer {
     background: #4A4849;
     padding: 0;
@@ -399,4 +404,8 @@ notify
     padding: 5px;
     margin: 2px;
     width: 60px;
+}
+
+ul .children{
+    padding-left: 20px;
 }

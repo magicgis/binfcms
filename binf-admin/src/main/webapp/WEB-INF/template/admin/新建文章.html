@@ -13,60 +13,91 @@
 
 <body>
 
-<div id="wrapper">
+<div id="createPost" class="wrapper">
 
     <#include "inc/nav.html"/>
 
-    <div id="page-wrapper">
+    <div id="page-wrapper" class="container">
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">新建文章</h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
-    
-        <div class="row">
-            <div class="col-lg-9">
-                <div class="panel">
-                    <form id="categoryForm" method="post" action="content/category/save" class="form-horizontal" role="form">
+        <form id="categoryForm" method="post" action="content/category/save" class="form-horizontal" role="form">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="panel">
                         <div class="panel-heading">
                             <input type="text" class="form-control input-lg" name="name" placeholder="请输入名称">
                             <div class="clearfix"></div>
                         </div>
                         <div class="panel-body">
-                            <textarea class="summernote"><p>Seasons <b>coming up</b></p></textarea>
+                            <textarea class="summernote">
+
+                            </textarea>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <b>发布</b>
-                    </div>
-                    <div class="panel-body">
-                        <a href="javascript:void(0)" id="draft"  class="pull-left btn  btn-default" role="button">保存草稿</a>
-                        <a href="javascript:void(0)" id="preview" class="pull-right btn  btn-success" role="button">预览</a>
-                    </div>
-                    <div class="panel-footer">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <a href="javascript:void(0)" id="save" class="btn btn-primary" role="button">发布</a>
+                <div class="col-lg-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <b>发布</b>
+                        </div>
+                        <div class="panel-body">
+                            <a href="javascript:void(0)" id="draft"  class="pull-left btn  btn-default" role="button">保存草稿</a>
+                            <a href="javascript:void(0)" id="preview" class="pull-right btn  btn-success" role="button">预览</a>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <a href="javascript:void(0)" id="save" class="btn btn-primary" role="button">发布</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <b>类别选择</b>
-                    </div>
-                    <div class="panel-body">
-                        hello
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <b>类别选择</b>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="">Checkbox 1
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="">Checkbox 1
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="">Checkbox 1
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <ul  class="children list-unstyled">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" value="">Checkbox 1
+                                            </label>
+                                        </div>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    
+        </form>
     
     </div>
 <!-- /#page-wrapper -->
@@ -84,23 +115,31 @@
 
 
 <script type="text/javascript">
+
+    var createPost = {
+        v:{
+            id:"createPost"
+        },
+        fn:{
+            init:function(){
+                binf.summerNote($(".summernote"),{
+                    height:400,
+                    tabsize:2
+                })
+            },
+            category:function(){
+
+            }
+
+        }
+    }
+
     $(document).ready(function() {
-        $('.summernote').summernote({
-            height: 400,
-            tabsize: 2,
-            lang: 'zh-CN',
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
-                ['fontname', ['fontname']],
-                // ['fontsize', ['fontsize']], // Still buggy
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['height', ['height']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture', 'video', 'hr']],
-                ['view', ['fullscreen', 'codeview']]
-            ]
-        });
+        createPost.fn.init();
     });
+
+
+
+
+
 </script>

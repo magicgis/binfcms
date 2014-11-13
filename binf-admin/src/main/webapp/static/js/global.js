@@ -149,6 +149,24 @@ var binf = {
             }
         },option))
 
+    },
+    summerNote:function(obj,option){
+        obj.summernote($.extend({
+            height: 400,
+            tabsize: 2,
+            lang: 'zh-CN',
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video', 'hr']],
+                ['view', ['fullscreen','codeview']]
+            ]
+        },option));
     }
 
 }
