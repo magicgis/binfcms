@@ -31,6 +31,27 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryDao.findAll();
     }
 
+    public List<Category> findList(){
+        List<Category> topLCategoryList =  categoryDao.findByLevel(1);
+        return  findAll(topLCategoryList);
+    }
+
+
+
+    public List<Category> findAll(List<Category> list){
+        if(list!=null&&!list.isEmpty()){
+            for(Category c:list){
+                List<Category> children = findByParent(c.getId());
+                if(children!=null&&children.size()>0){
+                    c.setChildren(children);
+                    findAll(children);
+                }
+            }
+
+        }
+        return list;
+    }
+
     @Override
     public Page<Category> find(int pageNum, int pageSize) {
         return categoryDao.findAll(new PageRequest(pageNum,pageSize, Sort.Direction.DESC,"id"));
@@ -100,6 +121,9 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> findByParent(Integer parentId) {
         return categoryDao.findByParent(parentId);
     }
+
+
+
 
     @Override
     public List<Category> findAllSub(Integer id) {

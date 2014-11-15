@@ -4,6 +4,7 @@ import me.binf.admin.utils.DataTableFactory;
 import me.binf.admin.utils.WebUtil;
 import me.binf.core.bean.Result;
 import me.binf.entity.Category;
+import me.binf.entity.Post;
 import me.binf.exception.GeneralExceptionHandler;
 import me.binf.service.CategoryService;
 import me.binf.utils.JsonUtil;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -88,9 +90,21 @@ public class ContentController {
 
     @RequestMapping(value = "post")
     public String post(HttpServletRequest request,
-                     HttpServletResponse response){
-
+                       HttpServletResponse response,
+                       ModelMap model){
+        List<Category> categoryList =    categoryService.findList();
+        model.put("categoryList",categoryList);
         return "template/admin/新建文章";
+    }
+
+    @RequestMapping(value = "post/save")
+    public void save(HttpServletRequest request,
+                     HttpServletResponse response,
+                     Post post,
+                     Integer[] categoryIds,
+                     ModelMap model){
+
+        System.out.println(post);
 
     }
 

@@ -24,16 +24,16 @@
             </div>
             <!-- /.col-lg-12 -->
         </div>
-        <form id="categoryForm" method="post" action="content/category/save" class="form-horizontal" role="form">
+        <form id="postForm" method="post" action="content/post/save" class="form-horizontal" role="form">
             <div class="row">
                 <div class="col-lg-9">
                     <div class="panel">
                         <div class="panel-heading">
-                            <input type="text" class="form-control input-lg" name="name" placeholder="请输入名称">
+                            <input type="text" class="form-control input-lg" name="title" placeholder="请输入名称">
                             <div class="clearfix"></div>
                         </div>
                         <div class="panel-body">
-                            <textarea class="summernote">
+                            <textarea class="summernote" id="content">
 
                             </textarea>
                         </div>
@@ -61,38 +61,35 @@
                             <b>类别选择</b>
                         </div>
                         <div class="panel-body">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" value="">Checkbox 1
-                                        </label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" value="">Checkbox 1
-                                        </label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" value="">Checkbox 1
-                                        </label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <ul  class="children list-unstyled">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" value="">Checkbox 1
-                                            </label>
-                                        </div>
-                                    </ul>
-                                </li>
-                            </ul>
+                            <#if (categoryList??&&categoryList?has_content)>
+
+                                <ul class="list-unstyled">
+                                    <#list categoryList as category>
+                                        <li>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="categoryIds" value="${category.id!}">${category.name!}
+                                                </label>
+                                            </div>
+                                            <#if (category.children??&&category.children?has_content)>
+                                                <#list category.children as subCategory>
+                                                <li>
+                                                    <ul  class="children list-unstyled">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" name="categoryIds" value="${subCategory.id!}">${subCategory.name!}
+                                                            </label>
+                                                        </div>
+                                                    </ul>
+                                                </li>
+                                                </#list>
+                                            </#if>
+                                        </li>
+                                    </#list>
+
+                                </ul>
+                            </#if>
+
                         </div>
                     </div>
                 </div>
@@ -126,8 +123,19 @@
                     height:400,
                     tabsize:2
                 })
-            },
-            category:function(){
+
+                $("#save").click(function(){
+
+                    var content = $(".summernote").code();
+
+                    $("#postForm").ajaxSubmit({
+                        dataType:"json",
+                        data:{content:content},
+                        success:function(result){
+                            category.fn.responseComplete(result);
+                        }
+                    })
+                })
 
             }
 

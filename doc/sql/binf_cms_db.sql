@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50527
 File Encoding         : 65001
 
-Date: 2014-10-31 22:36:00
+Date: 2014-11-16 00:37:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -33,7 +33,21 @@ CREATE TABLE `category` (
   PRIMARY KEY (`id`),
   KEY `category_ibfk_1` (`model_id`),
   CONSTRAINT `category_ibfk_1` FOREIGN KEY (`model_id`) REFERENCES `model` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for category_post
+-- ----------------------------
+DROP TABLE IF EXISTS `category_post`;
+CREATE TABLE `category_post` (
+  `id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  KEY `category_post_ibfk_1` (`category_id`),
+  KEY `category_post_ibfk_2` (`post_id`),
+  CONSTRAINT `category_post_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `category_post_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for member
@@ -73,7 +87,6 @@ CREATE TABLE `post` (
   `title` varchar(255) DEFAULT NULL COMMENT '标题',
   `image_id` int(11) DEFAULT NULL COMMENT '文章缩略图',
   `content` varchar(3000) DEFAULT NULL COMMENT '文章内容',
-  `category_id` int(11) DEFAULT NULL COMMENT '类别ID',
   `sort` int(11) DEFAULT NULL COMMENT '排序',
   `stick` bit(1) DEFAULT NULL COMMENT '是否置顶(1:是,0:否)',
   `create_by` int(11) NOT NULL COMMENT '创建人',
@@ -86,10 +99,8 @@ CREATE TABLE `post` (
   `create_date` datetime NOT NULL COMMENT '创建时间',
   `update_date` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`),
-  KEY `category_id` (`category_id`),
   KEY `create_by` (`create_by`),
   KEY `update_by` (`update_by`),
-  CONSTRAINT `post_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `post_ibfk_2` FOREIGN KEY (`create_by`) REFERENCES `member` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `post_ibfk_3` FOREIGN KEY (`update_by`) REFERENCES `member` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

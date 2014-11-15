@@ -3,6 +3,7 @@ package me.binf.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wangbin on 14-10-16.
@@ -38,6 +39,16 @@ public class Category implements Serializable {
     @Column(name = "update_date")
     private Date updateDate;
 
+    @Transient
+    private List<Category> children;
+
+    public List<Category> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Category> children) {
+        this.children = children;
+    }
 
     public Integer getId() {
         return id;
