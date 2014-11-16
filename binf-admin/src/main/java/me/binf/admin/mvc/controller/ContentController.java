@@ -92,8 +92,8 @@ public class ContentController {
     public String post(HttpServletRequest request,
                        HttpServletResponse response,
                        ModelMap model){
-        List<Category> categoryList =    categoryService.findList();
-        model.put("categoryList",categoryList);
+        List<Category> categorys =    categoryService.findByLevel(1);
+        model.put("categorys",categorys);
         return "template/admin/新建文章";
     }
 
@@ -104,9 +104,13 @@ public class ContentController {
                      Integer[] categoryIds,
                      ModelMap model){
 
-        System.out.println(post);
+
+
 
     }
+
+
+
 
 
 

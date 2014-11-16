@@ -36,6 +36,10 @@ public class CategoryServiceImpl implements CategoryService {
         return  findAll(topLCategoryList);
     }
 
+    public List<Category> findByLevel(int level){
+        List<Category> categoryList =  categoryDao.findByLevel(level);
+        return categoryList;
+    }
 
 
     public List<Category> findAll(List<Category> list){

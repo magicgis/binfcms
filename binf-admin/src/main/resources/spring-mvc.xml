@@ -55,9 +55,12 @@
         <property name="freemarkerVariables">
             <map>
                 <entry key="baseUrl" value="${base.url}"/>
+                <entry key="categoryList" value-ref="categoryList"/>
             </map>
         </property>
     </bean>
+
+    <bean id="categoryList" class="me.binf.admin.freemarker.CategoryList"/>
 
 
     <!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->

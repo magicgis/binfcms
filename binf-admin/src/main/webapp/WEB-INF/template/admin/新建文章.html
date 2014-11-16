@@ -61,34 +61,7 @@
                             <b>类别选择</b>
                         </div>
                         <div class="panel-body">
-                            <#if (categoryList??&&categoryList?has_content)>
-
-                                <ul class="list-unstyled">
-                                    <#list categoryList as category>
-                                        <li>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" name="categoryIds" value="${category.id!}">${category.name!}
-                                                </label>
-                                            </div>
-                                            <#if (category.children??&&category.children?has_content)>
-                                                <#list category.children as subCategory>
-                                                <li>
-                                                    <ul  class="children list-unstyled">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox" name="categoryIds" value="${subCategory.id!}">${subCategory.name!}
-                                                            </label>
-                                                        </div>
-                                                    </ul>
-                                                </li>
-                                                </#list>
-                                            </#if>
-                                        </li>
-                                    </#list>
-
-                                </ul>
-                            </#if>
+                            <@categoryList level=1 />
 
                         </div>
                     </div>
@@ -125,9 +98,7 @@
                 })
 
                 $("#save").click(function(){
-
                     var content = $(".summernote").code();
-
                     $("#postForm").ajaxSubmit({
                         dataType:"json",
                         data:{content:content},
@@ -136,8 +107,8 @@
                         }
                     })
                 })
-
             }
+
 
         }
     }

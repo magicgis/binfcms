@@ -14,6 +14,8 @@ public interface CategoryService extends ICommonService<Category> {
 
     public List<Category> findList();
 
+    public List<Category> findByLevel(int level);
+
     public List<Category> findAll(List<Category> category);
 
     public List<Category> findAllSub(Integer id);
