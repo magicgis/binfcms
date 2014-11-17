@@ -21,6 +21,10 @@ public class CategoryList implements TemplateDirectiveModel {
 
     private static CategoryService  categoryService;
 
+    static {
+
+    }
+
     @Override
     public void execute(Environment environment,
                         Map map,
@@ -28,10 +32,8 @@ public class CategoryList implements TemplateDirectiveModel {
                         TemplateDirectiveBody templateDirectiveBody) throws TemplateException, IOException {
 
         try {
-            Integer level =  DirectiveUtils.getInt("level",map);
             categoryService = (CategoryService)BeanUtil.getBean("categoryServiceImpl");
-            String result =categoryHtml(categoryService.findByLevel(level));
-            System.out.println(result);
+            String result =categoryHtml(categoryService.findList(),false);
             Writer out = environment.getOut();
             out.append(result);
         }catch (Exception e){
@@ -41,10 +43,14 @@ public class CategoryList implements TemplateDirectiveModel {
     }
 
 
-    private String categoryHtml(List<Category> list){
+    private String categoryHtml(List<Category> list,Boolean isChild){
 
-        StringBuilder sb =  new StringBuilder("<ul class=\"list-unstyled\">");
-
+        StringBuilder sb =  null;
+        if(isChild){
+            sb =  new StringBuilder("<ul  class=\"children list-unstyled\">");
+        }else{
+            sb =  new StringBuilder("<ul class=\"list-unstyled\">");
+        }
         if(list!=null&&!list.isEmpty()){
             for(Category c:list){
                 sb.append("<li>");
@@ -55,27 +61,16 @@ public class CategoryList implements TemplateDirectiveModel {
                 sb.append("</div>");
                 List<Category> children = categoryService.findByParent(c.getId());
                 if(children!=null&&children.size()>0){
-                    for(Category chi : children){
-                        sb.append("<li>");
-                        sb.append("<ul  class=\"children list-unstyled\">");
-                        sb.append("<div class=\"checkbox\">");
-                        sb.append("<label>");
-                        sb.append("<input type=\"checkbox\" name=\"categoryIds\" value="+chi.getId()+">"+chi.getName());
-                        sb.append("</label>");
-                        sb.append("</div>");
-                        sb.append("</ul>");
-                        sb.append("</li>");
-                    }
-                    categoryHtml(children);
+                    sb.append(categoryHtml(children,true));
                 }
-                sb.append("</li>");
             }
+            sb.append("</li>");
+
         }
-
         sb.append("</ul>");
-
         return sb.toString();
     }
+
 
 
 }

@@ -1,13 +1,17 @@
 package me.binf.admin.mvc.controller;
 
+import me.binf.admin.service.LoginService;
 import me.binf.admin.utils.DataTableFactory;
 import me.binf.admin.utils.WebUtil;
 import me.binf.core.bean.Result;
 import me.binf.entity.Category;
+import me.binf.entity.Member;
 import me.binf.entity.Post;
 import me.binf.exception.GeneralExceptionHandler;
 import me.binf.service.CategoryService;
+import me.binf.service.PostService;
 import me.binf.utils.JsonUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -25,6 +29,10 @@ public class ContentController {
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private PostService postService;
+    @Autowired
+    private LoginService loginService;
 
     @RequestMapping(value = "category")
     public String category(HttpServletRequest request,
@@ -38,13 +46,13 @@ public class ContentController {
                              HttpServletResponse response,
                              Category category){
         try {
-            Category data = null;
+            Category result = null;
             if(category.getId()==null){
-                data = categoryService.create(category);
+                result = categoryService.create(category);
             }else{
-                data = categoryService.update(category);
+                result = categoryService.update(category);
             }
-            WebUtil.print(response,new Result(true).data(data).msg("创建类别成功！"));
+            WebUtil.print(response,new Result(true).data(result).msg("创建类别成功！"));
         }catch (Exception e){
             GeneralExceptionHandler.log("创建类别失败", e);
             WebUtil.print(response, new Result(false).msg("创建类别失败"));
@@ -92,8 +100,7 @@ public class ContentController {
     public String post(HttpServletRequest request,
                        HttpServletResponse response,
                        ModelMap model){
-        List<Category> categorys =    categoryService.findByLevel(1);
-        model.put("categorys",categorys);
+
         return "template/admin/新建文章";
     }
 
@@ -101,12 +108,24 @@ public class ContentController {
     public void save(HttpServletRequest request,
                      HttpServletResponse response,
                      Post post,
+                     Integer status,
                      Integer[] categoryIds,
                      ModelMap model){
+        Post result = null;
 
-
-
-
+        Member member =  loginService.getMember(request);
+        post.setUpdateBy(member);
+        try{
+            if(post.getId()==null){
+                post.setCreateBy(member);
+                result = postService.create(post,categoryIds);
+            }else{
+                result = postService.update(post, categoryIds);
+            }
+            WebUtil.print(response,new Result(true).data(result).msg("文章发布成功！"));
+        }catch (Exception e){
+            WebUtil.print(response, new Result(false).msg(e.getMessage()));
+        }
     }
 
 

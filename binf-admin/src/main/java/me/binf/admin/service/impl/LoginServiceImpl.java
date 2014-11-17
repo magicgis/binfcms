@@ -41,4 +41,16 @@ public class LoginServiceImpl implements LoginService{
         }
         return false;
     }
+
+    @Override
+    public Member getMember(HttpServletRequest request) {
+
+        String username =  request.getSession().getAttribute(Constant.SESSION_MEMBER).toString();
+
+        Member member = cacheService.get(username);
+
+        return member;
+    }
+
+
 }
