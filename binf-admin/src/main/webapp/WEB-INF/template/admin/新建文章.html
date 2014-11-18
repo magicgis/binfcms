@@ -103,10 +103,16 @@
                         dataType:"json",
                         data:{content:content},
                         success:function(result){
-                            category.fn.responseComplete(result);
+                            createPost.fn.responseComplete(result);
                         }
                     })
                 })
+            },responseComplete:function(result){
+                if(result.success){
+                    binf.notify(result.msg,"success");
+                }else{
+                    binf.notify(result.msg,"error");
+                }
             }
 
 

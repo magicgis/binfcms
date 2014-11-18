@@ -34,6 +34,8 @@ public class ContentController {
     @Autowired
     private LoginService loginService;
 
+    /** 类别start**/
+
     @RequestMapping(value = "category")
     public String category(HttpServletRequest request,
                            HttpServletResponse response,
@@ -96,6 +98,10 @@ public class ContentController {
 
     }
 
+    /** 类别end**/
+
+
+    /** 新建文章start **/
     @RequestMapping(value = "post")
     public String post(HttpServletRequest request,
                        HttpServletResponse response,
@@ -105,12 +111,12 @@ public class ContentController {
     }
 
     @RequestMapping(value = "post/save")
-    public void save(HttpServletRequest request,
-                     HttpServletResponse response,
-                     Post post,
-                     Integer status,
-                     Integer[] categoryIds,
-                     ModelMap model){
+    public void postSave(HttpServletRequest request,
+                         HttpServletResponse response,
+                         Post post,
+                         Integer status,
+                         Integer[] categoryIds,
+                         ModelMap model){
         Post result = null;
 
         Member member =  loginService.getMember(request);
@@ -128,9 +134,35 @@ public class ContentController {
         }
     }
 
+    /** 新建文章end **/
 
 
 
+    /** 文章列表start **/
+    @RequestMapping(value = "posts")
+    public String postListIndex(HttpServletRequest request,
+                              HttpServletResponse response,
+                              ModelMap model){
+        return "template/admin/文章列表";
+    }
 
+
+    @RequestMapping(value = "posts/list")
+    public void postList(HttpServletRequest request,
+                         HttpServletResponse response,
+                         Integer draw,
+                         Integer start,
+                         Integer length){
+        if(start==null){
+            start = 0;
+        }
+        Page<Post> page = postService.find(start,length);
+        Map<String,Object> result = DataTableFactory.fitting(draw, page);
+        WebUtil.printJson(response,result);
+    }
+
+
+
+    /** 文章列表end **/
 
 }

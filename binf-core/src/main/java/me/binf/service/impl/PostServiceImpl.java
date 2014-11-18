@@ -41,7 +41,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<Post> find(int pageNum, int pageSize) {
-        return postDao.findAll(new PageRequest(pageNum - 1, pageSize, Sort.Direction.DESC, "id"));
+        return postDao.findAll(new PageRequest(pageNum, pageSize, Sort.Direction.DESC, "sort"));
     }
 
     @Override
@@ -86,8 +86,8 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public Post create(Post post, Integer[] categoryIds) {
-        if(categoryIds.length==0){
-            GeneralExceptionHandler.handle("文章类别为空!");
+        if(null==categoryIds||categoryIds.length==0){
+            GeneralExceptionHandler.handle("文章类别不能为空!");
         }
         for(int categoryId : categoryIds){
             Category category = categoryService.getById(categoryId);
@@ -107,8 +107,8 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public Post update(Post post, Integer[] categoryIds){
-        if(categoryIds.length==0){
-            GeneralExceptionHandler.handle("文章类别为空!");
+        if(null==categoryIds||categoryIds.length==0){
+            GeneralExceptionHandler.handle("文章类别不能为空!");
         }
         for(int categoryId : categoryIds){
             Category category = categoryService.getById(categoryId);
