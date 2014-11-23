@@ -1,11 +1,9 @@
 package me.binf.admin.freemarker;
 
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateNumberModel;
-import freemarker.template.TemplateScalarModel;
+import freemarker.template.*;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,9 +32,24 @@ public abstract class DirectiveUtils {
         }else {
             throw new MustNumberException(name);
         }
+    }
 
-
-
+    public static List getList(Map<String,TemplateModel> params,String name) throws TemplateException{
+        TemplateModel model = params.get(name);
+        if(model==null){
+            return null;
+        }
+        if(model instanceof TemplateModel){
+            String s = model.toString();
+            if(StringUtils.isBlank(s)){
+                return null;
+            }else{
+                if(model instanceof SimpleSequence){
+                    return  ((SimpleSequence)model).toList();
+                }
+            }
+        }
+        return  null;
     }
 
 }

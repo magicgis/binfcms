@@ -105,7 +105,12 @@ public class ContentController {
     @RequestMapping(value = "post")
     public String post(HttpServletRequest request,
                        HttpServletResponse response,
+                       Integer id,
                        ModelMap model){
+        if(id!=null){
+           Post post = postService.findPostById(id);
+           model.put("post",post);
+        }
 
         return "template/admin/新建文章";
     }

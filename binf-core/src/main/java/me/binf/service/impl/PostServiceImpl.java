@@ -9,6 +9,7 @@ import me.binf.exception.GeneralExceptionHandler;
 import me.binf.service.CategoryPostService;
 import me.binf.service.CategoryService;
 import me.binf.service.PostService;
+import me.binf.utils.ClassUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,7 +43,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<Post> find(int pageNum, int pageSize) {
-        return postDao.findAll(new PageRequest(pageNum, pageSize, Sort.Direction.DESC, "sort"));
+        Page<Post> page = postDao.findAll(new PageRequest(pageNum, pageSize, Sort.Direction.DESC, "sort"));
+        for(Post post : page.getContent()){
+            List<CategoryPost>  categoryPosts =  categoryPostService.findByPost(post.getId());
+            List<Category> categoryList = new ArrayList<Category>();
+            for(CategoryPost categoryPost : categoryPosts){
+                categoryList.add(categoryPost.getCategory());
+
+            }
+            post.setCategorys(categoryList);
+        }
+        return page;
     }
 
     @Override
@@ -79,8 +91,10 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public Post update(Post post) {
-        post.setUpdateDate(new Date());
-        return postDao.save(post);
+        Post origPost = getById(post.getId());
+        ClassUtil.copyProperties(origPost,post);
+        origPost.setUpdateDate(new Date());
+        return postDao.save(origPost);
     }
 
     @Override
@@ -115,7 +129,7 @@ public class PostServiceImpl implements PostService {
             if(category==null){
                 GeneralExceptionHandler.handle("该类别不存在!");
             }else{
-                categoryPostService.deleteByPost(post);
+                categoryPostService.deleteByPost(post.getId());
                 CategoryPost categoryPost = new CategoryPost();
                 categoryPost.setCategory(category);
                 categoryPost.setPost(post);
@@ -123,6 +137,22 @@ public class PostServiceImpl implements PostService {
             }
         }
         return update(post);
+    }
+
+    @Override
+    public Post findPostById(int postId) {
+        Post post = getById(postId);
+        if(post==null){
+            GeneralExceptionHandler.handle("id["+postId+"]该文章不存在!");
+        }
+        List<CategoryPost>  categoryPosts =  categoryPostService.findByPost(post.getId());
+        List<Category> categoryList = new ArrayList<Category>();
+        for(CategoryPost categoryPost : categoryPosts){
+            categoryList.add(categoryPost.getCategory());
+
+        }
+        post.setCategorys(categoryList);
+        return post;
     }
 
 

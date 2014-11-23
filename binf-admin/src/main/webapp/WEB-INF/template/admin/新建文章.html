@@ -6,7 +6,6 @@
     <meta name="author" content="">
     <title>新建文章</title>
     <#include "inc/css.html"/>
-    <link href="static/js/plugins/summernote/dist/summernote.css" rel="stylesheet">
 
 
 </head>
@@ -29,12 +28,13 @@
                 <div class="col-lg-9">
                     <div class="panel">
                         <div class="panel-heading">
-                            <input type="text" class="form-control input-lg" name="title" placeholder="请输入名称">
+                            <input type="hidden" name="id" value="${(post.id)!}">
+                            <input type="text" class="form-control input-lg" value="${(post.title)!}" name="title" placeholder="请输入名称">
                             <div class="clearfix"></div>
                         </div>
                         <div class="panel-body">
-                            <textarea class="summernote" id="content">
-
+                            <textarea  id="content" >
+                                      ${(post.content)!}
                             </textarea>
                         </div>
                     </div>
@@ -61,8 +61,11 @@
                             <b>类别选择</b>
                         </div>
                         <div class="panel-body">
-                            <@categoryList />
-
+                            <#if (post.categorys)??>
+                                <@categoryList def=post.categorys />
+                                <#else>
+                                <@categoryList  />
+                            </#if>
                         </div>
                     </div>
                 </div>
@@ -74,8 +77,9 @@
 
 </div>
 <!-- /#wrapper -->
-<script src="static/js/plugins/summernote/dist/summernote.min.js"></script>
-<script type="text/javascript" src="static/js/plugins/summernote/lang/summernote-zh-CN.js"></script>
+<script src="static/js/plugins/tinymce/js/tinymce/tinymce.min.js"></script>
+
+
 <#include "inc/footer.html"/>
 
 
@@ -88,17 +92,14 @@
 
     var createPost = {
         v:{
-            id:"createPost"
+            id:"createPost",
+            tinyContent:null
         },
         fn:{
             init:function(){
-                binf.summerNote($(".summernote"),{
-                    height:400,
-                    tabsize:2
-                })
 
                 $("#save").click(function(){
-                    var content = $(".summernote").code();
+                    var content = tinymce.get('content').getContent();
                     $("#postForm").ajaxSubmit({
                         dataType:"json",
                         data:{content:content},
@@ -115,12 +116,26 @@
                 }
             }
 
-
         }
     }
 
     $(document).ready(function() {
+
+        tinymce.init({
+            selector: "textarea",
+            height:"300px",
+            plugins: [
+                "advlist autolink lists link image charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table contextmenu paste"
+            ],
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+        });
+
+
         createPost.fn.init();
+
+
     });
 
 

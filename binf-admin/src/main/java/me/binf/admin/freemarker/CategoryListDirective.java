@@ -1,13 +1,11 @@
 package me.binf.admin.freemarker;
 
 import freemarker.core.Environment;
-import freemarker.template.TemplateDirectiveBody;
-import freemarker.template.TemplateDirectiveModel;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateModel;
+import freemarker.template.*;
 import me.binf.admin.utils.BeanUtil;
 import me.binf.entity.Category;
 import me.binf.service.CategoryService;
+import me.binf.utils.ClassUtil;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -17,13 +15,11 @@ import java.util.Map;
 /**
  * Created by wangbin on 14-11-16.
  */
-public class CategoryList implements TemplateDirectiveModel {
+public class CategoryListDirective implements TemplateDirectiveModel {
 
     private static CategoryService  categoryService;
 
-    static {
-
-    }
+    private static final String   def = "def";
 
     @Override
     public void execute(Environment environment,
@@ -32,18 +28,17 @@ public class CategoryList implements TemplateDirectiveModel {
                         TemplateDirectiveBody templateDirectiveBody) throws TemplateException, IOException {
 
         try {
+            List<Category> categorys = DirectiveUtils.getList(map,def);
             categoryService = (CategoryService)BeanUtil.getBean("categoryServiceImpl");
-            String result =categoryHtml(categoryService.findList(),false);
+            String result =categoryHtml(categoryService.findList(),categorys,false);
             Writer out = environment.getOut();
             out.append(result);
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
-
-    private String categoryHtml(List<Category> list,Boolean isChild){
+    private String categoryHtml(List<Category> list,List<Category> defList,Boolean isChild){
 
         StringBuilder sb =  null;
         if(isChild){
@@ -56,12 +51,17 @@ public class CategoryList implements TemplateDirectiveModel {
                 sb.append("<li>");
                 sb.append("<div class=\"checkbox\">");
                 sb.append("<label>");
-                sb.append("<input type=\"checkbox\" name=\"categoryIds\" value='"+c.getId()+"'>"+c.getName());
+                if(ClassUtil.objInArray(c,defList)){
+                    sb.append("<input type=\"checkbox\" checked=\"checked\" name=\"categoryIds\" value='"+c.getId()+"'>"+c.getName());
+                }else{
+                    sb.append("<input type=\"checkbox\" name=\"categoryIds\" value='"+c.getId()+"'>"+c.getName());
+                }
+
                 sb.append("</label>");
                 sb.append("</div>");
                 List<Category> children = categoryService.findByParent(c.getId());
                 if(children!=null&&children.size()>0){
-                    sb.append(categoryHtml(children,true));
+                    sb.append(categoryHtml(children,defList,true));
                 }
             }
             sb.append("</li>");

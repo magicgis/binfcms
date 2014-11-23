@@ -1,7 +1,10 @@
 package me.binf.entity;
 
+import me.binf.annotation.NoConvert;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wangbin on 14-11-16.
@@ -27,6 +30,9 @@ public class Post {
 
     private Boolean stick;
 
+    @Transient
+    private List<Category> categorys;
+
     @ManyToOne
     @JoinColumn(name = "create_by")
     private Member createBy;
@@ -35,6 +41,7 @@ public class Post {
     @JoinColumn(name = "update_by")
     private Member updateBy;
 
+    @NoConvert
     private Integer visits;
 
     private Integer stars;
@@ -178,5 +185,13 @@ public class Post {
 
     public void setAnnounceDate(Date announceDate) {
         this.announceDate = announceDate;
+    }
+
+    public List<Category> getCategorys() {
+        return categorys;
+    }
+
+    public void setCategorys(List<Category> categorys) {
+        this.categorys = categorys;
     }
 }

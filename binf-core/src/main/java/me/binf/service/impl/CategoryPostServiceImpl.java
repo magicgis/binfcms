@@ -7,6 +7,8 @@ import me.binf.service.CategoryPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by wangbin on 14-11-17.
  */
@@ -22,8 +24,14 @@ public class CategoryPostServiceImpl implements CategoryPostService {
         return categoryPostDao.save(categoryPost);
     }
 
-    public void deleteByPost(Post post){
-        categoryPostDao.deleteByPostId(post.getId());
+    public void deleteByPost(int postId){
+        categoryPostDao.deleteByPostId(postId);
+    }
+
+    @Override
+    public List<CategoryPost> findByPost(int postId) {
+        List<CategoryPost> categoryPostList =   categoryPostDao.findByPost(postId);
+        return categoryPostList;
     }
 
 

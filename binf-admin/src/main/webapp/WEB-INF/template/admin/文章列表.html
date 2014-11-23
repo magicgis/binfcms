@@ -45,6 +45,7 @@
                                     <col class="gradeA odd"/>
                                     <col class="gradeA even"/>
                                     <col class="gradeA odd"/>
+                                    <col class="gradeA even"/>
                                 </colgroup>
                                 <thead>
                                 <tr>
@@ -54,6 +55,7 @@
                                     <th>标签</th>
                                     <th>作者</th>
                                     <th>日期</th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -104,17 +106,41 @@
                     "columns": [
                         { "data": "id" },
                         { "data": "title" },
+                        { "data": "categorys" },
                         { "data": "sort" },
-                        { "data": "stick" },
                         { "data": "createBy.name" },
-                        { "data": "announceDate" }
+                        { "data": "announceDate" },
+                        { "data": "" }
+                    ],
+                    "columnDefs": [
+                        {
+                            "data": null,
+                            "defaultContent":
+                                "<button type='button'  title='编辑' class='btn btn-primary btn-circle edit'>" +
+                                "<i class='fa fa-edit'></i>"+
+                                "</button>",
+                            "targets": -1
+                        }
                     ],
                     "createdRow": function ( row, data, index ) {
                         posts.v.list.push(data);
+                        var names="";
+                        for(var i=0;i<data.categorys.length;i++){
+                            var item =  data.categorys[i];
+                            names+=item.name+"、";
+                        }
+                        names = names.substr(0,names.length-1);
                         $('td',row).eq(0).html("<input type='checkbox'  value="+data.id+">");
+                        if(data.stick){
+                            $('td',row).eq(1).html("<span style='color:red'>[置顶]</span>"+data.title);
+                        }
+                        $('td',row).eq(2).html(names);
                     },
                     rowCallback:function(row,data){
                         var items = posts.v.list;
+                        $('td',row).last().find(".edit").click(function(){
+                             location.href="content/post?id="+data.id;
+                        })
 
                     },
                     "fnDrawCallback": function (row){

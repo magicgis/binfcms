@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
  * Created by wangbin on 14-11-16.
  */
@@ -17,4 +19,6 @@ public interface CategoryPostDao extends JpaRepository<CategoryPost,Integer> {
     public void deleteByPostId(Integer postId);
 
 
+    @Query("select a from CategoryPost a where a.post.id = ?1")
+    public List<CategoryPost> findByPost(Integer postId);
 }

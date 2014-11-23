@@ -13,4 +13,6 @@ public interface PostService extends ICommonService<Post> {
 
     public Post update(Post post, Integer[] categoryIds);
 
+    public Post findPostById(int postId);
+
 }
