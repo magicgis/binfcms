@@ -28,9 +28,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="btn-group pull-left" >
-                            <a href="javascript:void(0)" id="create"  class="btn btn-outline btn-primary btn-lg" role="button" data-toggle="modal" >创建</a>
-                            <a href="javascript:void(0)" id="edit" class="btn btn-outline btn-warning btn-lg" role="button">修改</a>
-                            <a href="javascript:void(0)" id="delete" class="btn btn-outline btn-danger btn-lg" role="button">删除</a>
+                            <a href="javascript:void(0)" id="newPost"  class="btn btn-outline btn-primary btn-lg" role="button" data-toggle="modal" >新建文章</a>
+                            <a href="javascript:void(0)" id="batchDel" class="btn btn-outline btn-danger btn-lg" role="button">批量删除</a>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -54,7 +53,7 @@
                                     <th>类别</th>
                                     <th>标签</th>
                                     <th>作者</th>
-                                    <th>日期</th>
+                                    <th>发布时间</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -90,9 +89,35 @@
         },
         fn:{
             init:function(){
-
-
                 posts.fn.dataTableInit();
+
+                $("#batchDel").click(function(){
+                    var checkBox =  $("#dataTables tbody tr").find('input[type=checkbox]:checked');
+                    var ids =  checkBox.getInputId();
+                    posts.fn.deleteRow(checkBox,ids)
+                })
+
+                $("#newPost").click(function(){
+                    location.href="content/post";
+                })
+            },
+            deleteRow:function(checkBox,ids){
+                if(ids.length>0){
+                    binf.delNotify(function(){
+                        binf.ajax("content/post/delete",{ids:JSON.stringify(ids)},function(result){
+                            if(result.success){
+                                binf.notify(result.msg,"success");
+                                checkBox.each(function(index){
+                                    if(ids[index]==$(this).val()){
+                                        $(this).parents("tr").remove();
+                                    }
+                                })
+                            }else{
+                                binf.notify(result.msg,"error");
+                            }
+                        })
+                    });
+                }
             },
             dataTableInit:function(){
                 posts.v.dTable =binf.dataTable($('#dataTables'),{
@@ -107,7 +132,7 @@
                         { "data": "id" },
                         { "data": "title" },
                         { "data": "categorys" },
-                        { "data": "sort" },
+                        { "data": "tags" },
                         { "data": "createBy.name" },
                         { "data": "announceDate" },
                         { "data": "" }
@@ -118,6 +143,10 @@
                             "defaultContent":
                                 "<button type='button'  title='编辑' class='btn btn-primary btn-circle edit'>" +
                                 "<i class='fa fa-edit'></i>"+
+                                "</button>"+
+                                "&nbsp;&nbsp;"+
+                                "<button type='button'  title='删除' class='btn btn-danger btn-circle delete'>" +
+                                "<i class='fa fa-bitbucket'></i>"+
                                 "</button>",
                             "targets": -1
                         }
@@ -142,6 +171,10 @@
                              location.href="content/post?id="+data.id;
                         })
 
+                        $('td',row).last().find(".delete").click(function(){
+                            var checkbox = $('td',row).first().find("input[type='checkbox']");
+                            posts.fn.deleteRow(checkbox,[data.id]);
+                        })
                     },
                     "fnDrawCallback": function (row){
                         binf.uiform();

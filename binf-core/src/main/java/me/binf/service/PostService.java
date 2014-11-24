@@ -15,4 +15,6 @@ public interface PostService extends ICommonService<Post> {
 
     public Post findPostById(int postId);
 
+    public void deleteAll(int[] ids);
+
 }

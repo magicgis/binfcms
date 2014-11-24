@@ -155,5 +155,14 @@ public class PostServiceImpl implements PostService {
         return post;
     }
 
+    @Override
+    @Transactional
+    public void deleteAll(int[] ids) {
+        for(int id : ids){
+            deleteById(id);
+            categoryPostService.deleteByPost(id);
+        }
+    }
+
 
 }

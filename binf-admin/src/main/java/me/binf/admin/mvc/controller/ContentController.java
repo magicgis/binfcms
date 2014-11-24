@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping(value = "content")
@@ -120,12 +122,16 @@ public class ContentController {
                          HttpServletResponse response,
                          Post post,
                          Integer status,
-                         Integer[] categoryIds,
-                         ModelMap model){
+                         Integer[] categoryIds){
         Post result = null;
-
         Member member =  loginService.getMember(request);
         post.setUpdateBy(member);
+        if(StringUtils.isNotBlank(post.getTags())){
+            String tags = post.getTags();
+            Pattern pattern = Pattern.compile("，+|,+");
+            Matcher matcher = pattern.matcher(tags);
+            post.setTags(matcher.replaceAll(","));
+        }
         try{
             if(post.getId()==null){
                 post.setCreateBy(member);
@@ -137,6 +143,22 @@ public class ContentController {
         }catch (Exception e){
             WebUtil.print(response, new Result(false).msg(e.getMessage()));
         }
+    }
+
+    @RequestMapping(value = "post/delete")
+    public void postDelete(HttpServletRequest request,
+                           HttpServletResponse response,
+                           String ids){
+        try {
+            int[] arrayId =  JsonUtil.json2Obj(ids,int[].class);
+            postService.deleteAll(arrayId);
+            WebUtil.print(response,new Result(true).msg("删除类别成功！"));
+        }catch (Exception e){
+            GeneralExceptionHandler.log("删除类别失败",e);
+            WebUtil.print(response,new Result(false).msg("删除类别失败！"));
+        }
+
+
     }
 
     /** 新建文章end **/

@@ -29,7 +29,7 @@
                     <div class="panel">
                         <div class="panel-heading">
                             <input type="hidden" name="id" value="${(post.id)!}">
-                            <input type="text" class="form-control input-lg" value="${(post.title)!}" name="title" placeholder="请输入名称">
+                            <input type="text" class="form-control input-lg" value="${(post.title)!}" name="title" placeholder="请输入文章标题">
                             <div class="clearfix"></div>
                         </div>
                         <div class="panel-body">
@@ -42,11 +42,28 @@
                 <div class="col-lg-3">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <b>发布</b>
+                             <b>发布</b>
                         </div>
                         <div class="panel-body">
-                            <a href="javascript:void(0)" id="draft"  class="pull-left btn  btn-default" role="button">保存草稿</a>
-                            <a href="javascript:void(0)" id="preview" class="pull-right btn  btn-success" role="button">预览</a>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <a href="javascript:void(0)" id="draft"  class="pull-left btn  btn-default" role="button">保存草稿</a>
+                                    <a href="javascript:void(0)" id="preview" class="pull-right btn  btn-success" role="button">预览</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <#if post??>
+                                    <div class="col-lg-12">
+                                        <h6>
+                                            <i class="fa fa-clock-o fa-fw"></i>发布于：
+                                            <small class=" text-muted">
+                                                 ${post.createDate?string("yyyy年MM月dd日 HH:ss")}
+                                            </small>
+                                        </h6>
+                                    </div>
+                                </#if>
+                            </div>
+
                         </div>
                         <div class="panel-footer">
                             <div class="row">
@@ -55,6 +72,15 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <b>文章标签</b>
+                        </div>
+                        <div class="panel-body">
+                            <input type="text" name="tags" class="form-control input-lg" placeholder="多个标签用(,)隔开" value="${(post.tags)!}">
+                        </div>
+
                     </div>
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -97,7 +123,6 @@
         },
         fn:{
             init:function(){
-
                 $("#save").click(function(){
                     var content = tinymce.get('content').getContent();
                     $("#postForm").ajaxSubmit({
@@ -108,11 +133,22 @@
                         }
                     })
                 })
-            },responseComplete:function(result){
+
+                createPost.fn.lastLoad();
+            },
+            responseComplete:function(result){
                 if(result.success){
+                    $("#postForm input[name='id']").val(result.data.id);
+
+                    $("#"+createPost.v.id+" .page-header").html("编辑文章")
                     binf.notify(result.msg,"success");
                 }else{
                     binf.notify(result.msg,"error");
+                }
+            },
+            lastLoad:function(){
+                if($("#postForm input[name='id']").val()!=null&&$("#postForm input[name='id']").val()!=""){
+                    $("#"+createPost.v.id+" .page-header").html("编辑文章");
                 }
             }
 

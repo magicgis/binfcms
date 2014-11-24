@@ -26,6 +26,8 @@ public class Post {
 
     private String content;
 
+    private String tags;
+
     private Integer sort;
 
     private Boolean stick;
@@ -66,6 +68,14 @@ public class Post {
     @Column(name = "announce_date")
     private Date announceDate;
 
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
 
     public Integer getId() {
         return id;
