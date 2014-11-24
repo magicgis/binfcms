@@ -160,9 +160,14 @@
                         }
                         names = names.substr(0,names.length-1);
                         $('td',row).eq(0).html("<input type='checkbox'  value="+data.id+">");
+
                         if(data.stick){
-                            $('td',row).eq(1).html("<span style='color:red'>[置顶]</span>"+data.title);
+                            $('td',row).eq(1).html("<a href='content/post?id="+data.id+"'>"+"<span style='color:red'>[置顶]</span>"+data.title+"</a>");
+                        }else{
+                            $('td',row).eq(1).html("<a href='content/post?id="+data.id+"'>"+data.title+"</a>");
                         }
+
+
                         $('td',row).eq(2).html(names);
                     },
                     rowCallback:function(row,data){
