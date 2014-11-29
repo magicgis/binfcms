@@ -64,12 +64,49 @@
 
                     </div>
                     <!-- /.panel-body -->
+
                 </div>
                 <!-- /.panel -->
             </div>
         </div>
-    
-    
+
+        <div class="modal fade" id="editPostModal" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="editPostModalLabel">修改文章</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="postForm" method="post" action="content/category/save" class="form-horizontal" role="form">
+                            <input type="hidden"  id="id" name="id" value="">
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">名称:</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="title" name="title" data-rule="required" placeholder="请输入名称">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">操作时间:</label>
+                                <div class="col-sm-5">
+                                    <input type="text" onClick="WdatePicker()" class="form-control" id="announceDate" name="announceDate" data-rule="required" >
+                                </div>
+                            </div>
+
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" id="save" class="btn btn-primary">保存</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+
     </div>
 <!-- /#page-wrapper -->
 
@@ -77,6 +114,8 @@
 <!-- /#wrapper -->
 
 <#include "inc/footer.html"/>
+<script  src="static/js/plugins/My97DatePicker/WdatePicker.js"> </script>
+
 
 </body>
 
@@ -99,6 +138,25 @@
 
                 $("#newPost").click(function(){
                     location.href="content/post";
+                })
+
+
+            },
+            showModal:function(){
+                binf.clearForm($("#editPostModal"));
+                $("#editPostModal").modal("show");
+            },
+            edit:function(id){
+                var items = posts.v.list;
+                $.each(items,function(index,item){
+                    if(item.id==id){
+                        for(var key in item){
+                            var element = $("#postForm :input[name="+key+"]")
+                            if(element.length>0){
+                                element.val(item[key]);
+                            }
+                        }
+                    }
                 })
             },
             deleteRow:function(checkBox,ids){
@@ -173,7 +231,8 @@
                     rowCallback:function(row,data){
                         var items = posts.v.list;
                         $('td',row).last().find(".edit").click(function(){
-                             location.href="content/post?id="+data.id;
+                             posts.fn.showModal();
+                             posts.fn.edit(data.id);
                         })
 
                         $('td',row).last().find(".delete").click(function(){
