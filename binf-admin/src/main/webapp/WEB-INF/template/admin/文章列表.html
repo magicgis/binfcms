@@ -78,7 +78,7 @@
                         <h4 class="modal-title" id="editPostModalLabel">修改文章</h4>
                     </div>
                     <div class="modal-body">
-                        <form id="postForm" method="post" action="content/category/save" class="form-horizontal" role="form">
+                        <form id="postForm" method="post" action="content/post/save" class="form-horizontal" role="form">
                             <input type="hidden"  id="id" name="id" value="">
                             <div class="form-group">
                                 <label for="title" class="col-sm-2 control-label">名称:</label>
@@ -87,15 +87,23 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="title" class="col-sm-2 control-label">操作时间:</label>
+                                <label for="announceDate" class="col-sm-2 control-label">操作时间:</label>
                                 <div class="col-sm-5">
-                                    <input type="text" onClick="WdatePicker()" class="form-control" id="announceDate" name="announceDate" data-rule="required" >
+                                    <input type="text" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="form-control" id="announceDate" name="announceDate" data-rule="required" >
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="tags" class="col-sm-2 control-label">标签:</label>
                                 <div class="col-sm-5">
-                                    <input type="text"  class="form-control" id="tags" name="tags" data-rule="required" >
+                                    <input type="text"  class="form-control" id="tags" name="tags"  >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="stick" class="col-sm-2 control-label">是否置顶:</label>
+                                <div class="col-sm-3 ">
+                                    <label>
+                                        <input  type="checkbox" id="stick" name="stick"  >
+                                    </label>
                                 </div>
                             </div>
 
@@ -145,6 +153,9 @@
                     location.href="content/post";
                 })
 
+                $("#editPostModal #save").click(function(){
+                    posts.fn.save();
+                })
 
             },
             showModal:function(){
@@ -158,11 +169,40 @@
                         for(var key in item){
                             var element = $("#postForm :input[name="+key+"]")
                             if(element.length>0){
-                                element.val(item[key]);
+                                if(element.attr("type")=="checkbox"){
+                                    if(item[key]){
+                                        element.val(item[key]);
+                                        element.prop('checked', true);
+                                    }else{
+                                        element.removeAttr("checked",true);
+                                    }
+                                }else{
+                                    element.val(item[key]);
+                                }
+
                             }
                         }
                     }
                 })
+            },
+            save:function(){
+                if(!$('#postForm').isValid()){
+                    return false;
+                };
+                $("#postForm").ajaxSubmit({
+                    dataType:"json",
+                    success:function(result){
+                        posts.fn.responseComplete(result);
+                        $("#editPostModal").modal("hide");
+                    }
+                })
+            },
+            responseComplete:function(result){
+                if(result.success){
+                    binf.notify(result.msg,"success");
+                }else{
+                    binf.notify(result.msg,"error");
+                }
             },
             deleteRow:function(checkBox,ids){
                 if(ids.length>0){

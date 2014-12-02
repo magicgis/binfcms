@@ -1,5 +1,6 @@
 package me.binf.admin.mvc.controller;
 
+import me.binf.admin.mvc.editor.*;
 import me.binf.admin.service.LoginService;
 import me.binf.admin.utils.DataTableFactory;
 import me.binf.admin.utils.WebUtil;
@@ -16,10 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -36,8 +41,20 @@ public class ContentController {
     @Autowired
     private LoginService loginService;
 
-    /** 类别start**/
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(MultipartFile.class, new CustomFileEditor());
+        binder.registerCustomEditor(Double.class, new CustomDoubleEditor());
+        binder.registerCustomEditor(Float.class, new CustomFloatEditor());
+        binder.registerCustomEditor(Integer.class, new CustomIntegerEditor());
+        binder.registerCustomEditor(Long.class, new CustomLongEditor());
+        binder.registerCustomEditor(Date.class, new CustomDateEditor());
+    }
+
+
+
+    /** 类别start**/
     @RequestMapping(value = "category")
     public String category(HttpServletRequest request,
                            HttpServletResponse response,

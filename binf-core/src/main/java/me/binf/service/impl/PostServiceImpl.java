@@ -124,6 +124,8 @@ public class PostServiceImpl implements PostService {
         if(null==categoryIds||categoryIds.length==0){
             GeneralExceptionHandler.handle("文章类别不能为空!");
         }
+
+
         for(int categoryId : categoryIds){
             Category category = categoryService.getById(categoryId);
             if(category==null){

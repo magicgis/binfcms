@@ -119,6 +119,7 @@ var binf = {
      */
     clearForm:function(form){
         form.find(":input").val("");
+        form.find("input[type=checkbox]").removeAttr("checked");
         form.validator( "cleanUp" );
     },
     dataTable:function(obj,option){
