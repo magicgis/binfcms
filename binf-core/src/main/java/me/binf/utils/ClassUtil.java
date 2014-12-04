@@ -1,9 +1,7 @@
 package me.binf.utils;
 
-import me.binf.annotation.NoConvert;
+import me.binf.annotation.MustConvert;
 import me.binf.exception.GeneralExceptionHandler;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
@@ -48,13 +46,13 @@ public class ClassUtil {
             for (Field field : fields) {
                 String fieldName = field.getName();
                 Object value = parGetVal(fieldName, orig);
-                if (field.isAnnotationPresent(NoConvert.class)) {
-                    continue;
-                }
-                if(value!=null){
+                if (field.isAnnotationPresent(MustConvert.class)) {
                     parSetVal(fieldName, dest, value);
+                }else{
+                    if(value!=null){
+                        parSetVal(fieldName, dest, value);
+                    }
                 }
-
             }
         } catch (Exception e) {
             GeneralExceptionHandler.handle(e);

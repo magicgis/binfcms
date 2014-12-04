@@ -78,7 +78,7 @@
                         <h4 class="modal-title" id="editPostModalLabel">修改文章</h4>
                     </div>
                     <div class="modal-body">
-                        <form id="postForm" method="post" action="content/post/save" class="form-horizontal" role="form">
+                        <form id="postForm" method="post" action="content/post/fast/save" class="form-horizontal" role="form">
                             <input type="hidden"  id="id" name="id" value="">
                             <div class="form-group">
                                 <label for="title" class="col-sm-2 control-label">名称:</label>
@@ -102,11 +102,10 @@
                                 <label for="stick" class="col-sm-2 control-label">是否置顶:</label>
                                 <div class="col-sm-3 ">
                                     <label>
-                                        <input  type="checkbox" id="stick" name="stick"  >
+                                        <input  type="checkbox" id="stick" name="stick" value="true" >
                                     </label>
                                 </div>
                             </div>
-
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -171,7 +170,6 @@
                             if(element.length>0){
                                 if(element.attr("type")=="checkbox"){
                                     if(item[key]){
-                                        element.val(item[key]);
                                         element.prop('checked', true);
                                     }else{
                                         element.removeAttr("checked",true);
@@ -193,13 +191,14 @@
                     dataType:"json",
                     success:function(result){
                         posts.fn.responseComplete(result);
-                        $("#editPostModal").modal("hide");
                     }
                 })
             },
             responseComplete:function(result){
                 if(result.success){
                     binf.notify(result.msg,"success");
+                    $("#editPostModal").modal("hide");
+                    posts.v.dTable.ajax.reload();
                 }else{
                     binf.notify(result.msg,"error");
                 }

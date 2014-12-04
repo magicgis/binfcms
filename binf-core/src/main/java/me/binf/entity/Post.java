@@ -1,6 +1,6 @@
 package me.binf.entity;
 
-import me.binf.annotation.NoConvert;
+import me.binf.annotation.MustConvert;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -43,11 +43,9 @@ public class Post {
     @JoinColumn(name = "update_by")
     private Member updateBy;
 
-    @NoConvert
     private Integer visits;
 
     private Integer stars;
-
 
     @Column(name = "comment_status")
     private Boolean commentStatus;

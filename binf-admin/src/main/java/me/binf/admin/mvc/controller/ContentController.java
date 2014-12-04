@@ -134,6 +134,38 @@ public class ContentController {
         return "template/admin/新建文章";
     }
 
+    /**
+     * 快速编辑
+     * @param request
+     * @param response
+     * @param post
+     * @param status
+     */
+    @RequestMapping(value = "post/fast/save")
+    public void postFastSave(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Post post,
+                             Integer status){
+
+        Member member =  loginService.getMember(request);
+        post.setUpdateBy(member);
+        if(StringUtils.isNotBlank(post.getTags())){
+            String tags = post.getTags();
+            Pattern pattern = Pattern.compile("，+|,+");
+            Matcher matcher = pattern.matcher(tags);
+            post.setTags(matcher.replaceAll(","));
+        }
+        try{
+            Post  result = postService.update(post);
+            WebUtil.print(response,new Result(true).data(result).msg("文章发布成功！"));
+        }catch (Exception e){
+            WebUtil.print(response, new Result(false).msg(e.getMessage()));
+        }
+
+    }
+
+
+
     @RequestMapping(value = "post/save")
     public void postSave(HttpServletRequest request,
                          HttpServletResponse response,

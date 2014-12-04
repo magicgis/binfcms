@@ -118,7 +118,7 @@ var binf = {
      * @param option boolean类型，为true清理select插件
      */
     clearForm:function(form){
-        form.find(":input").val("");
+        form.find(":input[type!=checkbox]").val("");
         form.find("input[type=checkbox]").removeAttr("checked");
         form.validator( "cleanUp" );
     },

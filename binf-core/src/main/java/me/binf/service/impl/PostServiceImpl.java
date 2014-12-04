@@ -92,6 +92,10 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public Post update(Post post) {
         Post origPost = getById(post.getId());
+        if(post.getStick()==null){
+            post.setStick(false);
+        }
+
         ClassUtil.copyProperties(origPost,post);
         origPost.setUpdateDate(new Date());
         return postDao.save(origPost);
