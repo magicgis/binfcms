@@ -23,8 +23,8 @@ public class IndexController {
     @Autowired
     private LoginService loginService;
 
-    @RequestMapping(value = "/")
-    public String index(HttpServletRequest request,
+    @RequestMapping(value = "/login")
+    public String login(HttpServletRequest request,
                         HttpServletResponse response,
                         String error,
                         ModelMap model){
@@ -35,15 +35,15 @@ public class IndexController {
     }
 
 
-    @RequestMapping(value = "login")
-    public String login(String username,
+    @RequestMapping(value = "/login/check")
+    public String checkLogin(String username,
                         String password,
                         HttpServletRequest request,
                         ModelMap model){
 
         Boolean success = loginService.login(username,password,request);
         if(success){
-            return "redirect:dashboard";
+            return "redirect:/dashboard";
         }
         model.addAttribute("error","用户名或密码错误!");
         return "redirect:/";
@@ -54,6 +54,14 @@ public class IndexController {
     public String dashboard(HttpServletRequest request,
                         HttpServletResponse response,
                         ModelMap model){
+
+        return "template/admin/控制面板";
+    }
+
+    @RequestMapping(value = "/")
+    public String index(HttpServletRequest request,
+                            HttpServletResponse response,
+                            ModelMap model){
 
         return "template/admin/控制面板";
     }

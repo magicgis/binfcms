@@ -8,6 +8,7 @@ $(function(){
             var ul = $(this).parent("ul .nav-second-level")
             if(ul.length>0){
                 ul.addClass("in")
+                ul.parent("li").addClass("active")
             }
 
         }

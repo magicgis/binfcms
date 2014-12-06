@@ -1,5 +1,6 @@
 package me.binf.admin.mvc.controller;
 
+import me.binf.admin.mvc.common.CommonController;
 import me.binf.admin.mvc.editor.*;
 import me.binf.admin.service.LoginService;
 import me.binf.admin.utils.DataTableFactory;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -32,7 +34,7 @@ import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping(value = "content")
-public class ContentController {
+public class ContentController extends CommonController {
 
     @Autowired
     private CategoryService categoryService;
@@ -40,18 +42,6 @@ public class ContentController {
     private PostService postService;
     @Autowired
     private LoginService loginService;
-
-
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(MultipartFile.class, new CustomFileEditor());
-        binder.registerCustomEditor(Double.class, new CustomDoubleEditor());
-        binder.registerCustomEditor(Float.class, new CustomFloatEditor());
-        binder.registerCustomEditor(Integer.class, new CustomIntegerEditor());
-        binder.registerCustomEditor(Long.class, new CustomLongEditor());
-        binder.registerCustomEditor(Date.class, new CustomDateEditor());
-    }
-
 
 
     /** 类别start**/
@@ -90,16 +80,11 @@ public class ContentController {
 
     @RequestMapping(value = "category/list")
     public void categoryList(HttpServletRequest request,
-                             HttpServletResponse response,
-                             Integer draw,
-                             Integer start,
-                             Integer length){
-        if(start==null){
-            start = 0;
-        }
-        Page<Category> page = categoryService.find(start,length);
-        Map<String,Object> result = DataTableFactory.fitting(draw, page);
-        WebUtil.printJson(response,result);
+                             HttpServletResponse response){
+        List<Category> list = categoryService.findAll();
+        Map<String,Object> result = new HashMap<String, Object>();
+        result.put("data",list);
+        WebUtil.print(response,result);
     }
 
     @RequestMapping(value = "category/delete")

@@ -86,7 +86,7 @@ public class GlobalFilter implements Filter {
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             WebUtil.print(httpResponse, "重新登录！");
         }else{
-            httpResponse.sendRedirect(contextPath);
+            httpResponse.sendRedirect(contextPath+"/login");
         }
 
     }
