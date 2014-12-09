@@ -160,9 +160,6 @@
                 uploadFile.v.fileQueue.find("li[data-index=" + file.index + "]").find(".progress").text(percent + "%");
             },
             onFileComplete:function(e, file, response){
-                console.log("File Complete");
-
-                console.log(response.data)
                 var $target = uploadFile.v.fileQueue.find("li[data-index=" + file.index + "]");
                 $target.find(".file").html('<img src="'+response.data+'" class="img-responsive" alt="Responsive image">');
                 $target.find(".progress").remove();

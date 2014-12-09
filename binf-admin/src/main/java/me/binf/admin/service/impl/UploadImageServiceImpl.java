@@ -33,4 +33,8 @@ public class UploadImageServiceImpl extends AbstractUploadService implements Upl
         }
         return result;
     }
+
+
+
+
 }

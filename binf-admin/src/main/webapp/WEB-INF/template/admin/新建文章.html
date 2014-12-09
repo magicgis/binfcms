@@ -6,7 +6,8 @@
     <meta name="author" content="">
     <title>新建文章</title>
     <#include "inc/css.html"/>
-
+    <link href="static/js/plugins/dropper/jquery.fs.dropper.css" rel="stylesheet">
+    <script src="static/js/plugins/dropper/jquery.fs.dropper.js"></script>
 
 </head>
 
@@ -84,6 +85,33 @@
                     </div>
                     <div class="panel panel-default">
                         <div class="panel-heading">
+                            <b>文章缩略图</b>
+                        </div>
+                        <div class="panel-body">
+                            <input type="hidden" id="imageId" name="imageId" value="">
+                            <div  class="image_show"  style="display: none">
+
+                            </div>
+
+                            <div class="image_handle">
+                                <form action="#" class="demo_form">
+                                    <div class="dropped"></div>
+                                </form>
+                            </div>
+
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <a href="javascript:void(0)" id="removeImg" class="btn btn-default" role="button">删除图片</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
                             <b>类别选择</b>
                         </div>
                         <div class="panel-body">
@@ -120,6 +148,7 @@
         v:{
             id:"createPost",
             tinyContent:null
+
         },
         fn:{
             init:function(){
@@ -134,7 +163,33 @@
                     })
                 })
 
+                $("#removeImg").click(function(){
+                    $(".image_handle").show();
+                    $(".image_show").hide();
+                    $(".image_show").html("");
+
+                })
+                createPost.fn.dropperInit();
+
                 createPost.fn.lastLoad();
+            },
+            dropperInit:function(){
+                $("#" + createPost.v.id + " .dropped").dropper({
+                    postKey: "file",
+                    action: "file/save",
+                    label: "把文件拖拽到此处",
+                    maxSize: 1048576
+                }).on("fileComplete.dropper", createPost.fn.onFileComplete)
+                  .on("fileError.dropper", createPost.fn.onFileError);
+            },
+            onFileComplete:function(e, file, response){
+                $(".dropper-input").val("");
+                $(".image_handle").hide();
+                $(".image_show").show();
+                $(".image_show").html("<img src='"+response.data.path+"' class='img-responsive' >");
+            },
+            onFileError:function(e, file, error){
+                    console.log("error:"+error);
             },
             responseComplete:function(result){
                 if(result.success){

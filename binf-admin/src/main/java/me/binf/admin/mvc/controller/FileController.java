@@ -5,7 +5,9 @@ import me.binf.admin.mvc.common.CommonController;
 import me.binf.admin.service.UploadImageService;
 import me.binf.admin.utils.WebUtil;
 import me.binf.core.bean.Result;
+import me.binf.entity.Image;
 import me.binf.exception.GeneralExceptionHandler;
+import me.binf.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  * Created by wangbin on 2014/12/6.
@@ -25,6 +28,8 @@ public class FileController extends CommonController{
     @Autowired
     private UploadImageService uploadImageService;
 
+    @Autowired
+    private ImageService imageService;
 
     @RequestMapping(value = "/upload")
     public String upload(HttpServletRequest request,
@@ -39,14 +44,19 @@ public class FileController extends CommonController{
                      HttpServletResponse response,
                      @RequestParam(required=false) MultipartFile file){
 
-        String filename = "";
+        String filePath = "";
         try {
-            filename = uploadImageService.saveImage(file);
-            filename= Configue.getUploadUrl()+filename;
-            WebUtil.print(response, new Result(true).data(filename).msg("上传图片成功!"));
+            filePath = uploadImageService.saveImage(file);
+            Image image = new Image();
+            image.setPath(filePath);
+            image.setCreateDate(new Date());
+            imageService.create(image);
+            //图片完整路径
+            image.setPath(Configue.getUploadUrl()+filePath);
+            WebUtil.print(response, new Result(true).data(image).msg("上传图片成功!"));
         }catch (Exception e){
             GeneralExceptionHandler.log(e);
-            WebUtil.print(response, new Result(true).data(filename).msg(e.getMessage()));
+            WebUtil.print(response, new Result(false).msg(e.getMessage()));
         }
 
 
