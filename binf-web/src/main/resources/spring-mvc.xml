@@ -10,7 +10,7 @@
 
     <!-- 扫描 com.binf.admin 包及子包下的 @Service @Controller @Repository @Component
         注解 -->
-    <context:component-scan base-package="me.binf.admin.mvc">
+    <context:component-scan base-package="me.binf.web.mvc">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
 
@@ -22,7 +22,7 @@
 
 
     <!-- 配置freeMarker视图解析器 -->
-    <bean id="viewResolverFtl" class="me.binf.admin.web.RichFreeMarkerViewResolver">
+    <bean id="viewResolverFtl" class="me.binf.web.freemarker.RichFreeMarkerViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
         <property name="contentType" value="text/html; charset=utf-8"/>
         <property name="cache" value="false" />
@@ -55,12 +55,10 @@
         <property name="freemarkerVariables">
             <map>
                 <entry key="baseUrl" value="${base.url}"/>
-                <entry key="categoryList" value-ref="categoryList"/>
             </map>
         </property>
     </bean>
 
-    <bean id="categoryList" class="me.binf.admin.freemarker.CategoryListDirective"/>
 
 
     <!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
