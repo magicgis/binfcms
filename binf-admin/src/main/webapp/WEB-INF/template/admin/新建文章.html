@@ -76,26 +76,19 @@
                     </div>
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <b>文章标签</b>
-                        </div>
-                        <div class="panel-body">
-                            <input type="text" name="tags" class="form-control input-lg" placeholder="多个标签用(,)隔开" value="${(post.tags)!}">
-                        </div>
-
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
                             <b>文章缩略图</b>
                         </div>
                         <div class="panel-body">
                             <input type="hidden" id="imageId" name="imageId" value="">
-                            <div  class="image_show"  style="display: none">
-
+                            <div  class="image_show"  <#if !(post.image)?? >style="display: none" </#if> >
+                                <#if (post.image)??>
+                                    <img src="${post.image.path}" class="img-responsive" >
+                                </#if>
                             </div>
 
-                            <div class="image_handle">
+                            <div class="image_handle" <#if (post.image)?? >style="display: none" </#if>>
                                 <form action="#" class="demo_form">
-                                    <div class="dropped"></div>
+                                    <div class="dropped" style="position:relative"></div>
                                 </form>
                             </div>
 
@@ -108,8 +101,6 @@
                             </div>
                         </div>
                     </div>
-
-
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <b>类别选择</b>
@@ -122,6 +113,17 @@
                             </#if>
                         </div>
                     </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <b>文章标签</b>
+                        </div>
+                        <div class="panel-body">
+                            <input type="text" name="tags" class="form-control input-lg" placeholder="多个标签用(,)隔开" value="${(post.tags)!}">
+                        </div>
+
+                    </div>
+
+
                 </div>
             </div>
         </form>
@@ -176,20 +178,25 @@
             dropperInit:function(){
                 $("#" + createPost.v.id + " .dropped").dropper({
                     postKey: "file",
-                    action: "file/save",
+                    action: "file/image/save",
                     label: "把文件拖拽到此处",
                     maxSize: 1048576
                 }).on("fileComplete.dropper", createPost.fn.onFileComplete)
                   .on("fileError.dropper", createPost.fn.onFileError);
             },
             onFileComplete:function(e, file, response){
-                $(".dropper-input").val("");
-                $(".image_handle").hide();
-                $(".image_show").show();
-                $(".image_show").html("<img src='"+response.data.path+"' class='img-responsive' >");
+                if(response.success){
+                    $(".dropper-input").val("");
+                    $(".image_handle").hide();
+                    $(".image_show").show();
+                    $(".image_show").html("<img src='"+response.data.path+"' class='img-responsive' >");
+                    $("#imageId").val(response.data.id);
+                }else{
+                    binf.notify(response.msg,"error");
+                }
             },
             onFileError:function(e, file, error){
-                    console.log("error:"+error);
+                binf.notify(error,"error");
             },
             responseComplete:function(result){
                 if(result.success){

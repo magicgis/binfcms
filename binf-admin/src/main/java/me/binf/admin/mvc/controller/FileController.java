@@ -39,7 +39,7 @@ public class FileController extends CommonController{
     }
 
 
-    @RequestMapping(value = "/save")
+    @RequestMapping(value = "/image/save")
     public void save(HttpServletRequest request,
                      HttpServletResponse response,
                      @RequestParam(required=false) MultipartFile file){
@@ -59,8 +59,13 @@ public class FileController extends CommonController{
             WebUtil.print(response, new Result(false).msg(e.getMessage()));
         }
 
+    }
 
+    @RequestMapping(value = "/files")
+    public String files(HttpServletRequest request,
+                        HttpServletResponse response){
 
+        return "template/admin/文件管理";
     }
 
 

@@ -12,6 +12,7 @@
         <module>binf-admin</module>
         <module>binf-core</module>
         <module>binf-utils</module>
+        <module>binf-web</module>
     </modules>
 
 

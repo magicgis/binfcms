@@ -1,5 +1,6 @@
 package me.binf.admin.mvc.controller;
 
+import me.binf.admin.core.Configue;
 import me.binf.admin.mvc.common.CommonController;
 import me.binf.admin.mvc.editor.*;
 import me.binf.admin.service.LoginService;
@@ -7,6 +8,7 @@ import me.binf.admin.utils.DataTableFactory;
 import me.binf.admin.utils.WebUtil;
 import me.binf.core.bean.Result;
 import me.binf.entity.Category;
+import me.binf.entity.Image;
 import me.binf.entity.Member;
 import me.binf.entity.Post;
 import me.binf.exception.GeneralExceptionHandler;
@@ -44,27 +46,29 @@ public class ContentController extends CommonController {
     private LoginService loginService;
 
 
-    /** 类别start**/
+    /**
+     * 类别start*
+     */
     @RequestMapping(value = "category")
     public String category(HttpServletRequest request,
                            HttpServletResponse response,
-                           ModelMap model){
+                           ModelMap model) {
         return "template/admin/类别管理";
     }
 
     @RequestMapping(value = "category/save")
     public void categorySave(HttpServletRequest request,
                              HttpServletResponse response,
-                             Category category){
+                             Category category) {
         try {
             Category result = null;
-            if(category.getId()==null){
+            if (category.getId() == null) {
                 result = categoryService.create(category);
-            }else{
+            } else {
                 result = categoryService.update(category);
             }
-            WebUtil.print(response,new Result(true).data(result).msg("创建类别成功！"));
-        }catch (Exception e){
+            WebUtil.print(response, new Result(true).data(result).msg("创建类别成功！"));
+        } catch (Exception e) {
             GeneralExceptionHandler.log("创建类别失败", e);
             WebUtil.print(response, new Result(false).msg("创建类别失败"));
         }
@@ -73,31 +77,31 @@ public class ContentController extends CommonController {
     @RequestMapping(value = "category/tree")
     public void categoryTree(HttpServletRequest request,
                              HttpServletResponse response,
-                             String scriptName){
+                             String scriptName) {
         String tree = categoryService.tree(null);
-        WebUtil.printJson(response, "var "+ scriptName+"="+tree);
+        WebUtil.printJson(response, "var " + scriptName + "=" + tree);
     }
 
     @RequestMapping(value = "category/list")
     public void categoryList(HttpServletRequest request,
-                             HttpServletResponse response){
+                             HttpServletResponse response) {
         List<Category> list = categoryService.findAll();
-        Map<String,Object> result = new HashMap<String, Object>();
-        result.put("data",list);
-        WebUtil.print(response,result);
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("data", list);
+        WebUtil.print(response, result);
     }
 
     @RequestMapping(value = "category/delete")
     public void categoryDel(HttpServletRequest request,
                             HttpServletResponse response,
-                            String ids){
+                            String ids) {
         try {
-            int[] arrayId =  JsonUtil.json2Obj(ids,int[].class);
+            int[] arrayId = JsonUtil.json2Obj(ids, int[].class);
             categoryService.deleteAll(arrayId);
-            WebUtil.print(response,new Result(true).msg("删除类别成功！"));
-        }catch (Exception e){
-            GeneralExceptionHandler.log("删除类别失败",e);
-            WebUtil.print(response,new Result(false).msg("删除类别失败！"));
+            WebUtil.print(response, new Result(true).msg("删除类别成功！"));
+        } catch (Exception e) {
+            GeneralExceptionHandler.log("删除类别失败", e);
+            WebUtil.print(response, new Result(false).msg("删除类别失败！"));
         }
 
     }
@@ -105,15 +109,22 @@ public class ContentController extends CommonController {
     /** 类别end**/
 
 
-    /** 新建文章start **/
+    /**
+     * 新建文章start *
+     */
     @RequestMapping(value = "post")
     public String post(HttpServletRequest request,
                        HttpServletResponse response,
                        Integer id,
-                       ModelMap model){
-        if(id!=null){
-           Post post = postService.findPostById(id);
-           model.put("post",post);
+                       ModelMap model) {
+        if (id != null) {
+            Post post = postService.findPostById(id);
+            Image image = post.getImage();
+            if(image!=null){
+                image.setPath(Configue.getUploadUrl() + image.getPath());
+            }
+
+            model.put("post", post);
         }
 
         return "template/admin/新建文章";
@@ -121,6 +132,7 @@ public class ContentController extends CommonController {
 
     /**
      * 快速编辑
+     *
      * @param request
      * @param response
      * @param post
@@ -130,25 +142,24 @@ public class ContentController extends CommonController {
     public void postFastSave(HttpServletRequest request,
                              HttpServletResponse response,
                              Post post,
-                             Integer status){
+                             Integer status) {
 
-        Member member =  loginService.getMember(request);
+        Member member = loginService.getMember(request);
         post.setUpdateBy(member);
-        if(StringUtils.isNotBlank(post.getTags())){
+        if (StringUtils.isNotBlank(post.getTags())) {
             String tags = post.getTags();
             Pattern pattern = Pattern.compile("，+|,+");
             Matcher matcher = pattern.matcher(tags);
             post.setTags(matcher.replaceAll(","));
         }
-        try{
-            Post  result = postService.update(post);
-            WebUtil.print(response,new Result(true).data(result).msg("文章发布成功！"));
-        }catch (Exception e){
+        try {
+            Post result = postService.update(post);
+            WebUtil.print(response, new Result(true).data(result).msg("文章发布成功！"));
+        } catch (Exception e) {
             WebUtil.print(response, new Result(false).msg(e.getMessage()));
         }
 
     }
-
 
 
     @RequestMapping(value = "post/save")
@@ -156,25 +167,31 @@ public class ContentController extends CommonController {
                          HttpServletResponse response,
                          Post post,
                          Integer status,
-                         Integer[] categoryIds){
+                         Integer imageId,
+                         Integer[] categoryIds) {
         Post result = null;
-        Member member =  loginService.getMember(request);
+        Member member = loginService.getMember(request);
         post.setUpdateBy(member);
-        if(StringUtils.isNotBlank(post.getTags())){
+        if (StringUtils.isNotBlank(post.getTags())) {
             String tags = post.getTags();
             Pattern pattern = Pattern.compile("，+|,+");
             Matcher matcher = pattern.matcher(tags);
             post.setTags(matcher.replaceAll(","));
         }
-        try{
-            if(post.getId()==null){
+        if (imageId != null) {
+            Image image = new Image();
+            image.setId(imageId);
+            post.setImage(image);
+        }
+        try {
+            if (post.getId() == null) {
                 post.setCreateBy(member);
-                result = postService.create(post,categoryIds);
-            }else{
+                result = postService.create(post, categoryIds);
+            } else {
                 result = postService.update(post, categoryIds);
             }
-            WebUtil.print(response,new Result(true).data(result).msg("文章发布成功！"));
-        }catch (Exception e){
+            WebUtil.print(response, new Result(true).data(result).msg("文章发布成功！"));
+        } catch (Exception e) {
             WebUtil.print(response, new Result(false).msg(e.getMessage()));
         }
     }
@@ -182,14 +199,14 @@ public class ContentController extends CommonController {
     @RequestMapping(value = "post/delete")
     public void postDelete(HttpServletRequest request,
                            HttpServletResponse response,
-                           String ids){
+                           String ids) {
         try {
-            int[] arrayId =  JsonUtil.json2Obj(ids,int[].class);
+            int[] arrayId = JsonUtil.json2Obj(ids, int[].class);
             postService.deleteAll(arrayId);
-            WebUtil.print(response,new Result(true).msg("删除类别成功！"));
-        }catch (Exception e){
-            GeneralExceptionHandler.log("删除类别失败",e);
-            WebUtil.print(response,new Result(false).msg("删除类别失败！"));
+            WebUtil.print(response, new Result(true).msg("删除类别成功！"));
+        } catch (Exception e) {
+            GeneralExceptionHandler.log("删除类别失败", e);
+            WebUtil.print(response, new Result(false).msg("删除类别失败！"));
         }
 
 
@@ -198,12 +215,13 @@ public class ContentController extends CommonController {
     /** 新建文章end **/
 
 
-
-    /** 文章列表start **/
+    /**
+     * 文章列表start *
+     */
     @RequestMapping(value = "posts")
     public String postListIndex(HttpServletRequest request,
-                              HttpServletResponse response,
-                              ModelMap model){
+                                HttpServletResponse response,
+                                ModelMap model) {
         return "template/admin/文章列表";
     }
 
@@ -213,15 +231,14 @@ public class ContentController extends CommonController {
                          HttpServletResponse response,
                          Integer draw,
                          Integer start,
-                         Integer length){
-        if(start==null){
+                         Integer length) {
+        if (start == null) {
             start = 0;
         }
-        Page<Post> page = postService.find(start,length);
-        Map<String,Object> result = DataTableFactory.fitting(draw, page);
-        WebUtil.printJson(response,result);
+        Page<Post> page = postService.find(start, length);
+        Map<String, Object> result = DataTableFactory.fitting(draw, page);
+        WebUtil.printJson(response, result);
     }
-
 
 
     /** 文章列表end **/

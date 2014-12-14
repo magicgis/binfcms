@@ -21,8 +21,9 @@ public class Post {
 
     private String title;
 
-    @Column(name = "image_id")
-    private Integer imageId;
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 
     private String content;
 
@@ -91,12 +92,12 @@ public class Post {
         this.title = title;
     }
 
-    public Integer getImageId() {
-        return imageId;
+    public Image getImage() {
+        return image;
     }
 
-    public void setImageId(Integer imageId) {
-        this.imageId = imageId;
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public String getContent() {
