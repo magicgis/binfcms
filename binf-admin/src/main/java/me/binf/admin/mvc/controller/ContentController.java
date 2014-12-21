@@ -53,7 +53,7 @@ public class ContentController extends CommonController {
     public String category(HttpServletRequest request,
                            HttpServletResponse response,
                            ModelMap model) {
-        return "template/admin/类别管理";
+        return "template/admin/category";
     }
 
     @RequestMapping(value = "category/save")
@@ -127,7 +127,7 @@ public class ContentController extends CommonController {
             model.put("post", post);
         }
 
-        return "template/admin/新建文章";
+        return "template/admin/post";
     }
 
     /**
@@ -222,7 +222,7 @@ public class ContentController extends CommonController {
     public String postListIndex(HttpServletRequest request,
                                 HttpServletResponse response,
                                 ModelMap model) {
-        return "template/admin/文章列表";
+        return "template/admin/posts";
     }
 
 

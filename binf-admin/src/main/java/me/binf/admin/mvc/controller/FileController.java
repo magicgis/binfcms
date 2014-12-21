@@ -35,7 +35,7 @@ public class FileController extends CommonController{
     public String upload(HttpServletRequest request,
                             HttpServletResponse response
                             ){
-        return "template/admin/文件上传";
+        return "template/admin/upload";
     }
 
 

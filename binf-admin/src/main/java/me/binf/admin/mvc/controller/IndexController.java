@@ -31,7 +31,7 @@ public class IndexController {
         if(StringUtils.isNotBlank(error)){
             model.addAttribute("error",error);
         }
-        return "template/admin/登录";
+        return "template/admin/login";
     }
 
 
@@ -55,7 +55,7 @@ public class IndexController {
                         HttpServletResponse response,
                         ModelMap model){
 
-        return "template/admin/控制面板";
+        return "template/admin/dashboard";
     }
 
     @RequestMapping(value = "/")
@@ -63,7 +63,7 @@ public class IndexController {
                             HttpServletResponse response,
                             ModelMap model){
 
-        return "template/admin/控制面板";
+        return "redirect:/dashboard";
     }
 
 
