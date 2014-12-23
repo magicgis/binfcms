@@ -1,5 +1,6 @@
 package me.binf.web.freemarker;
 
+
 import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
 
 import javax.servlet.http.HttpServletRequest;

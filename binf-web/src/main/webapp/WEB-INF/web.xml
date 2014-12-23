@@ -16,7 +16,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             classpath*:applicationContext.xml,
-            classpath*:conf/spring-cache.xml
+            classpath*:conf/spring-hessian.xml
         </param-value>
     </context-param>
 
@@ -40,6 +40,8 @@
         <filter-name>org.springframework.web.filter.CharacterEncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+
 
 
 

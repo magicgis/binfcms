@@ -26,9 +26,11 @@ public class HelloServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        ServletContext servletContext =  config.getServletContext();
-        Object object =  servletContext.getAttribute("javax.servlet.context.tempdir");
+        ServletContext servletContext = config.getServletContext();
+        Object object = servletContext.getAttribute("javax.servlet.context.tempdir");
 
 
     }
+
+
 }

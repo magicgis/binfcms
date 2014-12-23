@@ -1,8 +1,8 @@
 package me.binf.service.impl;
 
+import me.binf.entity.Member;
 import me.binf.core.Constant;
 import me.binf.dao.MemberDao;
-import me.binf.entity.Member;
 import me.binf.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

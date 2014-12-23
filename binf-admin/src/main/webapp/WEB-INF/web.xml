@@ -56,6 +56,19 @@
     </filter-mapping>
 
 
+
+    <servlet>
+        <servlet-name>postService</servlet-name>                                                               <!-- servlet-class中指定的类是固定的，统一使用 com.caucho.hessian.server.HessianServlet-->
+        <servlet-class>me.binf.admin.api.PostServiceApiImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>postService</servlet-name>
+        <url-pattern>/api/admin/postService</url-pattern>
+    </servlet-mapping>
+
+
+
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

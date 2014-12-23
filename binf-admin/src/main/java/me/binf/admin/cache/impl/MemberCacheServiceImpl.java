@@ -1,9 +1,9 @@
 package me.binf.admin.cache.impl;
 
 import me.binf.admin.cache.CacheService;
+import me.binf.entity.Member;
 import me.binf.common.cache.service.AbstractCacheService;
 import me.binf.common.cache.item.CommonCacheItem;
-import me.binf.entity.Member;
 import org.springframework.stereotype.Service;
 
 /**

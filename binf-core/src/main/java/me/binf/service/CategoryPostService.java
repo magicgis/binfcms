@@ -1,8 +1,6 @@
 package me.binf.service;
 
-import me.binf.dao.CategoryPostDao;
 import me.binf.entity.CategoryPost;
-import me.binf.entity.Post;
 
 import java.util.List;
 

@@ -13,6 +13,7 @@
         <module>binf-core</module>
         <module>binf-utils</module>
         <module>binf-web</module>
+        <module>binf-api</module>
     </modules>
 
 

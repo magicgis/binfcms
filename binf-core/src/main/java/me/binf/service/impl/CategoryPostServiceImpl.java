@@ -1,8 +1,7 @@
 package me.binf.service.impl;
 
-import me.binf.dao.CategoryPostDao;
 import me.binf.entity.CategoryPost;
-import me.binf.entity.Post;
+import me.binf.dao.CategoryPostDao;
 import me.binf.service.CategoryPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

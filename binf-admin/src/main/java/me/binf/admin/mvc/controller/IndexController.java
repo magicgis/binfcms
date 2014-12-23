@@ -2,7 +2,6 @@ package me.binf.admin.mvc.controller;
 
 import me.binf.admin.service.LoginService;
 import me.binf.dao.MemberDao;
-import me.binf.entity.Member;
 import me.binf.service.MemberService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

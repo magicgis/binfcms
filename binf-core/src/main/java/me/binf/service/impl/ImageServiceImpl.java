@@ -1,18 +1,13 @@
 package me.binf.service.impl;
 
-import me.binf.core.Constant;
-import me.binf.dao.ImageDao;
 import me.binf.entity.Image;
+import me.binf.dao.ImageDao;
 import me.binf.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by wangbin on 14-10-16.

@@ -3,5 +3,9 @@
 	<persistence-unit name="service.jpa">
 
         <class>me.binf.entity.Member</class>
+        <class>me.binf.entity.Category</class>
+        <class>me.binf.entity.CategoryPost</class>
+        <class>me.binf.entity.Image</class>
+        <class>me.binf.entity.Post</class>
     </persistence-unit>
 </persistence>

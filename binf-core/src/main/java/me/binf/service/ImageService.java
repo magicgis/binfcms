@@ -1,9 +1,6 @@
 package me.binf.service;
 
 import me.binf.entity.Image;
-import me.binf.service.common.ICommonService;
-
-import java.util.Date;
 
 /**
  * Created by wangbin on 2014/12/9.

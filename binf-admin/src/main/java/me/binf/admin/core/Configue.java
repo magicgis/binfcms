@@ -12,12 +12,13 @@ public class Configue {
         ConfigUtil.setConfigFile("conf/system.properties");
     }
 
-    public static String getUploadUrl(){
+    public static String getUploadUrl() {
         return ConfigUtil.getString("upload.url");
     }
 
-    public static String getUploadPath(){
+    public static String getUploadPath() {
         return ConfigUtil.getString("upload.path");
     }
+
 
 }
