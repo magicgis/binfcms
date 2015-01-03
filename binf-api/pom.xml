@@ -13,17 +13,17 @@
 
 
     <dependencies>
-        <!-- jpa -->
+
+
+        <!-- hessian -->
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>4.2.8.Final</version>
+            <groupId>com.caucho</groupId>
+            <artifactId>hessian</artifactId>
+            <version>4.0.38</version>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.2.8.Final</version>
-        </dependency>
+
+
+
 
     </dependencies>
 

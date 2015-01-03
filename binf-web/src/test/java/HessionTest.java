@@ -10,11 +10,11 @@ public class HessionTest {
 
         try {
 
-            String url = "http://localhost:8080/admin/api/admin/postService";
+            String url = "http://localhost:8080/admin/api/admin/postServiceApi";
             HessianProxyFactory factory = new HessianProxyFactory();
             factory.setOverloadEnabled(true);
             PostServiceApi basic = (PostServiceApi) factory.create(PostServiceApi.class, url);
-            System.out.println(basic.hello());
+            System.out.println(basic.findAll());
 
 
         }catch (Exception e){

@@ -7,7 +7,7 @@
 	<!-- Hessian 启动BeanNameMapping 映射功能 -->
     <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
 
-    <bean name="/api/admin/postService"  class="org.springframework.remoting.caucho.HessianServiceExporter">
+    <bean name="/api/admin/postServiceApi"  class="org.springframework.remoting.caucho.HessianServiceExporter">
         <property name="service" ref="postServiceApiImpl" />
         <property name="serviceInterface" value="me.binf.api.PostServiceApi"/>
     </bean>

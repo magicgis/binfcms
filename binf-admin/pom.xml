@@ -37,15 +37,6 @@
             <version>2.2.1</version>
         </dependency>
 
-
-
-        <!-- hessian -->
-        <dependency>
-            <groupId>com.caucho</groupId>
-            <artifactId>hessian</artifactId>
-            <version>4.0.38</version>
-        </dependency>
-
         <!-- freemarker -->
         <dependency>
             <groupId>org.freemarker</groupId>

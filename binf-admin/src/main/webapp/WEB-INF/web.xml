@@ -16,7 +16,8 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             classpath*:applicationContext.xml,
-            classpath*:conf/spring-cache.xml
+            classpath*:conf/spring-cache.xml,
+            classpath*:conf/spring-hessian.xml
         </param-value>
     </context-param>
 
@@ -47,7 +48,7 @@
         <filter-class>me.binf.admin.filter.GlobalFilter</filter-class>
         <init-param>
             <param-name>skipUrls</param-name>
-            <param-value>/static/*,/login/*,/login</param-value>
+            <param-value>/static/*,/login/*,/login,/api/*</param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -60,6 +61,7 @@
     <servlet>
         <servlet-name>postService</servlet-name>                                                               <!-- servlet-class中指定的类是固定的，统一使用 com.caucho.hessian.server.HessianServlet-->
         <servlet-class>me.binf.admin.api.PostServiceApiImpl</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>

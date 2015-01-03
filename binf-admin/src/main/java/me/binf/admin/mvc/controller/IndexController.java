@@ -1,6 +1,8 @@
 package me.binf.admin.mvc.controller;
 
+import com.caucho.hessian.client.HessianProxyFactory;
 import me.binf.admin.service.LoginService;
+import me.binf.api.PostServiceApi;
 import me.binf.dao.MemberDao;
 import me.binf.service.MemberService;
 import org.apache.commons.lang.StringUtils;
@@ -27,6 +29,7 @@ public class IndexController {
                         HttpServletResponse response,
                         String error,
                         ModelMap model){
+
         if(StringUtils.isNotBlank(error)){
             model.addAttribute("error",error);
         }

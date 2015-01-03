@@ -5,9 +5,9 @@
        default-lazy-init="true">
 
 
-    <bean id="postService"
+    <bean id="postServiceApi"
           class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
-        <property name="serviceUrl" value="${service.url}api/admin/postService" />
+        <property name="serviceUrl" value="${service.url}api/admin/postServiceApi" />
         <property name="serviceInterface" value="me.binf.api.PostServiceApi" />
         <property name="overloadEnabled" value="true" />
     </bean>

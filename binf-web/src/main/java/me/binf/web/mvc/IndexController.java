@@ -1,7 +1,6 @@
 package me.binf.web.mvc;
 
 import me.binf.api.PostServiceApi;
-import me.binf.entity.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +28,7 @@ public class IndexController {
 
     @RequestMapping("post")
     public String post(){
-
+        System.out.println(postService.findAll());
 
         return "template/index";
     }

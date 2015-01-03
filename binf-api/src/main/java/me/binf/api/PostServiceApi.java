@@ -1,7 +1,6 @@
 package me.binf.api;
 
 
-import me.binf.entity.Post;
 
 import java.util.List;
 
@@ -10,7 +9,8 @@ import java.util.List;
  */
 public interface PostServiceApi {
 
-    String list();
 
-   public String hello();
+    public String findAll();
+
+
 }
