@@ -12,5 +12,6 @@ public interface PostServiceApi {
 
     public String findAll();
 
+    public String find(int pageNum, int pageSize);
 
 }

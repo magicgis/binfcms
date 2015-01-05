@@ -1,8 +1,11 @@
 package me.binf.utils;
 
+import com.cedarsoftware.util.io.JsonReader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import me.binf.exception.GeneralExceptionHandler;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,18 @@ public class JsonUtil {
                 .create();
         return gson.fromJson(str,type);
     }
+
+
+    public static Object fromJsonToAnyObject(String json){
+        Object obj=null;
+        try {
+            obj = JsonReader.jsonToJava(json);
+        } catch (IOException e) {
+            GeneralExceptionHandler.handle(e);
+        }
+        return obj;
+    }
+
 
     public static void main(String[] args) {
 

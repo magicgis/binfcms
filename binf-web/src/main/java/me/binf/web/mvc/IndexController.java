@@ -1,8 +1,10 @@
 package me.binf.web.mvc;
 
 import me.binf.api.PostServiceApi;
+import me.binf.utils.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -20,8 +22,12 @@ public class IndexController {
 
 
     @RequestMapping("/")
-    public String index(){
+    public String index(ModelMap model){
+        String  pages =  postService.find(0, 20);
 
+        Object  posts = JsonUtil.fromJsonToAnyObject(pages);
+
+        model.put("posts",posts) ;
         return "template/index";
     }
 
@@ -32,4 +38,7 @@ public class IndexController {
 
         return "template/index";
     }
+
+
+
 }
