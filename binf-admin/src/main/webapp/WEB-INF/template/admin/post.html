@@ -7,6 +7,7 @@
     <title>新建文章</title>
     <#include "inc/css.html"/>
     <link href="static/js/plugins/dropper/jquery.fs.dropper.css" rel="stylesheet">
+    <link href="static/js/plugins/toopay/css/bootstrap-markdown.min.css" rel="stylesheet">
     <script src="static/js/plugins/dropper/jquery.fs.dropper.js"></script>
 
 </head>
@@ -34,9 +35,7 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="panel-body">
-                            <textarea  id="content" >
-                                      ${(post.content)!}
-                            </textarea>
+                            <textarea  id="content" data-provide="markdown" rows="10"  >${(post.content)!}</textarea>
                         </div>
                     </div>
                 </div>
@@ -133,7 +132,7 @@
 
 </div>
 <!-- /#wrapper -->
-<script src="static/js/plugins/tinymce/js/tinymce/tinymce.min.js"></script>
+<script src="static/js/plugins/toopay/js/bootstrap-markdown.js"></script>
 
 
 <#include "inc/footer.html"/>
@@ -219,18 +218,7 @@
 
     $(document).ready(function() {
 
-        tinymce.init({
-            language : 'zh_cn',
-            selector: "textarea",
-            height:"300px",
-            plugins: [
-                "advlist autolink lists link image charmap print preview anchor",
-                "searchreplace visualblocks code fullscreen",
-                "insertdatetime media table contextmenu paste"
-            ],
-            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-        });
-
+        //$("#content").markdown({autofocus:false,savable:false})
 
         createPost.fn.init();
 

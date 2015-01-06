@@ -3,6 +3,7 @@ package me.binf.service.impl;
 import me.binf.entity.Category;
 import me.binf.core.Constant;
 import me.binf.dao.CategoryDao;
+import me.binf.exception.GeneralExceptionHandler;
 import me.binf.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -103,6 +104,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public Category update(Category category) {
 
+        if(isOkPid(category.getParentId(),category.getId())){
+            GeneralExceptionHandler.handle("不能设置为父类!");
+        }
+
+
+
         Category origCategory = getById(category.getId());
         category.setCount(origCategory.getCount());
         category.setCreateDate(origCategory.getCreateDate());
@@ -121,13 +128,30 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryDao.save(category);
     }
 
+
+    private boolean isOkPid(int pid,int id){
+        if(id==pid){
+            return false;
+        }
+        while(true){
+            Category category=categoryDao.findOne(pid);
+            if(category.getParentId()!=null){
+                pid=category.getParentId();
+                if(id==pid){
+                    return false;
+                }
+            }else{
+                break;
+            }
+        }
+        return true;
+    }
+
+
     @Override
     public List<Category> findByParent(Integer parentId) {
         return categoryDao.findByParent(parentId);
     }
-
-
-
 
     @Override
     public List<Category> findAllSub(Integer id) {

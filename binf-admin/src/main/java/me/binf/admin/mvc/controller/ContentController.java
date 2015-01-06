@@ -10,6 +10,7 @@ import me.binf.entity.Image;
 import me.binf.entity.Member;
 import me.binf.entity.Post;
 import me.binf.core.bean.Result;
+import me.binf.exception.GeneralException;
 import me.binf.exception.GeneralExceptionHandler;
 import me.binf.service.CategoryService;
 import me.binf.service.PostService;
@@ -62,10 +63,15 @@ public class ContentController extends CommonController {
             } else {
                 result = categoryService.update(category);
             }
-            WebUtil.print(response, new Result(true).data(result).msg("创建类别成功！"));
-        } catch (Exception e) {
-            GeneralExceptionHandler.log("创建类别失败", e);
-            WebUtil.print(response, new Result(false).msg("创建类别失败"));
+            WebUtil.print(response, new Result(true).data(result).msg("类别操作成功！"));
+        }
+        catch (GeneralException ex){
+            GeneralExceptionHandler.log( ex);
+            WebUtil.print(response, new Result(false).msg(ex.getMessage()));
+        }
+        catch (Exception e) {
+            GeneralExceptionHandler.log("类别操作失败", e);
+            WebUtil.print(response, new Result(false).msg("类别操作失败"));
         }
     }
 

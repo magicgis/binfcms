@@ -46,11 +46,7 @@ public class FileController extends CommonController{
 
         String filePath = "";
         try {
-            filePath = uploadImageService.saveImage(file);
-            Image image = new Image();
-            image.setPath(filePath);
-            image.setCreateDate(new Date());
-            imageService.create(image);
+            Image image = uploadImageService.uploadImage(file);
             //图片完整路径
             image.setPath(Configue.getUploadUrl()+filePath);
             WebUtil.print(response, new Result(true).data(image).msg("上传图片成功!"));
