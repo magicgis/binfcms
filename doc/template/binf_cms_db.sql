@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50527
 File Encoding         : 65001
 
-Date: 2014-11-30 11:00:39
+Date: 2015-01-11 23:29:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -58,7 +58,7 @@ CREATE TABLE `category_post` (
   KEY `category_post_ibfk_2` (`post_id`),
   CONSTRAINT `category_post_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `category_post_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of category_post
@@ -72,7 +72,52 @@ INSERT INTO `category_post` VALUES ('11', '9', '8');
 INSERT INTO `category_post` VALUES ('22', '12', '9');
 INSERT INTO `category_post` VALUES ('23', '12', '10');
 INSERT INTO `category_post` VALUES ('25', '10', '11');
-INSERT INTO `category_post` VALUES ('26', '8', '3');
+INSERT INTO `category_post` VALUES ('27', '12', '12');
+INSERT INTO `category_post` VALUES ('28', '8', '3');
+
+-- ----------------------------
+-- Table structure for images
+-- ----------------------------
+DROP TABLE IF EXISTS `images`;
+CREATE TABLE `images` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `path` varchar(255) NOT NULL,
+  `thumbs` varchar(255) DEFAULT NULL,
+  `create_date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of images
+-- ----------------------------
+INSERT INTO `images` VALUES ('1', 'images/2014/12/1418137757674.png', null, '2014-12-09 23:09:17');
+INSERT INTO `images` VALUES ('2', 'images/2014/12/1418137845422.jpg', null, '2014-12-09 23:10:45');
+INSERT INTO `images` VALUES ('3', 'images/2014/12/1418138023570.jpg', null, '2014-12-09 23:13:43');
+INSERT INTO `images` VALUES ('4', 'images/2014/12/1418138307902.jpg', null, '2014-12-09 23:18:27');
+INSERT INTO `images` VALUES ('5', 'images/2014/12/1418140745137.jpg', null, '2014-12-09 23:59:05');
+INSERT INTO `images` VALUES ('6', 'images/2014/12/1418140878586.jpg', null, '2014-12-10 00:01:18');
+INSERT INTO `images` VALUES ('7', 'images/2014/12/1418140888185.jpg', null, '2014-12-10 00:01:28');
+INSERT INTO `images` VALUES ('8', 'images/2014/12/1418141108879.jpg', null, '2014-12-10 00:05:08');
+INSERT INTO `images` VALUES ('9', 'images/2014/12/1418141554896.jpg', null, '2014-12-10 00:12:34');
+INSERT INTO `images` VALUES ('10', 'images/2014/12/1418141569033.jpg', null, '2014-12-10 00:12:49');
+INSERT INTO `images` VALUES ('11', 'images/2014/12/1418141634128.jpg', null, '2014-12-10 00:13:54');
+INSERT INTO `images` VALUES ('12', 'images/2014/12/1418141708440.jpg', null, '2014-12-10 00:15:08');
+INSERT INTO `images` VALUES ('13', 'images/2014/12/1418141731725.jpg', null, '2014-12-10 00:15:31');
+INSERT INTO `images` VALUES ('14', 'images/2014/12/1418141757582.jpg', null, '2014-12-10 00:15:57');
+INSERT INTO `images` VALUES ('15', 'images/2014/12/1418141796456.jpg', null, '2014-12-10 00:16:36');
+INSERT INTO `images` VALUES ('16', 'images/2014/12/1418141857520.jpg', null, '2014-12-10 00:17:37');
+INSERT INTO `images` VALUES ('17', 'images/2014/12/1418142004776.jpg', null, '2014-12-10 00:20:04');
+INSERT INTO `images` VALUES ('18', 'images/2014/12/1418142057011.jpg', null, '2014-12-10 00:20:57');
+INSERT INTO `images` VALUES ('19', 'images/2014/12/1418142067399.jpg', null, '2014-12-10 00:21:07');
+INSERT INTO `images` VALUES ('20', 'images/2014/12/1418142072948.jpg', null, '2014-12-10 00:21:12');
+INSERT INTO `images` VALUES ('21', 'images/2014/12/1418142268028.jpg', null, '2014-12-10 00:24:28');
+INSERT INTO `images` VALUES ('22', 'images/2014/12/1418142272952.jpg', null, '2014-12-10 00:24:32');
+INSERT INTO `images` VALUES ('23', 'images/2014/12/1418142276440.jpg', null, '2014-12-10 00:24:36');
+INSERT INTO `images` VALUES ('24', 'images/2014/12/1418221640479.jpg', null, '2014-12-10 22:27:20');
+INSERT INTO `images` VALUES ('25', 'images/2014/12/1418221757639.jpg', null, '2014-12-10 22:29:17');
+INSERT INTO `images` VALUES ('26', 'images/2014/12/1418222357091.jpg', null, '2014-12-10 22:39:17');
+INSERT INTO `images` VALUES ('27', 'images/2014/12/1418222888719.jpg', null, '2014-12-10 22:48:08');
+INSERT INTO `images` VALUES ('28', 'images/2014/12/1418560737566.jpg', null, '2014-12-14 20:38:57');
 
 -- ----------------------------
 -- Table structure for member
@@ -145,17 +190,20 @@ CREATE TABLE `post` (
   PRIMARY KEY (`id`),
   KEY `create_by` (`create_by`),
   KEY `update_by` (`update_by`),
+  KEY `image_id` (`image_id`),
   CONSTRAINT `post_ibfk_2` FOREIGN KEY (`create_by`) REFERENCES `member` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `post_ibfk_3` FOREIGN KEY (`update_by`) REFERENCES `member` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+  CONSTRAINT `post_ibfk_3` FOREIGN KEY (`update_by`) REFERENCES `member` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `post_ibfk_4` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of post
 -- ----------------------------
 INSERT INTO `post` VALUES ('1', 'xx', null, 'dddd', null, null, null, '1', '1', null, null, null, null, '2014-11-18 00:04:40', '2014-11-18 00:04:40', null);
-INSERT INTO `post` VALUES ('3', 'dd', null, '<p>ddd</p>', '啊啊,出错', '0', '', '1', '1', '0', '0', '\0', '0', '2014-11-23 15:19:43', '2014-11-23 15:19:43', '2014-11-25 00:06:16');
-INSERT INTO `post` VALUES ('7', 'ccc', null, '<p>sadsadsad</p>', null, '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-11-23 16:28:27', '2014-11-23 16:28:27', null);
+INSERT INTO `post` VALUES ('3', 'dd', '27', '<p>ddd</p>', '啊啊,出错', '0', '', '1', '1', '0', '0', '\0', '0', '2014-11-23 15:19:43', '2014-11-23 15:19:43', '2014-12-10 22:48:43');
+INSERT INTO `post` VALUES ('7', 'ccc111', null, '<p>sadsadsad</p>', 's', '0', '\0', '1', '1', null, null, '\0', '0', '2014-11-23 16:28:27', '2014-11-23 16:28:27', '2014-12-04 23:38:31');
 INSERT INTO `post` VALUES ('8', 'ccc', null, '<p>sadsadsad</p>', null, '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-11-23 22:48:50', '2014-11-23 22:48:50', null);
 INSERT INTO `post` VALUES ('9', 'rrr11', null, '<p>sadsad</p>', 'sad', '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-11-24 23:26:23', '2014-11-24 23:26:23', null);
 INSERT INTO `post` VALUES ('10', 'rrr11', null, '<p>sadsad</p>', 'sad', '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-11-24 23:26:35', '2014-11-24 23:26:35', null);
 INSERT INTO `post` VALUES ('11', 'sadsafff', null, '<p>ffffsadas</p>', 'cccc,22', '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-11-24 23:27:10', '2014-11-24 23:27:10', '2014-11-24 23:27:36');
+INSERT INTO `post` VALUES ('12', 'fff', '26', '<p>fffff</p>', '', '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-12-10 22:39:27', '2014-12-10 22:39:27', null);

@@ -16,7 +16,8 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             classpath*:applicationContext.xml,
-            classpath*:conf/spring-hessian.xml
+            classpath*:conf/spring-hessian.xml,
+            classpath*:conf/spring-page.xml
         </param-value>
     </context-param>
 

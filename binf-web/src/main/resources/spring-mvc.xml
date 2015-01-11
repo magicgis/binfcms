@@ -54,7 +54,8 @@
         </property>
         <property name="freemarkerVariables">
             <map>
-                <entry key="baseUrl" value="${base.url}"/>
+                <!--<entry key="baseUrl" value="${base.url}"/>-->
+
             </map>
         </property>
     </bean>

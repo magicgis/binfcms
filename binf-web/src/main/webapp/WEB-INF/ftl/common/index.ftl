@@ -16,6 +16,6 @@
 <#include "td.ftl"/>
 <#include "tr.ftl"/>
 <#include "../custom/pager.ftl"/>
-<#include "../custom/cutext.ftl"/>
+
 
 <#include "self_define_widget.ftl"/>
