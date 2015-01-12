@@ -233,8 +233,8 @@ public class ContentController extends CommonController {
                          Integer draw,
                          Integer start,
                          Integer length) {
-        if (start == null) {
-            start = 0;
+        if (start == null||start==0) {
+            start = 1;
         }
         Page<Post> page = postService.find(start, length);
         Map<String, Object> result = DataTableFactory.fitting(draw, page);

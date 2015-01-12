@@ -26,23 +26,17 @@ public class IndexController {
     @RequestMapping("/")
     public String index(HttpServletRequest request,
                         HttpServletResponse response,
+                        Integer pageNum,
                         ModelMap model){
-        String  pages =  postService.find(0, 20);
 
+        if(pageNum==null||pageNum<=0){
+            pageNum = 1;
+        }
+        String  pages =  postService.find(pageNum, 3);
         Object  posts = JsonUtil.fromJsonToAnyObject(pages);
-
         model.put("posts",posts) ;
         return "template/index";
     }
-
-
-    @RequestMapping("post")
-    public String post(){
-        System.out.println(postService.findAll());
-
-        return "template/index";
-    }
-
 
 
 }

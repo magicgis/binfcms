@@ -28,10 +28,14 @@ public class PostServiceApiImpl implements PostServiceApi {
 
     @Override
     public String find(int pageNum, int pageSize) {
-
         Page<Post> postPage =    postService.find(pageNum,pageSize);
-
         return  JsonUtil.obj2Json(postPage);
+    }
+
+    @Override
+    public String findPostById(int postId) {
+        Post post = postService.findPostById(postId);
+        return JsonUtil.obj2Json(post);
     }
 
 

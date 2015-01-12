@@ -9,7 +9,7 @@
             <#assign pageNo=pageCount>
         </#if>
 
-    <div class="pager">
+    <ul class="pagination">
         <#assign visiblePages = 5>
         <#assign  start=(pageNo-2+1-visiblePages%2)>
         <#assign  end=(pageNo+((visiblePages/2)?int))>
@@ -29,22 +29,22 @@
 
     <#-- 上一页处理 -->
         <#if (pageNo == 1)>
-            <a  class="no_click">&laquo;&nbsp;上一页</a>
+            <li> <a  class="no_click">&laquo;</a></li>
         <#else>
-            <a href="javascript:void(0)" onclick="turnOverPage(${pageNo - 1})">&laquo;&nbsp;上一页</a>
+            <li> <a href="javascript:void(0)" onclick="turnOverPage(${pageNo - 1})">&laquo;</a></li>
         </#if>
 
         <#if (start>1)>
-            <a href="javascript:void(0)"  onclick="turnOverPage(1)">1</a>
+           <li> <a href="javascript:void(0)"  onclick="turnOverPage(1)">1</a></li>
             &hellip;
         </#if>
 
         <#-- 页号处理-->
         <#list start..end as i>
             <#if (pageNo==i)>
-                <a  class="cpb">${i}</a>
+            <li><a  class="cpb">${i}</a></li>
             <#else>
-                <a href="javascript:void(0)"  onclick="turnOverPage(${i})">${i}</a>
+            <li>    <a href="javascript:void(0)"  onclick="turnOverPage(${i})">${i}</a></li>
             </#if>
         </#list>
 
@@ -53,17 +53,15 @@
             <#if !(end==pageCount-1)>
                 &hellip;
             </#if>
-            <a href="javascript:void(0)"  onclick="turnOverPage(${pageCount})">${pageCount}</a>
+            <li> <a href="javascript:void(0)"  onclick="turnOverPage(${pageCount})">${pageCount}</a></li>
         </#if>
 
         <#-- 下一页处理 -->
         <#if (pageNo == pageCount)>
-            <a  class="no_click">下一页&nbsp;&raquo;</a>
+            <li><a  class="no_click">&raquo;</a></li>
         <#else>
-            <a href="javascript:void(0)" onclick="turnOverPage(${pageNo + 1})">下一页&nbsp;&raquo;</a>
+            <li><a href="javascript:void(0)" onclick="turnOverPage(${pageNo + 1})">&raquo;</a></li>
         </#if>
-
-
 
         <script language="javascript">
             function turnOverPage(no){
@@ -81,6 +79,6 @@
             }
         </script>
 
-    </div>
+    </ul>
 
 </#macro>

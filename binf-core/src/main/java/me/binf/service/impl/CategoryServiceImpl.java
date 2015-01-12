@@ -59,7 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Page<Category> find(int pageNum, int pageSize) {
-        return categoryDao.findAll(new PageRequest(pageNum,pageSize, Sort.Direction.DESC,"id"));
+        return categoryDao.findAll(new PageRequest(pageNum-1,pageSize, Sort.Direction.DESC,"id"));
     }
 
     @Override
