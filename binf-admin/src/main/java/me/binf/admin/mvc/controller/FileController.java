@@ -61,7 +61,7 @@ public class FileController extends CommonController{
     public String files(HttpServletRequest request,
                         HttpServletResponse response){
 
-        return "template/admin/文件管理";
+        return "template/admin/files/standalone";
     }
 
 
