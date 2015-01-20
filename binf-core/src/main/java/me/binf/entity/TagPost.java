@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Created by wangbin on 14-11-16.
+ * Created by wangbin on 2015/1/20.
  */
 @Entity
-@Table(name = "category_posts")
-public class CategoryPost  implements Serializable {
+@Table(name = "tags_posts")
+public class TagPost implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -17,8 +17,8 @@ public class CategoryPost  implements Serializable {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
@@ -32,12 +32,12 @@ public class CategoryPost  implements Serializable {
         this.id = id;
     }
 
-    public Category getCategory() {
-        return category;
+    public Tag getTag() {
+        return tag;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 
     public Post getPost() {

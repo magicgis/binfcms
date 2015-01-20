@@ -31,13 +31,6 @@ public class FileController extends CommonController{
     @Autowired
     private ImageService imageService;
 
-    @RequestMapping(value = "/upload")
-    public String upload(HttpServletRequest request,
-                            HttpServletResponse response
-                            ){
-        return "template/admin/upload";
-    }
-
 
     @RequestMapping(value = "/image/save")
     public void save(HttpServletRequest request,
@@ -49,6 +42,7 @@ public class FileController extends CommonController{
             Image image = uploadImageService.uploadImage(file);
             //图片完整路径
             image.setPath(Configue.getUploadUrl()+filePath);
+            imageService.create(image);
             WebUtil.print(response, new Result(true).data(image).msg("上传图片成功!"));
         }catch (Exception e){
             GeneralExceptionHandler.log(e);

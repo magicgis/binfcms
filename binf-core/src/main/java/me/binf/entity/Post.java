@@ -8,7 +8,7 @@ import java.util.List;
  * Created by wangbin on 14-11-16.
  */
 @Entity
-@Table(name = "post")
+@Table(name = "posts")
 public class Post {
 
     private static final long serialVersionUID = 1L;
