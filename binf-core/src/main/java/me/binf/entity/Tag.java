@@ -17,11 +17,15 @@ public class Tag implements Serializable {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-
     private String name;
+
+    private String alias;
+
+    private String description;
 
     private Integer stats;
 
+    @Temporal( TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
 
@@ -55,5 +59,21 @@ public class Tag implements Serializable {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

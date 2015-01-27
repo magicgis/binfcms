@@ -31,17 +31,28 @@ var binf = {
         }
         $.notify(msg, option);
     },
-    delNotify:function(method){
+    optNotify: function (method,title,button) {
+        if($("#notifyjs-foo-alert-option").length>0){
+            return false;
+        }
+
+        if(title===undefined){
+            title = '确认删除么？删除后不可恢复！';
+        }
+        if(button===undefined){
+            button = '删除';
+        }
+
         $.notify({
-            title: '确认删除么？删除后不可恢复！',
-            button: '删除'
+            title: title,
+            button:button
         }, {
             style: 'foo',
             autoHide: false,
             clickToHide: false,
-            position:"top center"
+            position: "top center"
         });
-        if(method!=undefined){
+        if (method != undefined) {
             binf.v.notifyMethod = method;
         }
     },
@@ -193,7 +204,6 @@ $(document).on('click', '.notifyjs-foo-base .no', function() {
 });
 $(document).on('click', '.notifyjs-foo-base .yes', function() {
     if(binf.v.notifyMethod!=null){
-        console.log(binf.v.notifyMethod)
         eval("binf.v.notifyMethod()");
     }
     $(this).trigger('notify-hide');

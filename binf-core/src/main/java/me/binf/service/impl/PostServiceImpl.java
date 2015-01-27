@@ -43,7 +43,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<Post> find(int pageNum, int pageSize) {
-        Page<Post> page = postDao.findAll(new PageRequest(pageNum, pageSize, Sort.Direction.DESC, "sort"));
+        Page<Post> page = postDao.findAll(new PageRequest(pageNum-1, pageSize, Sort.Direction.DESC, "sort"));
         for(Post post : page.getContent()){
             List<CategoryPost>  categoryPosts =  categoryPostService.findByPost(post.getId());
             List<Category> categoryList = new ArrayList<Category>();

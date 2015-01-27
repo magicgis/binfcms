@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
  * Created by wangbin on 14-10-16.
  */
 @Service
+@Transactional(readOnly = true)
 public class TagServiceImpl implements TagService {
 
     @Autowired
@@ -30,7 +32,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Page<Tag> find(int pageNum, int pageSize) {
-        return tagDao.findAll(new PageRequest(pageNum, pageSize, Sort.Direction.DESC, "id"));
+        return tagDao.findAll(new PageRequest(pageNum-1, pageSize, Sort.Direction.DESC, "id"));
     }
 
     @Override
@@ -44,6 +46,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Transactional
     public Tag deleteById(int id) {
         Tag tag = getById(id);
         tagDao.delete(tag);
@@ -51,14 +54,24 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Transactional
     public Tag create(Tag tag) {
         tag.setCreateDate(new Date());
+        tag.setStats(0);
         return tagDao.save(tag);
     }
 
     @Override
+    @Transactional
     public Tag update(Tag tag) {
         return tagDao.save(tag);
     }
 
+    @Override
+    @Transactional
+    public void deleteAll(int[] ids) {
+        for(int id : ids){
+            deleteById(id);
+        }
+    }
 }
