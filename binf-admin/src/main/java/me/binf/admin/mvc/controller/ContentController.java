@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -290,6 +288,26 @@ public class ContentController extends CommonController {
         }
     }
 
+    @RequestMapping(value = "tags/query")
+    public void tagsQuery(String query,
+                          HttpServletResponse response){
+
+        List<Tag> tags = tagService.likeByName(query);
+        List<Map<String,Object>> maps = new ArrayList<>();
+        for(Tag tag: tags){
+            Map<String,Object> map = new HashMap<String, Object>();
+            if(tag!=null){
+                map.put("value",tag.getName());
+                map.put("data",tag.getId()+"");
+            }
+            maps.add(map);
+        }
+
+        Map<String,Object> data =  new HashMap<String,Object>();
+        data.put("suggestions",maps);
+        data.put("query","Unit");
+        WebUtil.print(response,data);
+    }
 
 
 

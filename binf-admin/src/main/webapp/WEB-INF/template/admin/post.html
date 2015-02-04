@@ -120,7 +120,8 @@
                     <b>文章标签</b>
                 </div>
                 <div class="panel-body">
-                    <input type="text" id="autocomplete-ajax" name="tags" class="form-control input-lg" placeholder="多个标签用(,)隔开" value="${(post.tags)!}">
+                    <input type="text" id="autocomplete-tags" name="tags" class="form-control input-lg" placeholder="多个标签用(,)隔开" value="${(post.tags)!}">
+                    <input type="hidden" id="tagIds" name="tagIds" value="">
                 </div>
 
 
@@ -216,19 +217,17 @@
                     $("#"+createPost.v.id+" .page-header").html("编辑文章");
                 }
                 var countriesArray = $.map(countries, function (value, key) { return { value: value, data: key }; });
+                var tagIds =  [];
 
-                $('#autocomplete-ajax').autocomplete({
-                    // serviceUrl: '/autosuggest/service/url',
-                    lookup: countriesArray,
+                $('#autocomplete-tags').autocomplete({
+                    serviceUrl: 'content/tags/query',
                     lookupLimit:3,
                     minChars:1,
                     delimiter:",",
                     lookupFilter: function(suggestion, originalQuery, queryLowerCase) {
                         var re = new RegExp('\\b' + $.Autocomplete.utils.escapeRegExChars(queryLowerCase), 'gi');
+                        console.log(re)
                         return re.test(suggestion.value);
-                    },
-                    onSelect: function(suggestion) {
-                        $('#selction-ajax').html('You selected: ' + suggestion.value + ', ' + suggestion.data);
                     }
 
                 });

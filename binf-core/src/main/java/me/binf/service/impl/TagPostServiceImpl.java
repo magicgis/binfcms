@@ -2,8 +2,10 @@ package me.binf.service.impl;
 
 import me.binf.core.Constant;
 import me.binf.dao.TagPostDao;
+import me.binf.entity.Tag;
 import me.binf.entity.TagPost;
 import me.binf.service.TagPostService;
+import me.binf.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +24,9 @@ public class TagPostServiceImpl implements TagPostService {
 
     @Autowired
     private TagPostDao tagpostDao;
+
+    @Autowired
+    private TagService tagService;
 
 
     @Override
@@ -55,6 +60,9 @@ public class TagPostServiceImpl implements TagPostService {
     @Override
     @Transactional
     public TagPost create(TagPost tagpost) {
+        Tag tag =  tagpost.getTag();
+        tag.setStats(tag.getStats() + 1);
+        tagService.save(tag);
         return save(tagpost);
     }
 
@@ -66,5 +74,13 @@ public class TagPostServiceImpl implements TagPostService {
 
     public TagPost save(TagPost tagpost) {
         return tagpostDao.save(tagpost);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByPost(int postId) {
+
+
+        tagpostDao.deleteByPost(postId);
     }
 }

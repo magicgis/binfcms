@@ -4,6 +4,7 @@ import me.binf.core.Constant;
 import me.binf.dao.TagDao;
 import me.binf.entity.Tag;
 import me.binf.service.TagService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +47,7 @@ public class TagServiceImpl implements TagService {
         return tagDao.findOne(id);
     }
 
+
     @Override
     @Transactional
     public Tag deleteById(int id) {
@@ -58,6 +61,7 @@ public class TagServiceImpl implements TagService {
     public Tag create(Tag tag) {
         tag.setCreateDate(new Date());
         tag.setStats(0);
+
         return tagDao.save(tag);
     }
 
@@ -73,5 +77,46 @@ public class TagServiceImpl implements TagService {
         for(int id : ids){
             deleteById(id);
         }
+    }
+
+
+    public List<Tag> likeByName(String name){
+
+        return tagDao.likeByName("%" + name + "%");
+
+    }
+
+    @Override
+    public Tag findByName(String name) {
+        Tag tag = tagDao.findByName(name);
+        return tag;
+    }
+
+    @Override
+    public List<Tag> equalTags(String tagNames) {
+        if(StringUtils.isBlank(tagNames)){
+            return null;
+        }
+
+        String[] tagArray = tagNames.split(",");
+        List<Tag> tagList = new ArrayList<>();
+
+        for(String name : tagArray){
+            Tag tag = findByName(name);
+            if(tag!=null){
+                tagList.add(tag);
+            }else{
+                Tag tag1 = new Tag();
+                tag1.setName(name);
+                tagList.add(create(tag1));
+            }
+        }
+        return tagList;
+    }
+
+    @Override
+    @Transactional
+    public Tag save(Tag tag) {
+        return tagDao.save(tag);
     }
 }
