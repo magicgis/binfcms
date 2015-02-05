@@ -93,11 +93,9 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     public void createTagPost(Post post){
-
         List<Tag> tagList =  tagService.equalTags(post.getTags());
         if(tagList!=null){
             for(Tag tag : tagList){
-                tagPostService.deleteByPost(post.getId());
                 TagPost tagPost = new TagPost();
                 tagPost.setTag(tag);
                 tagPost.setPost(post);
@@ -116,7 +114,32 @@ public class PostServiceImpl implements PostService {
         ClassUtil.copyProperties(origPost, post);
         origPost.setUpdateDate(new Date());
         postDao.save(origPost);
-        createTagPost(post);
+
+
+        List<Tag> tags =  tagService.equalTags(post.getTags());
+
+        if(tags==null){
+            tagPostService.deleteByPost(post.getId());
+            return post;
+        }
+
+        List<Tag> tagList = tagPostService.findByPost(post.getId());
+        for(Tag tag : tagList){
+            if(!tags.contains(tag)){
+                tagPostService.deleteByPostAndTag(post.getId(),tag.getId());
+            }
+        }
+        for(Tag t : tags){
+            if(!tagList.contains(t)){
+                TagPost tagPost = new TagPost();
+                tagPost.setTag(t);
+                tagPost.setPost(post);
+                tagPostService.create(tagPost);
+            }
+        }
+
+
+
         return post;
     }
 

@@ -24,7 +24,6 @@ public class TagPostServiceImpl implements TagPostService {
 
     @Autowired
     private TagPostDao tagpostDao;
-
     @Autowired
     private TagService tagService;
 
@@ -79,8 +78,30 @@ public class TagPostServiceImpl implements TagPostService {
     @Override
     @Transactional
     public void deleteByPost(int postId) {
-
-
+        List<Tag> tagList = findByPost(postId);
+        for(Tag tag :tagList){
+            tag.setStats(tag.getStats()-1<0?0:tag.getStats()-1);
+            tagService.save(tag);
+        }
         tagpostDao.deleteByPost(postId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByPostAndTag(int postId, int tagId) {
+        Tag tag = tagService.getById(tagId);
+        tag.setStats(tag.getStats()-1<0?0:tag.getStats()-1);
+        tagService.save(tag);
+        tagpostDao.deleteByPostAndTag(postId, tagId);
+    }
+
+    @Override
+    public TagPost findByPostAndTag(int postId, int tagId) {
+        return tagpostDao.findByPostAndTag(postId,tagId);
+    }
+
+    @Override
+    public List<Tag> findByPost(int postId){
+        return tagpostDao.findByPost(postId);
     }
 }
