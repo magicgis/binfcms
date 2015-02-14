@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50527
 File Encoding         : 65001
 
-Date: 2015-01-21 00:01:04
+Date: 2015-02-15 00:01:17
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,22 +28,19 @@ CREATE TABLE `category` (
   `parent_id` int(11) DEFAULT NULL COMMENT '父类id',
   `sort` int(11) NOT NULL COMMENT '排序',
   `count` int(11) DEFAULT NULL COMMENT '文章数量',
+  `is_def` bit(1) DEFAULT b'0' COMMENT '判断是否为默认分类',
   `create_date` datetime DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `category_ibfk_1` (`model_id`),
   CONSTRAINT `category_ibfk_1` FOREIGN KEY (`model_id`) REFERENCES `model` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of category
 -- ----------------------------
-INSERT INTO `category` VALUES ('8', '网络', '1', 'net', null, null, '0', '0', '2014-10-31 22:15:22', '2014-10-31 22:16:53');
-INSERT INTO `category` VALUES ('9', '相册', '1', 'photo', null, null, '0', '0', '2014-10-31 22:16:11', '2014-10-31 22:17:03');
-INSERT INTO `category` VALUES ('10', '数据链路', '2', 'data-link', null, '8', '0', '0', '2014-10-31 22:18:09', null);
-INSERT INTO `category` VALUES ('11', '数据链路1', '3', 'net1', null, '10', '0', '0', '2014-11-15 23:30:08', null);
-INSERT INTO `category` VALUES ('12', '桥连', '2', 'xx', null, '8', '11', '0', '2014-11-15 23:30:43', null);
-INSERT INTO `category` VALUES ('13', '相片', '2', 'xx', null, '9', '0', '0', '2014-11-15 23:30:57', null);
+INSERT INTO `category` VALUES ('1', '未分类', '1', '未分类', null, null, '0', '0', '', '2015-02-08 23:16:28', '2015-02-08 23:16:28');
+INSERT INTO `category` VALUES ('16', '哈哈', '1', 'haha', null, null, '0', '0', '\0', '2015-02-14 23:55:13', null);
 
 -- ----------------------------
 -- Table structure for category_posts
@@ -54,26 +51,25 @@ CREATE TABLE `category_posts` (
   `category_id` int(11) NOT NULL COMMENT '文章类别ID',
   `post_id` int(11) NOT NULL COMMENT '文章ID',
   PRIMARY KEY (`id`),
-  KEY `category_post_ibfk_1` (`category_id`),
-  KEY `category_post_ibfk_2` (`post_id`),
+  UNIQUE KEY `category_post_12` (`category_id`,`post_id`) USING BTREE,
+  KEY `category_post_ibfk_22` (`post_id`) USING BTREE,
   CONSTRAINT `category_posts_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `category_posts_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of category_posts
 -- ----------------------------
-INSERT INTO `category_posts` VALUES ('1', '8', '1');
-INSERT INTO `category_posts` VALUES ('7', '12', '7');
-INSERT INTO `category_posts` VALUES ('8', '10', '7');
-INSERT INTO `category_posts` VALUES ('9', '12', '8');
-INSERT INTO `category_posts` VALUES ('10', '10', '8');
-INSERT INTO `category_posts` VALUES ('11', '9', '8');
-INSERT INTO `category_posts` VALUES ('22', '12', '9');
-INSERT INTO `category_posts` VALUES ('23', '12', '10');
-INSERT INTO `category_posts` VALUES ('25', '10', '11');
-INSERT INTO `category_posts` VALUES ('27', '12', '12');
-INSERT INTO `category_posts` VALUES ('28', '8', '3');
+INSERT INTO `category_posts` VALUES ('81', '1', '1');
+INSERT INTO `category_posts` VALUES ('77', '1', '3');
+INSERT INTO `category_posts` VALUES ('62', '1', '7');
+INSERT INTO `category_posts` VALUES ('11', '1', '8');
+INSERT INTO `category_posts` VALUES ('22', '1', '9');
+INSERT INTO `category_posts` VALUES ('23', '1', '10');
+INSERT INTO `category_posts` VALUES ('25', '1', '11');
+INSERT INTO `category_posts` VALUES ('27', '1', '12');
+INSERT INTO `category_posts` VALUES ('34', '1', '13');
+INSERT INTO `category_posts` VALUES ('80', '16', '1');
 
 -- ----------------------------
 -- Table structure for images
@@ -194,19 +190,20 @@ CREATE TABLE `posts` (
   CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`create_by`) REFERENCES `member` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `posts_ibfk_3` FOREIGN KEY (`update_by`) REFERENCES `member` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `posts_ibfk_4` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of posts
 -- ----------------------------
-INSERT INTO `posts` VALUES ('1', 'xx', null, 'dddd', null, '0', '', '1', '1', '0', '0', '\0', '0', '2014-11-18 00:04:40', '2014-11-18 00:04:40', null);
-INSERT INTO `posts` VALUES ('3', 'dd', '27', '<p>ddd</p>', '啊啊,出错', '0', '', '1', '1', '0', '0', '\0', '0', '2014-11-23 15:19:43', '2014-11-23 15:19:43', '2014-12-10 22:48:43');
-INSERT INTO `posts` VALUES ('7', 'ccc111', null, '<p>sadsadsad</p>', 's', '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-11-23 16:28:27', '2014-11-23 16:28:27', '2014-12-04 23:38:31');
+INSERT INTO `posts` VALUES ('1', 'xxdddd', null, '<p>ddddffff</p>', 'dd,sad', '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-11-18 00:04:40', '2014-11-18 00:04:40', '2015-02-14 23:56:02');
+INSERT INTO `posts` VALUES ('3', 'dd', '27', '<p>ddd</p>', '啊啊,出错', '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-11-23 15:19:43', '2014-11-23 15:19:43', '2015-02-14 23:55:49');
+INSERT INTO `posts` VALUES ('7', 'ccc111', null, '<p>sadsadsad</p>', 'aaa,sad,gsss', '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-11-23 16:28:27', '2014-11-23 16:28:27', '2015-02-06 00:44:42');
 INSERT INTO `posts` VALUES ('8', 'ccc', null, '<p>sadsadsad</p>', null, '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-11-23 22:48:50', '2014-11-23 22:48:50', null);
 INSERT INTO `posts` VALUES ('9', 'rrr11', null, '<p>sadsad</p>', 'sad', '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-11-24 23:26:23', '2014-11-24 23:26:23', null);
 INSERT INTO `posts` VALUES ('10', 'rrr11', null, '<p>sadsad</p>', 'sad', '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-11-24 23:26:35', '2014-11-24 23:26:35', null);
 INSERT INTO `posts` VALUES ('11', 'sadsafff', null, '<p>ffffsadas</p>', 'cccc,22', '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-11-24 23:27:10', '2014-11-24 23:27:10', '2014-11-24 23:27:36');
 INSERT INTO `posts` VALUES ('12', 'fff', '26', '<p>fffff</p>', '', '0', '\0', '1', '1', '0', '0', '\0', '0', '2014-12-10 22:39:27', '2014-12-10 22:39:27', null);
+INSERT INTO `posts` VALUES ('13', 'ddd', null, '<p>fsadasd</p>', 'sad,ffs,', '0', '\0', '1', '1', '0', '0', '\0', '0', '2015-02-05 00:27:14', '2015-02-05 00:27:14', '2015-02-05 00:30:22');
 
 -- ----------------------------
 -- Table structure for tags
@@ -215,14 +212,25 @@ DROP TABLE IF EXISTS `tags`;
 CREATE TABLE `tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
-  `stats` int(11) DEFAULT NULL,
+  `alias` varchar(255) DEFAULT NULL COMMENT '别名',
+  `description` varchar(255) DEFAULT NULL COMMENT '描述',
+  `stats` int(11) DEFAULT NULL COMMENT '统计标签关联数量',
   `create_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tags
 -- ----------------------------
+INSERT INTO `tags` VALUES ('2', 'ff', 'df', null, '0', '2015-01-27 23:12:28');
+INSERT INTO `tags` VALUES ('3', 'sad', 'sad', null, '2', '2015-01-27 23:13:22');
+INSERT INTO `tags` VALUES ('6', '中文啊', '', '', '0', '2015-02-05 00:00:01');
+INSERT INTO `tags` VALUES ('7', '中文的', '', '', '0', '2015-02-05 00:00:10');
+INSERT INTO `tags` VALUES ('8', 'ffs', null, null, '0', '2015-02-05 00:27:14');
+INSERT INTO `tags` VALUES ('9', 'fff', null, null, '0', '2015-02-05 00:28:06');
+INSERT INTO `tags` VALUES ('10', 'dd', null, null, '1', '2015-02-05 00:42:13');
+INSERT INTO `tags` VALUES ('13', '啊啊', null, null, '1', '2015-02-14 23:55:49');
+INSERT INTO `tags` VALUES ('14', '出错', null, null, '1', '2015-02-14 23:55:49');
 
 -- ----------------------------
 -- Table structure for tags_posts
@@ -235,10 +243,17 @@ CREATE TABLE `tags_posts` (
   PRIMARY KEY (`id`),
   KEY `tag_id` (`tag_id`),
   KEY `post_id` (`post_id`),
-  CONSTRAINT `tags_posts_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `tags_posts_ibfk_1` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  CONSTRAINT `tags_posts_ibfk_1` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `tags_posts_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tags_posts
 -- ----------------------------
+INSERT INTO `tags_posts` VALUES ('13', '3', '13');
+INSERT INTO `tags_posts` VALUES ('14', '8', '13');
+INSERT INTO `tags_posts` VALUES ('25', '10', '1');
+INSERT INTO `tags_posts` VALUES ('31', '3', '7');
+INSERT INTO `tags_posts` VALUES ('33', '3', '1');
+INSERT INTO `tags_posts` VALUES ('34', '13', '3');
+INSERT INTO `tags_posts` VALUES ('35', '14', '3');
