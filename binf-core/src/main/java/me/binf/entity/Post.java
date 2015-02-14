@@ -9,6 +9,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "posts")
+@Cacheable(true)
 public class Post {
 
     private static final long serialVersionUID = 1L;

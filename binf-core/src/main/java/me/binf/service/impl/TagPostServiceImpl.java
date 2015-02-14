@@ -104,4 +104,11 @@ public class TagPostServiceImpl implements TagPostService {
     public List<Tag> findByPost(int postId){
         return tagpostDao.findByPost(postId);
     }
+
+    @Override
+    public void deleteByTag(int tagId) {
+        tagpostDao.deleteByTag(tagId);
+    }
+
+
 }

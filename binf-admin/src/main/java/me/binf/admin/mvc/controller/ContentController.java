@@ -11,6 +11,7 @@ import me.binf.exception.GeneralException;
 import me.binf.exception.GeneralExceptionHandler;
 import me.binf.service.CategoryService;
 import me.binf.service.PostService;
+import me.binf.service.TagPostService;
 import me.binf.service.TagService;
 import me.binf.utils.JsonUtil;
 import org.apache.commons.lang.StringUtils;
@@ -38,7 +39,8 @@ public class ContentController extends CommonController {
     private LoginService loginService;
     @Autowired
     private TagService tagService;
-
+    @Autowired
+    private TagPostService tagPostService;
     /**
      * 类别start*
      */
@@ -97,7 +99,11 @@ public class ContentController extends CommonController {
             int[] arrayId = JsonUtil.json2Obj(ids, int[].class);
             categoryService.deleteAll(arrayId);
             WebUtil.print(response, new Result(true).msg("删除类别成功！"));
-        } catch (Exception e) {
+        }
+        catch (GeneralException ge){
+            WebUtil.print(response, new Result(false).msg(ge.getMessage()));
+        }
+        catch (Exception e) {
             GeneralExceptionHandler.log("删除类别失败", e);
             WebUtil.print(response, new Result(false).msg("删除类别失败！"));
         }
@@ -281,10 +287,10 @@ public class ContentController extends CommonController {
         try {
             int[] arrayId = JsonUtil.json2Obj(ids, int[].class);
             tagService.deleteAll(arrayId);
-            WebUtil.print(response, new Result(true).msg("删除类别成功！"));
+            WebUtil.print(response, new Result(true).msg("删除标签成功！"));
         } catch (Exception e) {
-            GeneralExceptionHandler.log("删除类别失败", e);
-            WebUtil.print(response, new Result(false).msg("删除类别失败！"));
+            GeneralExceptionHandler.log("删除标签失败", e);
+            WebUtil.print(response, new Result(false).msg("删除标签失败！"));
         }
     }
 

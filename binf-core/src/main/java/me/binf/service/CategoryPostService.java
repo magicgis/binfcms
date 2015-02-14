@@ -15,4 +15,7 @@ public interface CategoryPostService {
 
     public List<CategoryPost> findByPost(int postId);
 
+    public void deleteByCategory(int categoryId);
+
+    public void setCateToDefCate(int categoryId);
 }

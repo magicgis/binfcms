@@ -27,4 +27,9 @@ public interface TagPostDao  extends JpaRepository<TagPost,Integer> {
 
     @Query("select a.tag from TagPost a where a.post.id = ?1")
     public List<Tag> findByPost(Integer postId);
+
+    @Modifying
+    @Query("delete from TagPost a where  a.tag.id = ?1")
+    public void deleteByTag(Integer tagId);
+
 }

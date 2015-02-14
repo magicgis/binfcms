@@ -8,6 +8,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "category_posts")
+@Cacheable(true)
 public class CategoryPost  implements Serializable {
 
     private static final long serialVersionUID = 1L;

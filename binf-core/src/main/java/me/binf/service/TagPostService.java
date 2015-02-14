@@ -18,4 +18,6 @@ public interface TagPostService extends ICommonService<TagPost> {
     public TagPost findByPostAndTag(int postId,int tagId);
 
     public List<Tag> findByPost(int postId);
+
+    public void deleteByTag(int tagId);
 }

@@ -170,14 +170,12 @@ public class PostServiceImpl implements PostService {
         if(null==categoryIds||categoryIds.length==0){
             GeneralExceptionHandler.handle("文章类别不能为空!");
         }
-
-
+        categoryPostService.deleteByPost(post.getId());
         for(int categoryId : categoryIds){
             Category category = categoryService.getById(categoryId);
             if(category==null){
                 GeneralExceptionHandler.handle("该类别不存在!");
             }else{
-                categoryPostService.deleteByPost(post.getId());
                 CategoryPost categoryPost = new CategoryPost();
                 categoryPost.setCategory(category);
                 categoryPost.setPost(post);

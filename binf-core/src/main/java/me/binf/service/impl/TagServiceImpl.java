@@ -3,6 +3,7 @@ package me.binf.service.impl;
 import me.binf.core.Constant;
 import me.binf.dao.TagDao;
 import me.binf.entity.Tag;
+import me.binf.service.TagPostService;
 import me.binf.service.TagService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,8 @@ public class TagServiceImpl implements TagService {
 
     @Autowired
     private TagDao tagDao;
-
+    @Autowired
+    private TagPostService tagPostService;
 
     @Override
     public List<Tag> findAll() {
@@ -52,6 +54,7 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public Tag deleteById(int id) {
         Tag tag = getById(id);
+        tagPostService.deleteByTag(tag.getId());
         tagDao.delete(tag);
         return tag;
     }

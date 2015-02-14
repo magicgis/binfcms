@@ -10,6 +10,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "category")
+@Cacheable(true)
 public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,6 +31,10 @@ public class Category implements Serializable {
     private Integer sort;
 
     private Integer count;
+
+    @Column(name = "is_def")
+    private Boolean isDef;
+
 
     @Temporal( TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -120,5 +125,13 @@ public class Category implements Serializable {
 
     public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public Boolean getIsDef() {
+        return isDef;
+    }
+
+    public void setIsDef(Boolean isDef) {
+        this.isDef = isDef;
     }
 }

@@ -15,7 +15,9 @@ public interface TagDao  extends JpaRepository<Tag,Integer> {
     @Query("select a from Tag a where a.name like ?1")
     public List<Tag> likeByName(String name);
 
-
     @Query("select a from Tag a where a.name = ?1")
     public Tag findByName(String name);
+
+
+
 }

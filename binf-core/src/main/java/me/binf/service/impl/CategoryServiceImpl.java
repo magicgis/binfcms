@@ -4,6 +4,7 @@ import me.binf.entity.Category;
 import me.binf.core.Constant;
 import me.binf.dao.CategoryDao;
 import me.binf.exception.GeneralExceptionHandler;
+import me.binf.service.CategoryPostService;
 import me.binf.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryDao categoryDao;
+
+    @Autowired
+    private CategoryPostService categoryPostService;
 
 
     @Override
@@ -76,6 +80,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public Category deleteById(int id) {
         Category category = getById(id);
+        if(category.getIsDef()){
+            GeneralExceptionHandler.handle("不能删除默认分类!");
+        }
+        categoryPostService.setCateToDefCate(id);
         categoryDao.delete(category);
         return category;
     }
@@ -95,7 +103,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         category.setCount(0);
-
+        category.setIsDef(false);
         category.setCreateDate(new Date());
         return categoryDao.save(category);
     }
@@ -201,6 +209,11 @@ public class CategoryServiceImpl implements CategoryService {
         for(int id : ids){
             deleteById(id);
         }
+    }
+
+    @Override
+    public Category findByCategoryByDef() {
+        return categoryDao.findCategoryByDef();
     }
 
     public String tree(Category category){
