@@ -7,8 +7,9 @@
     <title>新建文章</title>
     <#include "inc/css.html"/>
     <link href="static/js/plugins/dropper/jquery.fs.dropper.css" rel="stylesheet">
-    <link href="static/js/plugins/toopay/css/bootstrap-markdown.min.css" rel="stylesheet">
     <script src="static/js/plugins/dropper/jquery.fs.dropper.js"></script>
+    <script src="static/js/plugins/autoComplete/jquery.autocomplete.js"></script>
+    <script src="static/js/plugins/autoComplete/countries.js"></script>
 
 </head>
 
@@ -35,14 +36,16 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="panel-body">
-                            <textarea  id="content" data-provide="markdown" rows="10"  >${(post.content)!}</textarea>
+                            <textarea  id="content" >
+                                      ${(post.content)!}
+                            </textarea>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                             <b>发布</b>
+                            <b>发布</b>
                         </div>
                         <div class="panel-body">
                             <div class="row">
@@ -57,7 +60,7 @@
                                         <h6>
                                             <i class="fa fa-clock-o fa-fw"></i>发布于：
                                             <small class=" text-muted">
-                                                 ${post.createDate?string("yyyy年MM月dd日 HH:ss")}
+                                                ${post.createDate?string("yyyy年MM月dd日 HH:ss")}
                                             </small>
                                         </h6>
                                     </div>
@@ -80,59 +83,61 @@
                         <div class="panel-body">
                             <input type="hidden" id="imageId" name="imageId" value="">
                             <div  class="image_show"  <#if !(post.image)?? >style="display: none" </#if> >
-                                <#if (post.image)??>
-                                    <img src="${post.image.path}" class="img-responsive" >
-                                </#if>
-                            </div>
-
-                            <div class="image_handle" <#if (post.image)?? >style="display: none" </#if>>
-                                <form action="#" class="demo_form">
-                                    <div class="dropped" style="position:relative"></div>
-                                </form>
-                            </div>
-
-                        </div>
-                        <div class="panel-footer">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <a href="javascript:void(0)" id="removeImg" class="btn btn-default" role="button">删除图片</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <b>类别选择</b>
-                        </div>
-                        <div class="panel-body">
-                            <#if (post.categorys)??>
-                                <@categoryList def=post.categorys />
-                                <#else>
-                                <@categoryList  />
+                            <#if (post.image)??>
+                                <img src="${post.image.path}" class="img-responsive" >
                             </#if>
                         </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <b>文章标签</b>
-                        </div>
-                        <div class="panel-body">
-                            <input type="text" name="tags" class="form-control input-lg" placeholder="多个标签用(,)隔开" value="${(post.tags)!}">
-                        </div>
 
+                        <div class="image_handle" <#if (post.image)?? >style="display: none" </#if>>
+                        <form action="#" class="demo_form">
+                            <div class="dropped" style="position:relative"></div>
+                        </form>
                     </div>
-
 
                 </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="javascript:void(0)" id="removeImg" class="btn btn-default" role="button">删除图片</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
-    
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <b>类别选择</b>
+                </div>
+                <div class="panel-body">
+                    <#if (post.categorys)??>
+                        <@categoryList def=post.categorys />
+                        <#else>
+                            <@categoryList  />
+                    </#if>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <b>文章标签</b>
+                </div>
+                <div class="panel-body">
+                    <input type="text" id="autocomplete-tags" name="tags" class="form-control input-lg" placeholder="多个标签用(,)隔开" value="${(post.tags)!}">
+                    <input type="hidden" id="tagIds" name="tagIds" value="">
+                </div>
+
+
+            </div>
+
+
     </div>
+</div>
+</form>
+
+</div>
 <!-- /#page-wrapper -->
 
 </div>
 <!-- /#wrapper -->
-<script src="static/js/plugins/toopay/js/bootstrap-markdown.js"></script>
+<script src="static/js/plugins/tinymce/js/tinymce/tinymce.min.js"></script>
 
 
 <#include "inc/footer.html"/>
@@ -181,7 +186,7 @@
                     label: "把文件拖拽到此处",
                     maxSize: 1048576
                 }).on("fileComplete.dropper", createPost.fn.onFileComplete)
-                  .on("fileError.dropper", createPost.fn.onFileError);
+                        .on("fileError.dropper", createPost.fn.onFileError);
             },
             onFileComplete:function(e, file, response){
                 if(response.success){
@@ -211,6 +216,21 @@
                 if($("#postForm input[name='id']").val()!=null&&$("#postForm input[name='id']").val()!=""){
                     $("#"+createPost.v.id+" .page-header").html("编辑文章");
                 }
+                var countriesArray = $.map(countries, function (value, key) { return { value: value, data: key }; });
+                var tagIds =  [];
+
+                $('#autocomplete-tags').autocomplete({
+                    serviceUrl: 'content/tags/query',
+                    lookupLimit:3,
+                    minChars:1,
+                    delimiter:",",
+                    lookupFilter: function(suggestion, originalQuery, queryLowerCase) {
+                        var re = new RegExp('\\b' + $.Autocomplete.utils.escapeRegExChars(queryLowerCase), 'gi');
+                        console.log(re)
+                        return re.test(suggestion.value);
+                    }
+
+                });
             }
 
         }
@@ -218,7 +238,18 @@
 
     $(document).ready(function() {
 
-        //$("#content").markdown({autofocus:false,savable:false})
+        tinymce.init({
+            language : 'zh_cn',
+            selector: "textarea",
+            height:"300px",
+            plugins: [
+                "advlist autolink lists link image charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table contextmenu paste"
+            ],
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+        });
+
 
         createPost.fn.init();
 

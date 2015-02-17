@@ -1,14 +1,11 @@
 package me.binf.service.impl;
 
-import me.binf.entity.Category;
-import me.binf.entity.CategoryPost;
-import me.binf.entity.Post;
+import javafx.geometry.Pos;
+import me.binf.entity.*;
 import me.binf.core.Constant;
 import me.binf.dao.PostDao;
 import me.binf.exception.GeneralExceptionHandler;
-import me.binf.service.CategoryPostService;
-import me.binf.service.CategoryService;
-import me.binf.service.PostService;
+import me.binf.service.*;
 import me.binf.utils.ClassUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,7 +31,10 @@ public class PostServiceImpl implements PostService {
     private CategoryService categoryService;
     @Autowired
     private CategoryPostService categoryPostService;
-
+    @Autowired
+    private TagPostService tagPostService;
+    @Autowired
+    private TagService tagService;
 
     @Override
     public List<Post> findAll() {
@@ -85,7 +85,23 @@ public class PostServiceImpl implements PostService {
         post.setVisits(0);
         post.setCreateDate(new Date());
         post.setAnnounceDate(new Date());
-        return postDao.save(post);
+        postDao.save(post);
+        createTagPost(post);
+        return post;
+    }
+
+
+    @Transactional
+    public void createTagPost(Post post){
+        List<Tag> tagList =  tagService.equalTags(post.getTags());
+        if(tagList!=null){
+            for(Tag tag : tagList){
+                TagPost tagPost = new TagPost();
+                tagPost.setTag(tag);
+                tagPost.setPost(post);
+                tagPostService.create(tagPost);
+            }
+        }
     }
 
     @Override
@@ -95,10 +111,36 @@ public class PostServiceImpl implements PostService {
         if(post.getStick()==null){
             post.setStick(false);
         }
-
-        ClassUtil.copyProperties(origPost,post);
+        ClassUtil.copyProperties(origPost, post);
         origPost.setUpdateDate(new Date());
-        return postDao.save(origPost);
+        postDao.save(origPost);
+
+
+        List<Tag> tags =  tagService.equalTags(post.getTags());
+
+        if(tags==null){
+            tagPostService.deleteByPost(post.getId());
+            return post;
+        }
+
+        List<Tag> tagList = tagPostService.findByPost(post.getId());
+        for(Tag tag : tagList){
+            if(!tags.contains(tag)){
+                tagPostService.deleteByPostAndTag(post.getId(),tag.getId());
+            }
+        }
+        for(Tag t : tags){
+            if(!tagList.contains(t)){
+                TagPost tagPost = new TagPost();
+                tagPost.setTag(t);
+                tagPost.setPost(post);
+                tagPostService.create(tagPost);
+            }
+        }
+
+
+
+        return post;
     }
 
     @Override
@@ -128,14 +170,12 @@ public class PostServiceImpl implements PostService {
         if(null==categoryIds||categoryIds.length==0){
             GeneralExceptionHandler.handle("文章类别不能为空!");
         }
-
-
+        categoryPostService.deleteByPost(post.getId());
         for(int categoryId : categoryIds){
             Category category = categoryService.getById(categoryId);
             if(category==null){
                 GeneralExceptionHandler.handle("该类别不存在!");
             }else{
-                categoryPostService.deleteByPost(post.getId());
                 CategoryPost categoryPost = new CategoryPost();
                 categoryPost.setCategory(category);
                 categoryPost.setPost(post);
@@ -169,6 +209,8 @@ public class PostServiceImpl implements PostService {
             categoryPostService.deleteByPost(id);
         }
     }
+
+
 
 
 }

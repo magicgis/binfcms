@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "inc/meta.html"/>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>标签</title>
+    <#include "inc/css.html"/>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <#include "inc/nav.html"/>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">标签</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+    
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="btn-group pull-left" >
+                            <a href="javascript:void(0)" id="newTag"  class="btn btn-outline btn-primary btn-lg" role="button" data-toggle="modal" >新建标签</a>
+                            <a href="javascript:void(0)" id="batchDel" class="btn btn-outline btn-danger btn-lg" role="button">批量删除</a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables">
+                                <colgroup>
+                                    <col class="gradeA even" style="text-align: center; width: 6%"/>
+                                    <col class="gradeA odd"/>
+                                    <col class="gradeA even"/>
+                                    <col class="gradeA odd"/>
+                                    <col class="gradeA even"/>
+                                    <col class="gradeA odd"/>
+                                    <col class="gradeA even"/>
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th> <input type="checkbox" onclick="binf.checkAll(this)" class="checkall"/></th>
+                                    <th>名称</th>
+                                    <th>别名</th>
+                                    <th>关联数</th>
+                                    <th>发布时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <!-- /.panel-body -->
+
+                </div>
+                <!-- /.panel -->
+            </div>
+        </div>
+    
+    
+    </div>
+<!-- /#page-wrapper -->
+
+
+    <div class="modal fade" id="editTagModal" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="editTagModalLabel">修改文章</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="tagForm" method="post" action="content/tags/save" class="form-horizontal" role="form">
+                        <input type="hidden"  id="id" name="id" value="">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">名称:</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="name" name="name" data-rule="required" placeholder="请输入名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="alias" class="col-sm-2 control-label">别名:</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="alias" name="alias" placeholder="请输入别名">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-sm-2 control-label">描述:</label>
+                            <div class="col-sm-6">
+                                   <textarea class="form-control" id="description" name="description" data-rule="length[~200]"
+                                             maxlength="200" rows="4"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" id="save" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    
+</div>
+<!-- /#wrapper -->
+
+<#include "inc/footer.html"/>
+
+</body>
+
+<script type="text/javascript">
+
+    var tags = {
+        v:{
+            dTable:null,
+            list:[]
+        },
+        fn:{
+            init:function(){
+
+                $("#newTag").click(function(){
+                    tags.fn.showModal("新建标签");
+                })
+
+                $("#save").click(function(){
+                    tags.fn.save();
+                })
+
+                $("#batchDel").click(function () {
+                    var checkBox = $("#dataTables tbody tr").find('input[type=checkbox]:checked');
+                    var ids = checkBox.getInputId();
+                    tags.fn.deleteRow(ids)
+                })
+
+                tags.fn.dataTableInit();
+
+
+            },
+            deleteRow: function (ids) {
+                if (ids.length > 0) {
+                    binf.optNotify(function () {
+                        binf.ajax("content/tags/delete", {ids: JSON.stringify(ids)}, function (result) {
+                            if (result.success) {
+                                binf.notify(result.msg, "success");
+                                tags.v.dTable.ajax.reload();
+
+                            } else {
+                                binf.notify(result.msg, "error");
+                            }
+                        })
+                    });
+                }
+            },
+            edit: function (id) {
+                tags.fn.showModal("修改标签");
+                var items = tags.v.list;
+                $.each(items, function (index, item) {
+                    if (item.id == id) {
+                        for (var key in item) {
+                            var element = $("#tagForm :input[name=" + key + "]")
+                            if (element.length > 0) {
+                                element.val(item[key]);
+                            }
+                        }
+                    }
+                })
+            },
+            save: function () {
+                if (!$('#tagForm').isValid()) {
+                    return false;
+                };
+                $("#tagForm").ajaxSubmit({
+                    dataType: "json",
+                    success: function (result) {
+                        tags.fn.responseComplete(result,true);
+                        $("#editTagModal").modal("hide");
+                    }
+                })
+            },
+            dataTableInit: function () {
+                tags.v.dTable = binf.dataTable($('#dataTables'), {
+                    "processing": true,
+                    "serverSide": true,
+                    "ordering": false,
+                    "ajax": {
+                        "url": "content/tags/list",
+                        "type": "POST"
+                    },
+                    "columns": [
+                        {"data": "id"},
+                        {"data": "name"},
+                        {"data": "alias"},
+                        {"data": "stats"},
+                        {"data": "createDate"},
+                        {"data": ""}
+                    ],
+                    "columnDefs": [
+                        {
+                            "data": null,
+                            "defaultContent":
+                            "<button type='button'  title='编辑' class='btn btn-primary btn-circle edit'>" +
+                            "<i class='fa fa-edit'></i>" +
+                            "</button>" +
+                            "&nbsp;&nbsp;" +
+                            "<button type='button'  title='删除' class='btn btn-danger btn-circle delete'>" +
+                            "<i class='fa fa-bitbucket'></i>" +
+                            "</button>",
+                            "targets": -1
+                        }
+                    ],
+                    "createdRow": function (row, data, index) {
+                        tags.v.list.push(data);
+                        $('td', row).eq(0).html("<input type='checkbox' value=" + data.id + ">");
+                    },
+                    rowCallback: function (row, data) {
+                        var items = tags.v.list;
+                        $('td', row).last().find(".delete").click(function () {
+                            tags.fn.deleteRow([data.id]);
+                        })
+
+                        $('td', row).last().find(".edit").click(function () {
+                            tags.fn.edit(data.id);
+                        })
+
+
+                    },
+                    "fnDrawCallback": function (row) {
+                        binf.uiform();
+                    }
+                });
+            },
+            showModal:function(title){
+                binf.clearForm($("#editTagModal"));
+                $("#editTagModal").modal("show");
+                $("#editTagModal .modal-title").html(title);
+            },
+            responseComplete: function (result,action) {
+                if (result.success) {
+                    if(action){
+                        tags.v.dTable.ajax.reload(null, false);
+                    }else{
+                        tags.v.dTable.ajax.reload();
+                    }
+
+                    binf.notify(result.msg, "success");
+                } else {
+                    binf.notify(result.msg, "error");
+                }
+            }
+        }
+
+
+    }
+
+    $(document).ready(function() {
+        tags.fn.init();
+    });
+
+
+
+
+</script>
+
+
+</html>

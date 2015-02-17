@@ -24,4 +24,6 @@ public interface CategoryService extends ICommonService<Category> {
 
     public void deleteAll(int[] ids);
 
+    public Category findByCategoryByDef();
+
 }

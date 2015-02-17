@@ -22,4 +22,15 @@ public class CommonController {
         binder.registerCustomEditor(Long.class, new CustomLongEditor());
         binder.registerCustomEditor(Date.class, new CustomDateEditor());
     }
+
+    public Integer getPageNum(Integer start,Integer length){
+        if(start==null){
+            start = 0;
+        }
+        if(length == null){
+            length = 10;
+        }
+        int pageNum = (start/length)+1;
+        return pageNum;
+    }
 }

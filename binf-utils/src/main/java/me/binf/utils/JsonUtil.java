@@ -1,8 +1,7 @@
 package me.binf.utils;
 
 import com.cedarsoftware.util.io.JsonReader;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import me.binf.exception.GeneralExceptionHandler;
 
 import java.io.IOException;
@@ -18,16 +17,16 @@ public class JsonUtil {
     public static String obj2Json(Object obj){
         Gson gson = new GsonBuilder().
                 serializeNulls().
-                setDateFormat("yyyy-MM-dd HH:mm:ss")
-                .create();
+                setDateFormat("yyyy-MM-dd HH:mm:ss").
+                create();
         return  gson.toJson(obj);
     }
 
     public static <T> T json2Obj(String str,Type type){
         Gson gson = new GsonBuilder().
                 serializeNulls().
-                setDateFormat("yyyy-MM-dd HH:mm:ss")
-                .create();
+                setDateFormat("yyyy-MM-dd HH:mm:ss").
+                create();
         return gson.fromJson(str,type);
     }
 

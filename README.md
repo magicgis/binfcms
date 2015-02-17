@@ -9,7 +9,7 @@
 
 所以也就是j2ee的老一套东西了:
 
-* IDE:Intellij IDEA
+* IDE:Intellij IDEA。
 * 运行环境:jdk7,tomcat7,mysql5,redis。
 * maven构架。
 * 业务开发主要用到spring-mvc，spring，spring-jpa。

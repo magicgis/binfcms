@@ -7,7 +7,8 @@ import java.io.Serializable;
  * Created by wangbin on 14-11-16.
  */
 @Entity
-@Table(name = "category_post")
+@Table(name = "category_posts")
+@Cacheable(true)
 public class CategoryPost  implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -197,7 +197,7 @@
            },
            deleteRow:function(checkBox,ids){
                if(ids.length>0){
-                   binf.delNotify(function(){
+                   binf.optNotify(function(){
                        binf.ajax("content/category/delete",{ids:JSON.stringify(ids)},function(result){
                            if(result.success){
                                binf.notify(result.msg,"success");
@@ -279,7 +279,12 @@
                     ],
                     "createdRow": function ( row, data, index ) {
                         category.v.list.push(data);
-                        $('td',row).eq(0).html("<input type='checkbox'  value="+data.id+">");
+                        if(!data.isDef){
+                            $('td',row).eq(0).html("<input type='checkbox'  value="+data.id+">");
+                        }else{
+                            $('td',row).eq(0).html("");
+                        }
+
                     },
                     rowCallback:function(row,data){
                         var items = category.v.list;

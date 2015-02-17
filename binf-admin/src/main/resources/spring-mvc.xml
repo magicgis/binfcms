@@ -19,6 +19,7 @@
     <context:property-placeholder location="classpath:conf/system.properties" ignore-unresolvable="true"/>
 
     <mvc:resources mapping="/static/**" location="/static/"/>
+    <mvc:resources mapping="/ckfinder/**" location="/ckfinder/"/>
 
 
     <!-- 配置freeMarker视图解析器 -->
