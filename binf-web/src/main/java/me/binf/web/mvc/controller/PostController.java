@@ -2,6 +2,8 @@ package me.binf.web.mvc.controller;
 
 import me.binf.api.PostServiceApi;
 import me.binf.utils.JsonUtil;
+import me.binf.web.core.Configue;
+import me.binf.web.service.FreeMarkForHtmlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,18 +22,44 @@ public class PostController {
     @Autowired
     private PostServiceApi postService;
 
+    @Autowired
+    private FreeMarkForHtmlService freeMarkForHtmlService;
+
+
     @RequestMapping(value = "/{code:\\d+}")
     public String postIndex(HttpServletRequest request,
                             HttpServletResponse response,
                             ModelMap model,
-                            @PathVariable Integer code){
+                            @PathVariable Integer code) {
 
-        String  postJson = postService.findPostById(code);
-        Object  post = JsonUtil.fromJsonToAnyObject(postJson);
-        model.put("post",post) ;
+        String postJson = postService.findPostById(code);
+        Object post = JsonUtil.fromJsonToAnyObject(postJson);
+        model.put("post", post);
         return "template/post";
     }
 
+    @RequestMapping(value = "/create")
+    public void createPostIndex(HttpServletRequest request,
+                                HttpServletResponse response,
+                                ModelMap model) {
+
+        String postJson = postService.findPostById(1);
+        Object post = JsonUtil.fromJsonToAnyObject(postJson);
+        model.put("post", post);
+
+        try {
+            String path = Configue.getSystemHtmlPath() + "/info";
+            freeMarkForHtmlService.geneHtmlFile("/template/",
+                    "post.html",
+                    path,
+                    "1.html",
+                    model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
 
 }

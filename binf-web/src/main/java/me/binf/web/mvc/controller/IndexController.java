@@ -32,7 +32,7 @@ public class IndexController {
         if(pageNum==null||pageNum<=0){
             pageNum = 1;
         }
-        String  pages =  postService.find(pageNum, 3);
+        String  pages =  postService.find(pageNum, 5);
         Object  posts = JsonUtil.fromJsonToAnyObject(pages);
         model.put("posts",posts) ;
         return "template/index";

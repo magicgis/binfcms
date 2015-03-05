@@ -24,4 +24,6 @@
 
     <context:component-scan base-package="me.binf.web" />
 
+    <bean id="beanUtil" class="me.binf.web.utils.BeanUtil" />
+
 </beans>

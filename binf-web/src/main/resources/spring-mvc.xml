@@ -87,5 +87,6 @@
         </property>
     </bean>
 
+    <bean id="beanUtil" class="me.binf.web.utils.BeanUtil" />
 
 </beans>

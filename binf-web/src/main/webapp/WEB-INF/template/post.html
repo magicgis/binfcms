@@ -1,14 +1,40 @@
 <!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>首页</title>
+
+    <#include "inc/css.html"/>
 </head>
 <body>
 
-    <h1>${post.title!}</h1>
+<#include "inc/menu.html"/>
 
-    <h1>${post.content!}</h1>
+<div class="container">
+    <div class="blog-header">
+        <h1 class="blog-title">猫清扬</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8 blog-main">
+
+                <div class="blog-post">
+                    <h2 class="blog-post-title"><a href="/${post.id!}"> ${post.title!}</a></h2>
+                    <p class="blog-post-meta">${post.announceDate!} </p>
+                    ${post.content!}
+                </div><!-- /.blog-post -->
+
+        </div>
+
+        <#include "inc/sidebar.html"/>
+
+    </div>
+</div>
+
+<#include "inc/footer.html"/>
 
 </body>
+
 </html>

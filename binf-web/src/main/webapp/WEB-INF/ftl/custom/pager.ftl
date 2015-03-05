@@ -29,7 +29,7 @@
 
     <#-- 上一页处理 -->
         <#if (pageNo == 1)>
-            <li> <a  class="no_click">&laquo;</a></li>
+            <li> <a >&laquo;</a></li>
         <#else>
             <li> <a href="javascript:void(0)" onclick="turnOverPage(${pageNo - 1})">&laquo;</a></li>
         </#if>
@@ -42,9 +42,9 @@
         <#-- 页号处理-->
         <#list start..end as i>
             <#if (pageNo==i)>
-            <li><a  class="cpb">${i}</a></li>
+                <li class="active"><a>${i}</a></li>
             <#else>
-            <li>    <a href="javascript:void(0)"  onclick="turnOverPage(${i})">${i}</a></li>
+                <li> <a href="javascript:void(0)"  onclick="turnOverPage(${i})">${i}</a></li>
             </#if>
         </#list>
 
@@ -57,8 +57,9 @@
         </#if>
 
         <#-- 下一页处理 -->
+        <#-- 下一页处理 -->
         <#if (pageNo == pageCount)>
-            <li><a  class="no_click">&raquo;</a></li>
+            <li><a>&raquo;</a></li>
         <#else>
             <li><a href="javascript:void(0)" onclick="turnOverPage(${pageNo + 1})">&raquo;</a></li>
         </#if>
