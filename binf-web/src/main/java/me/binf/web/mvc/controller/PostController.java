@@ -38,6 +38,23 @@ public class PostController {
         return "template/post";
     }
 
+
+    @RequestMapping(value = "/archives/{year:\\d+}/{month:\\d+}")
+    public String archives(HttpServletRequest request,
+                            HttpServletResponse response,
+                            ModelMap model,
+                            @PathVariable Integer year,
+                            @PathVariable Integer month) {
+
+        System.out.println(year);
+        System.out.println(month);
+
+
+        return "template/archives";
+    }
+
+
+
     @RequestMapping(value = "/create")
     public void createPostIndex(HttpServletRequest request,
                                 HttpServletResponse response,

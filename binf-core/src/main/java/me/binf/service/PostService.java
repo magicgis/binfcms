@@ -3,6 +3,9 @@ package me.binf.service;
 import me.binf.entity.Post;
 import me.binf.service.common.ICommonService;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by wangbin on 14-11-16.
  */
@@ -16,5 +19,7 @@ public interface PostService extends ICommonService<Post> {
     public Post findPostById(int postId);
 
     public void deleteAll(int[] ids);
+
+    public  List<Map<String,String>> dateList();
 
 }

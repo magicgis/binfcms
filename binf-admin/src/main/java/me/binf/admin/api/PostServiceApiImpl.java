@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * Created by wangbin on 2014/12/22.
@@ -36,6 +39,12 @@ public class PostServiceApiImpl implements PostServiceApi {
     public String findPostById(int postId) {
         Post post = postService.findPostById(postId);
         return JsonUtil.obj2Json(post);
+    }
+
+    @Override
+    public String dateList() {
+        List<Map<String,String>> list =   postService.dateList();
+        return JsonUtil.obj2Json(list);
     }
 
 

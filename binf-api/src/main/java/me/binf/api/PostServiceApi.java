@@ -15,4 +15,6 @@ public interface PostServiceApi {
     public String find(int pageNum, int pageSize);
 
     public String findPostById(int postId);
+
+    public String dateList();
 }

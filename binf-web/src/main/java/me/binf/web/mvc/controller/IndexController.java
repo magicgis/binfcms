@@ -34,9 +34,14 @@ public class IndexController {
         }
         String  pages =  postService.find(pageNum, 5);
         Object  posts = JsonUtil.fromJsonToAnyObject(pages);
+
         model.put("posts",posts) ;
+
+
         return "template/index";
     }
+
+
 
 
 }

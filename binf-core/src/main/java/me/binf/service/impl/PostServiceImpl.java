@@ -13,10 +13,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import javax.persistence.Query;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.*;
 
 /**
  * Created by wangbin on 14-10-16.
@@ -35,6 +37,10 @@ public class PostServiceImpl implements PostService {
     private TagPostService tagPostService;
     @Autowired
     private TagService tagService;
+
+    @PersistenceContext
+    private EntityManager em;
+
 
     @Override
     public List<Post> findAll() {
@@ -137,9 +143,6 @@ public class PostServiceImpl implements PostService {
                 tagPostService.create(tagPost);
             }
         }
-
-
-
         return post;
     }
 
@@ -210,7 +213,29 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    @Override
+    public List<Map<String,String>> dateList() {
 
+        String sql = "SELECT date_format(a.announceDate, '%Y') as year,date_format(a.announceDate, '%c') as month " +
+                     "FROM Post a GROUP BY date_format(a.announceDate, '%Y%c')";
+
+        Query query = em.createQuery(sql);
+        List list =    query.getResultList();
+
+        List<Map<String,String>>  resultList = new ArrayList<Map<String,String>>();
+
+        for(Object obj : list){
+            Object[] objArr = (Object[])obj;
+            String year =  objArr[0].toString();
+            String month =  objArr[1].toString();
+            Map<String,String> map = new HashMap<String,String>();
+            map.put("year",year);
+            map.put("month",month);
+            resultList.add(map);
+        }
+
+        return resultList;
+    }
 
 
 }
