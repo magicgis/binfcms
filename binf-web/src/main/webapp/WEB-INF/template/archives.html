@@ -29,7 +29,7 @@
             </#list>
 
             <nav>
-                <@p.pager inPageNo=posts.pageable.page pageSize=posts.pageable.size recordCount=posts.total toURL="/"/>
+                <@p.pager inPageNo=posts.pageable.page pageSize=posts.pageable.size recordCount=posts.total toURL="/archives/${year}/${month}"/>
             </nav>
         </div>
 

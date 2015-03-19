@@ -43,11 +43,18 @@ public class PostController {
     public String archives(HttpServletRequest request,
                             HttpServletResponse response,
                             ModelMap model,
+                            Integer pageNum,
                             @PathVariable Integer year,
                             @PathVariable Integer month) {
+        if(pageNum==null||pageNum<=0){
+            pageNum = 1;
+        }
+        String  pages =postService.findByArchives(year,month,pageNum,3);
+        Object  posts = JsonUtil.fromJsonToAnyObject(pages);
+        model.put("posts",posts) ;
+        model.put("year",year) ;
+        model.put("month",month) ;
 
-        System.out.println(year);
-        System.out.println(month);
 
 
         return "template/archives";

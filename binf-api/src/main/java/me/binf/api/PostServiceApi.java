@@ -17,4 +17,6 @@ public interface PostServiceApi {
     public String findPostById(int postId);
 
     public String dateList();
+
+    public String findByArchives(int year, int month,int pageNum, int pageSize);
 }

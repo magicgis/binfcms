@@ -2,6 +2,7 @@ package me.binf.service;
 
 import me.binf.entity.Post;
 import me.binf.service.common.ICommonService;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Map;
@@ -21,5 +22,7 @@ public interface PostService extends ICommonService<Post> {
     public void deleteAll(int[] ids);
 
     public  List<Map<String,String>> dateList();
+
+    public Page<Post> findByArchives(int years,int month,int pageNum, int pageSize);
 
 }

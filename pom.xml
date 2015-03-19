@@ -14,7 +14,6 @@
         <module>binf-utils</module>
         <module>binf-web</module>
         <module>binf-api</module>
-        <module>binf-crawler</module>
     </modules>
 
 

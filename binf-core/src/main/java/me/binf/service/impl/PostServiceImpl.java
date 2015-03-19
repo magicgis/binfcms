@@ -9,6 +9,7 @@ import me.binf.service.*;
 import me.binf.utils.ClassUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -235,6 +236,47 @@ public class PostServiceImpl implements PostService {
         }
 
         return resultList;
+    }
+
+    @Override
+    public Page<Post> findByArchives(int year, int month,int pageNum, int pageSize) {
+
+
+        pageNum = pageNum-1;
+
+        String sql = "SELECT a  FROM Post a " +
+                     "where date_format(a.announceDate, '%Y') = :year and date_format(a.announceDate, '%c') = :month ";
+
+        String countSql = "SELECT  count(a)  FROM Post a " +
+                "where date_format(a.announceDate, '%Y') = :year and date_format(a.announceDate, '%c') = :month ";
+
+        Query query = em.createQuery(sql,Post.class);
+        query.setParameter("year",year+"");
+        query.setParameter("month", month+"");
+        query.setFirstResult((pageNum==0?0:pageSize*pageNum));
+        query.setMaxResults(pageSize);
+        List<Post> posts =    query.getResultList();
+
+
+        Query countQuery = em.createQuery(countSql);
+        countQuery.setParameter("year",year+"");
+        countQuery.setParameter("month", month+"");
+        Object obj = countQuery.getSingleResult();
+        int count = 0;
+        if(obj!=null){
+            count=Integer.parseInt(obj.toString());
+        }
+
+
+
+
+        Page<Post> postPage = new PageImpl<Post>(posts,new PageRequest(pageNum,pageSize),count);
+
+
+
+
+
+        return postPage;
     }
 
 

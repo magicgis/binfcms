@@ -47,5 +47,11 @@ public class PostServiceApiImpl implements PostServiceApi {
         return JsonUtil.obj2Json(list);
     }
 
+    @Override
+    public String findByArchives(int year, int month, int pageNum, int pageSize) {
+        Page<Post> postPage = postService.findByArchives(year,month,pageNum,pageSize);
+        return  JsonUtil.obj2Json(postPage);
+    }
+
 
 }
