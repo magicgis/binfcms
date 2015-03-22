@@ -17,8 +17,18 @@
         <h1 class="blog-title">猫清扬</h1>
     </div>
 
+
     <div class="row">
+
         <div class="col-sm-8 blog-main">
+            <#if (year??)>
+                    <p class="lead">文章归档:${year}年${month}月</p>
+                <#else>
+                    <p class="lead">文章分类:${categoryName!}</p>
+            </#if>
+
+            <hr/>
+
 
             <#list posts.content as post>
                 <div class="blog-post">
@@ -29,7 +39,13 @@
             </#list>
 
             <nav>
-                <@p.pager inPageNo=posts.pageable.page pageSize=posts.pageable.size recordCount=posts.total toURL="/archives/${year}/${month}"/>
+
+                <#if year??>
+                    <@p.pager inPageNo=posts.pageable.page pageSize=posts.pageable.size recordCount=posts.total toURL="/archives/${year}/${month}"/>
+                    <#else>
+                    <@p.pager inPageNo=posts.pageable.page pageSize=posts.pageable.size recordCount=posts.total toURL="/category/${categoryName!}"/>
+                </#if>
+
             </nav>
         </div>
 

@@ -147,6 +147,11 @@ h6, .h6 {
     color: #999;
 }
 
+.blog-post-meta a{
+    color: #757575;
+    text-decoration:#757575;
+}
+
 
 /*
  * Footer

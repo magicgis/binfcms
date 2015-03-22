@@ -12,4 +12,11 @@
         <property name="serviceInterface" value="me.binf.api.PostServiceApi"/>
     </bean>
 
+
+    <bean name="/api/admin/categoryServiceApi"  class="org.springframework.remoting.caucho.HessianServiceExporter">
+        <property name="service" ref="categoryServiceApiImpl" />
+        <property name="serviceInterface" value="me.binf.api.CategoryServiceApi"/>
+    </bean>
+
+
 </beans>

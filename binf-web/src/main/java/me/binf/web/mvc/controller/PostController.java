@@ -1,5 +1,6 @@
 package me.binf.web.mvc.controller;
 
+import me.binf.api.CategoryServiceApi;
 import me.binf.api.PostServiceApi;
 import me.binf.utils.JsonUtil;
 import me.binf.web.core.Configue;
@@ -21,6 +22,9 @@ public class PostController {
 
     @Autowired
     private PostServiceApi postService;
+
+    @Autowired
+    private CategoryServiceApi categoryService;
 
     @Autowired
     private FreeMarkForHtmlService freeMarkForHtmlService;
@@ -55,10 +59,28 @@ public class PostController {
         model.put("year",year) ;
         model.put("month",month) ;
 
+        return "template/archives";
+    }
 
+
+    @RequestMapping(value = "/category/{name:.+}")
+    public String categoryPosts(HttpServletRequest request,
+                                HttpServletResponse response,
+                                ModelMap model,
+                                Integer pageNum,
+                                @PathVariable String name){
+
+        if(pageNum==null||pageNum<=0){
+            pageNum = 1;
+        }
+        String  pages = categoryService.findByName(name,pageNum,3);
+        Object  posts = JsonUtil.fromJsonToAnyObject(pages);
+        model.put("posts",posts) ;
+        model.put("categoryName",name) ;
 
         return "template/archives";
     }
+
 
 
 

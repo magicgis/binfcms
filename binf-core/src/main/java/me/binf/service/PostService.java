@@ -25,4 +25,5 @@ public interface PostService extends ICommonService<Post> {
 
     public Page<Post> findByArchives(int years,int month,int pageNum, int pageSize);
 
+
 }

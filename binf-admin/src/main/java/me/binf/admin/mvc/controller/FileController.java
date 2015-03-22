@@ -37,11 +37,10 @@ public class FileController extends CommonController{
                      HttpServletResponse response,
                      @RequestParam(required=false) MultipartFile file){
 
-        String filePath = "";
         try {
             Image image = uploadImageService.uploadImage(file);
             //图片完整路径
-            image.setPath(Configue.getUploadUrl()+filePath);
+            image.setPath(Configue.getUploadUrl()+image.getPath());
             imageService.create(image);
             WebUtil.print(response, new Result(true).data(image).msg("上传图片成功!"));
         }catch (Exception e){

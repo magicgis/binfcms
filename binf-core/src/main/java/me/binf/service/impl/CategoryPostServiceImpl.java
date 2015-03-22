@@ -1,5 +1,6 @@
 package me.binf.service.impl;
 
+import javafx.geometry.Pos;
 import me.binf.entity.Category;
 import me.binf.entity.CategoryPost;
 import me.binf.dao.CategoryPostDao;
@@ -7,6 +8,9 @@ import me.binf.entity.Post;
 import me.binf.service.CategoryPostService;
 import me.binf.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,6 +72,12 @@ public class CategoryPostServiceImpl implements CategoryPostService {
 
         }
 
+    }
+
+    @Override
+    public Page<Post> findByCategory(String name,int pageNum,int pageSize) {
+        Page<Post> page= categoryPostDao.findByCategoryName(name,new PageRequest(pageNum-1, pageSize, Sort.Direction.DESC, "id"));
+        return page;
     }
 
 

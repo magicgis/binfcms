@@ -12,4 +12,11 @@
         <property name="overloadEnabled" value="true" />
     </bean>
 
+    <bean id="categoryServiceApi"
+          class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+        <property name="serviceUrl" value="${service.url}api/admin/categoryServiceApi" />
+        <property name="serviceInterface" value="me.binf.api.CategoryServiceApi" />
+        <property name="overloadEnabled" value="true" />
+    </bean>
+
 </beans>

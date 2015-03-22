@@ -1,6 +1,8 @@
 package me.binf.service;
 
 import me.binf.entity.CategoryPost;
+import me.binf.entity.Post;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -18,4 +20,8 @@ public interface CategoryPostService {
     public void deleteByCategory(int categoryId);
 
     public void setCateToDefCate(int categoryId);
+
+    public Page<Post> findByCategory(String name,int pageNum,int pageSize);
+
+
 }

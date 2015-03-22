@@ -1,5 +1,6 @@
 package me.binf.web.mvc.controller;
 
+import me.binf.api.CategoryServiceApi;
 import me.binf.api.PostServiceApi;
 import me.binf.utils.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,13 @@ import java.util.List;
 @RequestMapping(value = "site/inc")
 public class SiteIncController {
 
-
     @Autowired
     private PostServiceApi postService;
+
+    @Autowired
+    private CategoryServiceApi categoryService;
+
+
 
     @RequestMapping(value = "/sidebar")
     public String sidebarInc(HttpServletRequest request,
@@ -29,9 +34,17 @@ public class SiteIncController {
                                    ModelMap model){
         String dateListStr =   postService.dateList();
         Object  dateList = JsonUtil.fromJsonToAnyObject(dateListStr);
+
+        Object  categoryList = categoryService.findAllCategory();
+
         model.put("dateList",dateList) ;
+        model.put("categoryList",categoryList) ;
+
+
         return "template/inc/sidebar";
     }
+
+
 
 
 }
