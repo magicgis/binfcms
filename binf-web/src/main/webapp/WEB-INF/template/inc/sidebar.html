@@ -10,7 +10,12 @@
             <#list dateList as date>
                 <li><a href="/archives/${date.year}/${date.month}">${date.year}年${date.month}月</a></li>
             </#list>
-
+        </ol>
+        <h4>Category</h4>
+        <ol class="list-unstyled">
+            <#list categoryList as category>
+                <li><a href="/category/${category.name}">${category.name}</a></li>
+            </#list>
         </ol>
     </div>
     <div class="sidebar-module">

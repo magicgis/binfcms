@@ -32,10 +32,10 @@ public class SiteIncController {
     public String sidebarInc(HttpServletRequest request,
                                    HttpServletResponse response,
                                    ModelMap model){
-        String dateListStr =   postService.dateList();
-        Object  dateList = JsonUtil.fromJsonToAnyObject(dateListStr);
 
-        Object  categoryList = categoryService.findAllCategory();
+        Object  dateList = JsonUtil.fromJsonToAnyObject(postService.dateList());
+
+        Object  categoryList = JsonUtil.fromJsonToAnyObject(categoryService.findAllCategory());
 
         model.put("dateList",dateList) ;
         model.put("categoryList",categoryList) ;
