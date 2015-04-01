@@ -26,6 +26,8 @@ $(function(){
         return res;
     }
 
+    $.fn.dataTableExt.sErrMode = 'throw';
+
 })
 
 
